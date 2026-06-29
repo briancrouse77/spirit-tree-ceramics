@@ -546,11 +546,22 @@
       details: { ...state.details },
       date: state.selectedDate.toISOString(),
       time: state.selectedTime,
+      status: 'new',
     };
 
-    const existing = JSON.parse(localStorage.getItem('stc_bookings') || '[]');
-    existing.push(booking);
-    localStorage.setItem('stc_bookings', JSON.stringify(existing));
+    // Save to Firestore (cross-device) with localStorage fallback
+    if (typeof db !== 'undefined') {
+      db.collection('bookings').add(booking).catch(err => {
+        console.warn('Firestore write failed, using localStorage', err);
+        const ex = JSON.parse(localStorage.getItem('stc_bookings') || '[]');
+        ex.push(booking);
+        localStorage.setItem('stc_bookings', JSON.stringify(ex));
+      });
+    } else {
+      const ex = JSON.parse(localStorage.getItem('stc_bookings') || '[]');
+      ex.push(booking);
+      localStorage.setItem('stc_bookings', JSON.stringify(ex));
+    }
 
     // Show success
     const dateStr = state.selectedDate.toLocaleDateString('en-US', {
@@ -559,7 +570,7 @@
     document.getElementById('success-detail').textContent =
       `${state.selectedClass} · ${dateStr} at ${state.selectedTime}`;
 
-    state.step = 4; // so progress shows full
+    state.step = 4;
     goToStep('success');
     progressBar.style.width = '100%';
     document.querySelectorAll('.step-label').forEach(l => l.classList.add('active'));
@@ -580,13 +591,24 @@
       const msg   = document.getElementById('cf-msg').value.trim();
       if (!name || !email || !msg) return;
 
-      const messages = JSON.parse(localStorage.getItem('stc_messages') || '[]');
-      messages.push({
+      const msgObj = {
         id: 'MSG-' + Math.random().toString(36).substr(2,6).toUpperCase(),
         timestamp: new Date().toISOString(),
         name, email, message: msg, read: false,
-      });
-      localStorage.setItem('stc_messages', JSON.stringify(messages));
+      };
+
+      if (typeof db !== 'undefined') {
+        db.collection('messages').add(msgObj).catch(err => {
+          console.warn('Firestore write failed, using localStorage', err);
+          const msgs = JSON.parse(localStorage.getItem('stc_messages') || '[]');
+          msgs.push(msgObj);
+          localStorage.setItem('stc_messages', JSON.stringify(msgs));
+        });
+      } else {
+        const msgs = JSON.parse(localStorage.getItem('stc_messages') || '[]');
+        msgs.push(msgObj);
+        localStorage.setItem('stc_messages', JSON.stringify(msgs));
+      }
 
       contactForm.reset();
       const success = document.getElementById('cf-success');

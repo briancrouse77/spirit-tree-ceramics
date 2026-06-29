@@ -653,14 +653,25 @@
 
   <div id="toast"></div>
 
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
   <script>
     // ── Constants ──
     const PASSWORD    = 'JQR3pots';
     const SESSION_KEY = 'stc_admin_session';
-    const BK_KEY      = 'stc_bookings';
-    const MSG_KEY     = 'stc_messages';
+    const USE_FIREBASE = typeof db !== 'undefined';
 
-    // ── Auth ──
+    // ── LocalStorage fallbacks ──
+    function lsGetBookings() { return JSON.parse(localStorage.getItem('stc_bookings') || '[]'); }
+    function lsSaveBookings(arr) { localStorage.setItem('stc_bookings', JSON.stringify(arr)); }
+    function lsGetMessages() { return JSON.parse(localStorage.getItem('stc_messages') || '[]'); }
+    function lsSaveMessages(arr) { localStorage.setItem('stc_messages', JSON.stringify(arr)); }
+
+    // In-memory cache (populated by Firestore listeners)
+    let _bookings = [];
+    let _messages = [];
+
     const loginScreen = document.getElementById('login-screen');
     const app         = document.getElementById('app');
     const loginPw     = document.getElementById('login-pw');
@@ -700,11 +711,23 @@
 
     checkSession();
 
-    // ── Data helpers ──
-    function getBookings() { return JSON.parse(localStorage.getItem(BK_KEY) || '[]'); }
-    function saveBookings(arr) { localStorage.setItem(BK_KEY, JSON.stringify(arr)); }
-    function getMessages() { return JSON.parse(localStorage.getItem(MSG_KEY) || '[]'); }
-    function saveMessages(arr) { localStorage.setItem(MSG_KEY, JSON.stringify(arr)); }
+    // ── Data helpers (Firestore + localStorage fallback) ──
+    function getBookings() { return USE_FIREBASE ? _bookings : lsGetBookings(); }
+    function getMessages() { return USE_FIREBASE ? _messages : lsGetMessages(); }
+
+    function startListeners() {
+      if (!USE_FIREBASE) return;
+      db.collection('bookings').orderBy('timestamp','desc').onSnapshot(snap => {
+        _bookings = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        updateStats();
+        if (currentPanel === 'bookings') renderBookings();
+      });
+      db.collection('messages').orderBy('timestamp','desc').onSnapshot(snap => {
+        _messages = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        updateStats();
+        if (currentPanel === 'messages') renderMessages();
+      });
+    }
 
     // ── Toast ──
     const toastEl = document.getElementById('toast');
@@ -765,19 +788,27 @@
 
     // ── Refresh ──
     document.getElementById('refresh-btn').addEventListener('click', () => {
-      updateStats();
-      if (currentPanel === 'bookings') renderBookings();
-      else renderMessages();
+      if (!USE_FIREBASE) {
+        updateStats();
+        if (currentPanel === 'bookings') renderBookings();
+        else renderMessages();
+      }
       toast('Refreshed ↻');
     });
 
     // ── Clear All ──
     document.getElementById('clear-btn').addEventListener('click', () => {
       if (!confirm('Delete ALL bookings? This cannot be undone.')) return;
-      saveBookings([]);
-      renderBookings();
-      updateStats();
-      toast('All bookings cleared.');
+      if (USE_FIREBASE) {
+        const batch = db.batch();
+        _bookings.forEach(b => batch.delete(db.collection('bookings').doc(b._docId)));
+        batch.commit().then(() => toast('All bookings cleared.'));
+      } else {
+        lsSaveBookings([]);
+        renderBookings();
+        updateStats();
+        toast('All bookings cleared.');
+      }
     });
 
     // ── Stats ──
@@ -878,22 +909,29 @@
     }
 
     function setStatus(id, status) {
-      const bookings = getBookings();
-      const b = bookings.find(x => x.id === id);
-      if (b) { b.status = status; saveBookings(bookings); }
-      renderBookings();
-      updateStats();
       const labels = { confirmed: 'Confirmed ✓', cancelled: 'Cancelled', completed: 'Marked complete ★', new: 'Restored' };
-      toast(labels[status] || 'Updated');
+      if (USE_FIREBASE) {
+        const b = _bookings.find(x => x.id === id);
+        if (b) db.collection('bookings').doc(b._docId).update({ status }).then(() => toast(labels[status] || 'Updated'));
+      } else {
+        const bookings = lsGetBookings();
+        const b = bookings.find(x => x.id === id);
+        if (b) { b.status = status; lsSaveBookings(bookings); }
+        renderBookings(); updateStats();
+        toast(labels[status] || 'Updated');
+      }
     }
 
     function deleteBooking(id) {
       if (!confirm('Delete this booking permanently?')) return;
-      const bookings = getBookings().filter(x => x.id !== id);
-      saveBookings(bookings);
-      renderBookings();
-      updateStats();
-      toast('Booking deleted.');
+      if (USE_FIREBASE) {
+        const b = _bookings.find(x => x.id === id);
+        if (b) db.collection('bookings').doc(b._docId).delete().then(() => toast('Booking deleted.'));
+      } else {
+        lsSaveBookings(lsGetBookings().filter(x => x.id !== id));
+        renderBookings(); updateStats();
+        toast('Booking deleted.');
+      }
     }
 
     // ── Render Messages ──
@@ -942,26 +980,38 @@
     }
 
     function markRead(id) {
-      const messages = getMessages();
-      const m = messages.find(x => x.id === id);
-      if (m) { m.read = true; saveMessages(messages); }
-      renderMessages();
-      updateStats();
-      toast('Marked as read');
+      if (USE_FIREBASE) {
+        const m = _messages.find(x => x.id === id);
+        if (m) db.collection('messages').doc(m._docId).update({ read: true }).then(() => toast('Marked as read'));
+      } else {
+        const messages = lsGetMessages();
+        const m = messages.find(x => x.id === id);
+        if (m) { m.read = true; lsSaveMessages(messages); }
+        renderMessages(); updateStats();
+        toast('Marked as read');
+      }
     }
 
     function deleteMessage(id) {
       if (!confirm('Delete this message?')) return;
-      saveMessages(getMessages().filter(x => x.id !== id));
-      renderMessages();
-      updateStats();
-      toast('Message deleted.');
+      if (USE_FIREBASE) {
+        const m = _messages.find(x => x.id === id);
+        if (m) db.collection('messages').doc(m._docId).delete().then(() => toast('Message deleted.'));
+      } else {
+        lsSaveMessages(lsGetMessages().filter(x => x.id !== id));
+        renderMessages(); updateStats();
+        toast('Message deleted.');
+      }
     }
 
     // ── Init ──
     function init() {
-      updateStats();
-      renderBookings();
+      if (USE_FIREBASE) {
+        startListeners(); // real-time from Firestore
+      } else {
+        updateStats();
+        renderBookings();
+      }
     }
   </script>
 </body>
