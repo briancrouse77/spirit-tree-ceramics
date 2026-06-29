@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spirit Tree Ceramics — Mobile Pottery Studio | Dallas, TX</title>
+  <meta name="description" content="Spirit Tree Ceramics brings the pottery wheel to you. Book private, group, and beginner pottery wheel classes anywhere in the Dallas–Fort Worth area with John Ruiz." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── NAV ── -->
+  <nav class="nav" id="nav">
+    <div class="nav__inner">
+      <a href="#hero" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
+      <ul class="nav__links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#classes">Sessions</a></li>
+        <li><a href="#how">The Journey</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <button class="btn btn--accent nav__cta" id="nav-book-btn">Book a Session</button>
+      <button class="nav__hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav__mobile" id="mobile-menu">
+      <a href="#about">About</a>
+      <a href="#classes">Sessions</a>
+      <a href="#how">The Journey</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#contact">Contact</a>
+      <button class="btn btn--accent" id="mobile-book-btn">Book a Session</button>
+    </div>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero" id="hero">
+    <div class="hero__bg">
+      <img src="images/hero.png" alt="Hands shaping clay on a wheel — sacred geometry light" class="hero__img" />
+      <div class="hero__overlay"></div>
+    </div>
+
+    <!-- Sacred Geometry SVG Decoration -->
+    <div class="hero__geometry" aria-hidden="true">
+      <svg class="geo-ring geo-ring--1" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="190" stroke="rgba(139,92,246,0.18)" stroke-width="1"/>
+        <circle cx="200" cy="200" r="155" stroke="rgba(20,184,166,0.12)" stroke-width="1"/>
+        <circle cx="200" cy="200" r="115" stroke="rgba(212,175,55,0.15)" stroke-width="1"/>
+        <polygon points="200,30 370,290 30,290" stroke="rgba(139,92,246,0.12)" stroke-width="1" fill="none"/>
+        <polygon points="200,370 370,110 30,110" stroke="rgba(20,184,166,0.10)" stroke-width="1" fill="none"/>
+        <circle cx="200" cy="200" r="6" fill="rgba(212,175,55,0.4)"/>
+      </svg>
+      <svg class="geo-ring geo-ring--2" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="150" cy="150" r="140" stroke="rgba(139,92,246,0.1)" stroke-width="1"/>
+        <polygon points="150,20 270,215 30,215" stroke="rgba(212,175,55,0.12)" stroke-width="1" fill="none"/>
+        <polygon points="150,280 270,85 30,85" stroke="rgba(20,184,166,0.1)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="hero__particles" id="particles"></div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Dallas · Fort Worth · Surrounding Areas</p>
+      <h1 class="hero__title">Where Earth<br/><em>Meets the Infinite.</em></h1>
+      <p class="hero__sub">Ancient craft. Present moment. The wheel comes to you — and something always shifts when your hands meet the clay.</p>
+      <div class="hero__actions">
+        <button class="btn btn--primary btn--lg" id="hero-book-btn">Book a Session</button>
+        <a href="#classes" class="btn btn--ghost btn--lg">Explore Sessions</a>
+      </div>
+    </div>
+    <a href="#about" class="hero__scroll" aria-label="Scroll down">
+      <div class="hero__scroll-line"></div>
+    </a>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about section" id="about">
+    <div class="container about__grid">
+      <div class="about__image-wrap">
+        <img src="images/about.png" alt="John Ruiz — founder of Spirit Tree Ceramics" class="about__img" />
+        <div class="about__badge">
+          <span class="about__badge-num">8+</span>
+          <span class="about__badge-label">Years at the Wheel</span>
+        </div>
+      </div>
+      <div class="about__text">
+        <p class="section__eyebrow">The Keeper of the Wheel</p>
+        <h2 class="section__title">Hi, I'm John Ruiz.</h2>
+        <p class="about__body">Clay is one of the oldest teachers on earth. It asks you to slow down, to feel, to surrender to the spiral — and in that surrender, something opens. I've spent eight years listening to what it has to say.</p>
+        <p class="about__body">Spirit Tree Ceramics is my way of bringing that experience out of the studio and into your world. I pack the wheel, the clay, and everything else into the van and come to you — <strong>your backyard, your living room, your event, your life</strong> — anywhere in the Dallas–Fort Worth area.</p>
+        <ul class="about__features">
+          <li>
+            <div class="about__feat-icon">🌿</div>
+            <div>
+              <strong>We Come To You</strong>
+              <span>All equipment provided. You just show up and breathe.</span>
+            </div>
+          </li>
+          <li>
+            <div class="about__feat-icon">🌀</div>
+            <div>
+              <strong>All Levels Welcome</strong>
+              <span>The wheel doesn't judge. Neither do we.</span>
+            </div>
+          </li>
+          <li>
+            <div class="about__feat-icon">🔮</div>
+            <div>
+              <strong>Private &amp; Ceremonial Group</strong>
+              <span>Solo journeys, couples, gatherings &amp; corporate groups.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLASSES ── -->
+  <section class="classes section section--dark" id="classes">
+    <!-- Decorative background geometry -->
+    <div class="section__geo" aria-hidden="true">
+      <svg viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="300" cy="300" r="280" stroke="rgba(139,92,246,0.07)" stroke-width="1"/>
+        <circle cx="300" cy="300" r="220" stroke="rgba(20,184,166,0.05)" stroke-width="1"/>
+        <polygon points="300,50 540,425 60,425" stroke="rgba(212,175,55,0.07)" stroke-width="1" fill="none"/>
+        <polygon points="300,550 540,175 60,175" stroke="rgba(139,92,246,0.05)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <div class="container">
+      <p class="section__eyebrow section__eyebrow--light">Sacred Offerings</p>
+      <h2 class="section__title section__title--light">Choose Your Session</h2>
+      <p class="section__sub section__sub--light">All sessions include materials, aprons, and expert guidance. We handle setup and cleanup. You handle the transformation.</p>
+      <div class="classes__grid">
+
+        <div class="class-card" data-class="First Spiral — Intro Session">
+          <div class="class-card__icon">🌱</div>
+          <div class="class-card__badge">Most Sought</div>
+          <h3 class="class-card__title">First Spiral</h3>
+          <p class="class-card__subtitle">Intro to the Wheel</p>
+          <p class="class-card__meta"><span>2 Hours</span> · <span>Beginner</span> · <span>Up to 6 people</span></p>
+          <p class="class-card__desc">No experience needed. Learn to center, open, and pull your first vessel from a living lump of earth. Every person leaves having made something real.</p>
+          <div class="class-card__price">From <strong>$75</strong> <span>/ person</span></div>
+          <button class="btn btn--clay class-card__btn" data-class="First Spiral — Intro Session">Book Now</button>
+        </div>
+
+        <div class="class-card" data-class="Deeper Waters — Intermediate Session">
+          <div class="class-card__icon">🌊</div>
+          <h3 class="class-card__title">Deeper Waters</h3>
+          <p class="class-card__subtitle">Intermediate Throwing</p>
+          <p class="class-card__meta"><span>3 Hours</span> · <span>Some Experience</span> · <span>Up to 4 people</span></p>
+          <p class="class-card__desc">For those who've felt the spin before. We go deeper — consistent forms, trimming, and an expanded vocabulary of shape.</p>
+          <div class="class-card__price">From <strong>$95</strong> <span>/ person</span></div>
+          <button class="btn btn--clay class-card__btn" data-class="Deeper Waters — Intermediate Session">Book Now</button>
+        </div>
+
+        <div class="class-card" data-class="The Still Point — Private Session">
+          <div class="class-card__icon">✨</div>
+          <h3 class="class-card__title">The Still Point</h3>
+          <p class="class-card__subtitle">Private 1-on-1 Session</p>
+          <p class="class-card__meta"><span>2 Hours</span> · <span>Any Level</span> · <span>Just You</span></p>
+          <p class="class-card__desc">Undivided presence, your rhythm, your intention. The most intimate way to encounter the wheel — and yourself.</p>
+          <div class="class-card__price">From <strong>$150</strong> <span>/ session</span></div>
+          <button class="btn btn--clay class-card__btn" data-class="The Still Point — Private Session">Book Now</button>
+        </div>
+
+        <div class="class-card" data-class="The Gathering — Group Ceremony">
+          <div class="class-card__icon">🌕</div>
+          <h3 class="class-card__title">The Gathering</h3>
+          <p class="class-card__subtitle">Group Ceremony / Event</p>
+          <p class="class-card__meta"><span>2–3 Hours</span> · <span>Any Level</span> · <span>Up to 12 people</span></p>
+          <p class="class-card__desc">Birthdays, sacred circles, corporate gatherings, or just a night where your group makes something together. We transform any space.</p>
+          <div class="class-card__price">From <strong>$65</strong> <span>/ person</span></div>
+          <button class="btn btn--clay class-card__btn" data-class="The Gathering — Group Ceremony">Book Now</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── HOW IT WORKS ── -->
+  <section class="how section" id="how">
+    <div class="container">
+      <p class="section__eyebrow">The Path</p>
+      <h2 class="section__title">The Journey</h2>
+      <div class="how__steps">
+        <div class="how__step">
+          <div class="how__step-num">01</div>
+          <div class="how__step-icon">🌿</div>
+          <h3>Set Your Intention</h3>
+          <p>Choose the session that calls to you — beginner, intermediate, private, or group.</p>
+        </div>
+        <div class="how__connector"></div>
+        <div class="how__step">
+          <div class="how__step-num">02</div>
+          <div class="how__step-icon">🗓️</div>
+          <h3>Choose Your Moment</h3>
+          <p>Select from available dates and times. Morning, evening, or weekend — the timing is yours.</p>
+        </div>
+        <div class="how__connector"></div>
+        <div class="how__step">
+          <div class="how__step-num">03</div>
+          <div class="how__step-icon">🚐</div>
+          <h3>We Arrive</h3>
+          <p>John loads the van with wheels, clay, tools, and aprons and sets up in your space.</p>
+        </div>
+        <div class="how__connector"></div>
+        <div class="how__step">
+          <div class="how__step-num">04</div>
+          <div class="how__step-icon">🏺</div>
+          <h3>Create &amp; Carry</h3>
+          <p>Shape something from the earth. Your vessel is yours to keep after firing and glazing.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ── -->
+  <section class="gallery section section--void" id="gallery">
+    <div class="container">
+      <p class="section__eyebrow section__eyebrow--light">Sacred Forms</p>
+      <h2 class="section__title section__title--light">From the Wheel</h2>
+      <div class="gallery__grid">
+
+        <!-- Row 1 -->
+        <div class="gallery__item">
+          <img src="images/gallery1.png" alt="Iridescent cosmic pottery pieces" />
+          <div class="gallery__caption">Vessels of the deep</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/hero.png" alt="Sacred geometry and clay" />
+          <div class="gallery__caption">Where the spiral begins</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery2.png" alt="Group pottery gathering" />
+          <div class="gallery__caption">Collective creation</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery3.png" alt="Jewel-tone glazed pottery collection" />
+          <div class="gallery__caption">Ancient forms, living glazes</div>
+        </div>
+
+        <!-- Row 2 -->
+        <div class="gallery__item">
+          <img src="images/gallery2.png" alt="Students at pottery wheels" />
+          <div class="gallery__caption">The first touch of clay</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery3.png" alt="Finished glazed pottery shelves" />
+          <div class="gallery__caption">Earth fired to memory</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery1.png" alt="Earthy toned pottery arrangement" />
+          <div class="gallery__caption">Sage &amp; terracotta</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/hero.png" alt="Hands centered on the wheel" />
+          <div class="gallery__caption">Surrender to the spin</div>
+        </div>
+
+        <!-- Row 3 -->
+        <div class="gallery__item">
+          <img src="images/gallery3.png" alt="Mugs and plates on wood shelves" />
+          <div class="gallery__caption">Touched by fire</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery1.png" alt="Bowls and vases on a rustic table" />
+          <div class="gallery__caption">Rooted in the earth</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/hero.png" alt="Clay spinning on the wheel" />
+          <div class="gallery__caption">The infinite loop</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery2.png" alt="Laughter at the pottery wheel" />
+          <div class="gallery__caption">Joy is the medium</div>
+        </div>
+
+        <!-- Row 4 -->
+        <div class="gallery__item">
+          <img src="images/hero.png" alt="Mystical light on wet clay" />
+          <div class="gallery__caption">Light through the void</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery2.png" alt="Group session in warm studio light" />
+          <div class="gallery__caption">The gathering</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery3.png" alt="Deep blue glazed vase" />
+          <div class="gallery__caption">Cobalt &amp; obsidian</div>
+        </div>
+        <div class="gallery__item">
+          <img src="images/gallery1.png" alt="Green and terracotta ceramics" />
+          <div class="gallery__caption">Made to be held</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="contact section" id="contact">
+    <div class="container contact__inner">
+      <div class="contact__text">
+        <p class="section__eyebrow">Open the Door</p>
+        <h2 class="section__title">Questions?<br/>Let's Talk.</h2>
+        <ul class="contact__details">
+          <li>📍 Dallas–Fort Worth &amp; Surrounding Areas, TX</li>
+          <li>📧 <a href="mailto:hello@spirittreeceramics.com">hello@spirittreeceramics.com</a></li>
+          <li>📱 <a href="tel:+12145550100">(214) 555-0100</a></li>
+        </ul>
+
+        <form class="contact__form" id="contact-form" novalidate>
+          <div class="form__group">
+            <label for="cf-name">Your Name *</label>
+            <input type="text" id="cf-name" placeholder="Jane Doe" required />
+          </div>
+          <div class="form__group">
+            <label for="cf-email">Email *</label>
+            <input type="email" id="cf-email" placeholder="jane@email.com" required />
+          </div>
+          <div class="form__group">
+            <label for="cf-msg">Message *</label>
+            <textarea id="cf-msg" rows="4" placeholder="Ask anything…" required></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary" id="cf-submit">Send Message →</button>
+          <p class="contact__form-success" id="cf-success" style="display:none;">✓ Message sent! John will be in touch within 24 hours.</p>
+        </form>
+      </div>
+      <div class="contact__cta-box">
+        <div class="cta-box__geo" aria-hidden="true">
+          <svg viewBox="0 0 200 200" fill="none">
+            <circle cx="100" cy="100" r="90" stroke="rgba(139,92,246,0.2)" stroke-width="1"/>
+            <polygon points="100,20 174,155 26,155" stroke="rgba(212,175,55,0.2)" stroke-width="1" fill="none"/>
+            <polygon points="100,180 174,45 26,45" stroke="rgba(20,184,166,0.15)" stroke-width="1" fill="none"/>
+          </svg>
+        </div>
+        <h3>Ready to step into the spiral?</h3>
+        <p>Book your session online in under 2 minutes.</p>
+        <button class="btn btn--primary btn--lg" id="contact-book-btn">Schedule a Session →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__logo">Spirit Tree <span>Ceramics</span></div>
+      <p class="footer__tagline">Rooted in earth. Open to the infinite. Dallas, TX.</p>
+      <div class="footer__socials">
+        <a href="#" aria-label="Instagram">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+        </a>
+        <a href="#" aria-label="TikTok">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.27 8.27 0 0 0 4.84 1.56V6.78a4.85 4.85 0 0 1-1.07-.09z"/></svg>
+        </a>
+      </div>
+      <p class="footer__copy">&copy; 2026 Spirit Tree Ceramics by John Ruiz. All rights reserved.</p>
+      <a href="admin.html" class="footer__admin-link">Admin ↗</a>
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════════
+       BOOKING MODAL
+  ══════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal" id="booking-modal">
+
+      <!-- Progress Bar -->
+      <div class="modal__progress">
+        <div class="modal__progress-bar" id="progress-bar"></div>
+      </div>
+
+      <!-- Step Labels -->
+      <div class="modal__steps-label">
+        <span class="step-label active" id="step-label-1">Session</span>
+        <span class="step-label" id="step-label-2">Details</span>
+        <span class="step-label" id="step-label-3">Schedule</span>
+        <span class="step-label" id="step-label-4">Confirm</span>
+      </div>
+
+      <button class="modal__close" id="modal-close" aria-label="Close booking">✕</button>
+
+      <!-- ─── STEP 1: Session Selection ─── -->
+      <div class="modal__step active" id="step-1">
+        <h2 class="modal__title" id="modal-title">Choose Your Session</h2>
+        <p class="modal__sub">What calls to you?</p>
+        <div class="modal__class-options">
+          <label class="modal__class-opt" for="class-intro">
+            <input type="radio" name="class-type" id="class-intro" value="First Spiral — Intro Session" />
+            <div class="modal__class-opt-inner">
+              <span class="modal__class-opt-icon">🌱</span>
+              <div>
+                <strong>First Spiral — Intro</strong>
+                <span>2 hrs · Beginner · From $75/person</span>
+              </div>
+            </div>
+          </label>
+          <label class="modal__class-opt" for="class-inter">
+            <input type="radio" name="class-type" id="class-inter" value="Deeper Waters — Intermediate Session" />
+            <div class="modal__class-opt-inner">
+              <span class="modal__class-opt-icon">🌊</span>
+              <div>
+                <strong>Deeper Waters — Intermediate</strong>
+                <span>3 hrs · Some experience · From $95/person</span>
+              </div>
+            </div>
+          </label>
+          <label class="modal__class-opt" for="class-private">
+            <input type="radio" name="class-type" id="class-private" value="The Still Point — Private Session" />
+            <div class="modal__class-opt-inner">
+              <span class="modal__class-opt-icon">✨</span>
+              <div>
+                <strong>The Still Point — Private</strong>
+                <span>2 hrs · Any level · From $150/session</span>
+              </div>
+            </div>
+          </label>
+          <label class="modal__class-opt" for="class-group">
+            <input type="radio" name="class-type" id="class-group" value="The Gathering — Group Ceremony" />
+            <div class="modal__class-opt-inner">
+              <span class="modal__class-opt-icon">🌕</span>
+              <div>
+                <strong>The Gathering — Group</strong>
+                <span>2–3 hrs · Any level · From $65/person</span>
+              </div>
+            </div>
+          </label>
+        </div>
+        <div class="modal__actions">
+          <button class="btn btn--primary" id="step1-next">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 2: Personal Details ─── -->
+      <div class="modal__step" id="step-2">
+        <h2 class="modal__title">Your Details</h2>
+        <p class="modal__sub">We'll use this to confirm your session and find you.</p>
+        <form class="modal__form" id="details-form" novalidate>
+          <div class="form__row">
+            <div class="form__group">
+              <label for="f-name">First Name *</label>
+              <input type="text" id="f-name" placeholder="Jane" required />
+            </div>
+            <div class="form__group">
+              <label for="f-lname">Last Name *</label>
+              <input type="text" id="f-lname" placeholder="Doe" required />
+            </div>
+          </div>
+          <div class="form__group">
+            <label for="f-email">Email *</label>
+            <input type="email" id="f-email" placeholder="jane@email.com" required />
+          </div>
+          <div class="form__group">
+            <label for="f-phone">Phone *</label>
+            <input type="tel" id="f-phone" placeholder="(214) 555-0000" required />
+          </div>
+          <div class="form__group form__group--ac">
+            <label for="f-address">Street Address *</label>
+            <div class="ac-wrap">
+              <input type="text" id="f-address" placeholder="123 Main St" required autocomplete="off" />
+              <div class="ac-spinner" id="ac-spinner"></div>
+              <ul class="ac-dropdown" id="ac-dropdown" role="listbox"></ul>
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="form__group">
+              <label for="f-city">City *</label>
+              <input type="text" id="f-city" placeholder="Dallas" required />
+            </div>
+            <div class="form__group">
+              <label for="f-state">State *</label>
+              <input type="text" id="f-state" placeholder="TX" required maxlength="2" />
+            </div>
+          </div>
+          <div class="form__row">
+            <div class="form__group">
+              <label for="f-guests">Number of Guests</label>
+              <select id="f-guests">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="f-exp">Experience Level</label>
+              <select id="f-exp">
+                <option value="Complete Beginner">Complete Beginner</option>
+                <option value="Some Experience">Some Experience</option>
+                <option value="Intermediate">Intermediate</option>
+              </select>
+            </div>
+          </div>
+          <div class="form__group">
+            <label for="f-notes">Intentions / Notes</label>
+            <textarea id="f-notes" rows="3" placeholder="e.g. Birthday gathering, parking notes, accessibility needs, or what you're hoping to feel…"></textarea>
+          </div>
+        </form>
+        <div class="modal__actions">
+          <button class="btn btn--ghost" id="step2-back">← Back</button>
+          <button class="btn btn--primary" id="step2-next">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 3: Calendar ─── -->
+      <div class="modal__step" id="step-3">
+        <h2 class="modal__title">Choose Your Moment</h2>
+        <p class="modal__sub">Select a date, then choose a time that feels right.</p>
+        <div class="calendar-wrap">
+          <div class="calendar" id="calendar">
+            <div class="calendar__header">
+              <button id="cal-prev" aria-label="Previous month">‹</button>
+              <span id="cal-month-label"></span>
+              <button id="cal-next" aria-label="Next month">›</button>
+            </div>
+            <div class="calendar__weekdays">
+              <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+            </div>
+            <div class="calendar__days" id="cal-days"></div>
+          </div>
+          <div class="timeslots-wrap" id="timeslots-wrap">
+            <p class="timeslots__label" id="timeslots-label">Select a date to see open times</p>
+            <div class="timeslots" id="timeslots"></div>
+          </div>
+        </div>
+        <div class="modal__actions">
+          <button class="btn btn--ghost" id="step3-back">← Back</button>
+          <button class="btn btn--primary" id="step3-next">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ─── STEP 4: Confirm ─── -->
+      <div class="modal__step" id="step-4">
+        <h2 class="modal__title">Confirm Your Session</h2>
+        <p class="modal__sub">Everything look right? Let's make it real.</p>
+        <div class="confirm__card" id="confirm-card"></div>
+        <div class="modal__actions">
+          <button class="btn btn--ghost" id="step4-back">← Back</button>
+          <button class="btn btn--primary" id="step4-confirm">🏺 Confirm Booking</button>
+        </div>
+      </div>
+
+      <!-- ─── SUCCESS ─── -->
+      <div class="modal__step" id="step-success">
+        <div class="success">
+          <div class="success__icon">🌀</div>
+          <h2>You're In the Spiral.</h2>
+          <p>Your session is booked. John will reach out within 24 hours to confirm every detail and answer any questions.</p>
+          <div class="success__detail" id="success-detail"></div>
+          <button class="btn btn--primary" id="success-close">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

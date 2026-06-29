@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Spirit Tree Ceramics</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --void:     #06010F;
+      --cosmos:   #0D0520;
+      --deep:     #150930;
+      --card:     #1C0E3A;
+      --amethyst: #7C3AED;
+      --am-lt:    #A78BFA;
+      --am-dim:   rgba(124,58,237,0.15);
+      --teal:     #0D9488;
+      --teal-lt:  #5EEAD4;
+      --gold:     #D4AF37;
+      --pearl:    #F0E6FF;
+      --mist:     #C4B5FD;
+      --smoke:    #7B6FA0;
+      --danger:   #F87171;
+      --success:  #34D399;
+      --warning:  #FBBF24;
+      --font-h:   'Cormorant Garamond', serif;
+      --font-b:   'Inter', sans-serif;
+      --r:        10px;
+      --r-lg:     16px;
+      --tr:       0.22s cubic-bezier(0.4,0,0.2,1);
+    }
+    html { font-size: 16px; }
+    body {
+      font-family: var(--font-b);
+      background: var(--void);
+      color: var(--pearl);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+    input, textarea, select { font-family: inherit; }
+    ul { list-style: none; }
+
+    /* ── Login Screen ── */
+    #login-screen {
+      position: fixed; inset: 0;
+      background: var(--void);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+      padding: 20px;
+    }
+    .login-box {
+      background: var(--deep);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: var(--r-lg);
+      padding: 48px 40px;
+      width: 100%; max-width: 400px;
+      text-align: center;
+      box-shadow: 0 24px 64px rgba(6,1,15,0.7), 0 0 60px rgba(124,58,237,0.12);
+    }
+    .login-box__logo {
+      font-family: var(--font-h);
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--pearl);
+      margin-bottom: 4px;
+    }
+    .login-box__logo span { color: var(--teal-lt); }
+    .login-box__sub {
+      font-size: 0.78rem;
+      color: var(--smoke);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid rgba(196,181,253,0.18);
+      border-radius: var(--r);
+      background: rgba(255,255,255,0.04);
+      color: var(--pearl);
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+      outline: none;
+      transition: border-color var(--tr);
+    }
+    .login-box input::placeholder { color: var(--smoke); }
+    .login-box input:focus { border-color: var(--amethyst); }
+    .login-box input.error { border-color: var(--danger); }
+    .login-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--amethyst), #4f1db5);
+      color: #fff;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all var(--tr);
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+    }
+    .login-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .login-error {
+      font-size: 0.8rem;
+      color: var(--danger);
+      margin-top: 10px;
+      display: none;
+    }
+    .login-hint {
+      font-size: 0.72rem;
+      color: var(--smoke);
+      margin-top: 20px;
+    }
+
+    /* ── App Shell ── */
+    #app { display: none; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      width: 230px;
+      background: var(--cosmos);
+      border-right: 1px solid rgba(124,58,237,0.15);
+      display: flex;
+      flex-direction: column;
+      padding: 32px 0;
+      z-index: 100;
+    }
+    .sidebar__logo {
+      font-family: var(--font-h);
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--pearl);
+      padding: 0 24px 24px;
+      border-bottom: 1px solid rgba(124,58,237,0.12);
+      margin-bottom: 24px;
+    }
+    .sidebar__logo span { color: var(--teal-lt); }
+    .sidebar__badge {
+      display: block;
+      font-family: var(--font-b);
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--smoke);
+      margin-top: 4px;
+    }
+    .sidebar__nav { display: flex; flex-direction: column; gap: 4px; padding: 0 12px; flex: 1; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--r);
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--smoke);
+      cursor: pointer;
+      transition: all var(--tr);
+      position: relative;
+    }
+    .nav-item:hover { background: var(--am-dim); color: var(--mist); }
+    .nav-item.active { background: rgba(124,58,237,0.2); color: var(--pearl); }
+    .nav-item .icon { font-size: 1.1rem; width: 22px; text-align: center; }
+    .nav-item .badge {
+      margin-left: auto;
+      background: var(--amethyst);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 50px;
+      min-width: 20px;
+      text-align: center;
+    }
+    .sidebar__bottom {
+      padding: 16px 12px 0;
+      border-top: 1px solid rgba(124,58,237,0.12);
+      margin: 0 0;
+    }
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: var(--r);
+      font-size: 0.85rem;
+      color: var(--smoke);
+      transition: all var(--tr);
+    }
+    .logout-btn:hover { color: var(--danger); background: rgba(248,113,113,0.08); }
+
+    /* ── Main Content ── */
+    .main {
+      margin-left: 230px;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    /* ── Top Bar ── */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+    .topbar__title {
+      font-family: var(--font-h);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--pearl);
+    }
+    .topbar__sub { font-size: 0.82rem; color: var(--smoke); margin-top: 2px; }
+    .topbar__actions { display: flex; gap: 10px; }
+    .btn-sm {
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--tr);
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--amethyst), #4f1db5);
+      color: #fff;
+      box-shadow: 0 3px 12px rgba(124,58,237,0.35);
+    }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn-ghost {
+      background: transparent;
+      border: 1.5px solid rgba(196,181,253,0.2);
+      color: var(--mist);
+    }
+    .btn-ghost:hover { border-color: var(--am-lt); color: var(--pearl); }
+    .btn-danger {
+      background: transparent;
+      border: 1.5px solid rgba(248,113,113,0.3);
+      color: var(--danger);
+    }
+    .btn-danger:hover { background: rgba(248,113,113,0.1); }
+
+    /* ── Stats Row ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .stat-card {
+      background: var(--deep);
+      border: 1px solid rgba(124,58,237,0.14);
+      border-radius: var(--r-lg);
+      padding: 22px 24px;
+      transition: border-color var(--tr);
+    }
+    .stat-card:hover { border-color: rgba(124,58,237,0.35); }
+    .stat-card__label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--smoke);
+      margin-bottom: 10px;
+    }
+    .stat-card__value {
+      font-family: var(--font-h);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--pearl);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-card__sub { font-size: 0.75rem; color: var(--smoke); }
+    .stat-card--teal .stat-card__value { color: var(--teal-lt); }
+    .stat-card--gold .stat-card__value { color: var(--gold); }
+    .stat-card--violet .stat-card__value { color: var(--am-lt); }
+
+    /* ── Panel (tab content area) ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── Section Header ── */
+    .section-hdr {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .section-hdr h2 {
+      font-family: var(--font-h);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--pearl);
+    }
+    .section-hdr__filters { display: flex; gap: 8px; }
+    .filter-btn {
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all var(--tr);
+      border: 1.5px solid rgba(196,181,253,0.15);
+      color: var(--smoke);
+      background: transparent;
+    }
+    .filter-btn:hover { border-color: var(--am-lt); color: var(--pearl); }
+    .filter-btn.active { background: var(--am-dim); border-color: var(--amethyst); color: var(--am-lt); }
+
+    /* ── Booking Cards ── */
+    .bookings-list { display: flex; flex-direction: column; gap: 12px; }
+    .booking-card {
+      background: var(--deep);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      transition: border-color var(--tr);
+    }
+    .booking-card:hover { border-color: rgba(124,58,237,0.3); }
+    .booking-card__top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+    .booking-card__id {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--amethyst);
+      margin-bottom: 4px;
+    }
+    .booking-card__name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--pearl);
+    }
+    .booking-card__session {
+      font-size: 0.8rem;
+      color: var(--mist);
+      margin-top: 2px;
+    }
+    .booking-card__datetime {
+      text-align: right;
+    }
+    .booking-card__date {
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--teal-lt);
+    }
+    .booking-card__time {
+      font-size: 0.8rem;
+      color: var(--smoke);
+      margin-top: 2px;
+    }
+    .booking-card__meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 6px 24px;
+      font-size: 0.8rem;
+      color: var(--smoke);
+      padding-top: 14px;
+      border-top: 1px solid rgba(124,58,237,0.1);
+      margin-bottom: 14px;
+    }
+    .booking-card__meta span { display: flex; align-items: flex-start; gap: 6px; }
+    .booking-card__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(124,58,237,0.1);
+      padding-top: 12px;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 12px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .status-badge--new      { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid rgba(212,175,55,0.3); }
+    .status-badge--confirmed{ background: rgba(52,211,153,0.12); color: var(--success); border: 1px solid rgba(52,211,153,0.3); }
+    .status-badge--cancelled{ background: rgba(248,113,113,0.12); color: var(--danger); border: 1px solid rgba(248,113,113,0.3); }
+    .status-badge--completed{ background: rgba(196,181,253,0.12); color: var(--am-lt); border: 1px solid rgba(196,181,253,0.25); }
+    .action-btn {
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--tr);
+      border: 1.5px solid transparent;
+    }
+    .action-btn--confirm { border-color: rgba(52,211,153,0.35); color: var(--success); }
+    .action-btn--confirm:hover { background: rgba(52,211,153,0.1); }
+    .action-btn--cancel  { border-color: rgba(248,113,113,0.3); color: var(--danger); }
+    .action-btn--cancel:hover { background: rgba(248,113,113,0.08); }
+    .action-btn--done    { border-color: rgba(196,181,253,0.3); color: var(--am-lt); }
+    .action-btn--done:hover { background: var(--am-dim); }
+    .action-btn--delete  { border-color: rgba(248,113,113,0.2); color: rgba(248,113,113,0.6); margin-left: auto; }
+    .action-btn--delete:hover { background: rgba(248,113,113,0.08); color: var(--danger); }
+    .booking-card__notes {
+      font-size: 0.8rem;
+      color: var(--smoke);
+      font-style: italic;
+      background: rgba(124,58,237,0.06);
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin-top: 8px;
+    }
+
+    /* ── Messages ── */
+    .messages-list { display: flex; flex-direction: column; gap: 12px; }
+    .msg-card {
+      background: var(--deep);
+      border: 1px solid rgba(124,58,237,0.12);
+      border-radius: var(--r-lg);
+      padding: 20px 24px;
+      transition: border-color var(--tr);
+    }
+    .msg-card.unread { border-color: rgba(94,234,212,0.25); }
+    .msg-card:hover { border-color: rgba(124,58,237,0.3); }
+    .msg-card__top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .msg-card__id { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 3px; }
+    .msg-card__name { font-size: 1rem; font-weight: 600; color: var(--pearl); }
+    .msg-card__email { font-size: 0.8rem; color: var(--teal-lt); margin-top: 2px; }
+    .msg-card__ts { font-size: 0.76rem; color: var(--smoke); text-align: right; }
+    .msg-card__body {
+      font-size: 0.88rem;
+      color: var(--mist);
+      line-height: 1.65;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      border-left: 3px solid rgba(94,234,212,0.3);
+      margin-bottom: 12px;
+    }
+    .msg-card__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .unread-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--teal-lt);
+      box-shadow: 0 0 8px rgba(94,234,212,0.6);
+      flex-shrink: 0;
+      display: inline-block;
+      margin-right: 4px;
+    }
+    .reply-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: rgba(13,148,136,0.12);
+      border: 1.5px solid rgba(13,148,136,0.3);
+      color: var(--teal-lt);
+      transition: all var(--tr);
+    }
+    .reply-link:hover { background: rgba(13,148,136,0.22); }
+
+    /* ── Empty States ── */
+    .empty-state {
+      text-align: center;
+      padding: 64px 20px;
+      color: var(--smoke);
+    }
+    .empty-state__icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.5; }
+    .empty-state h3 { font-family: var(--font-h); font-size: 1.3rem; color: var(--mist); margin-bottom: 8px; }
+    .empty-state p { font-size: 0.88rem; }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--deep);
+      border: 1px solid rgba(124,58,237,0.3);
+      border-radius: var(--r);
+      padding: 12px 20px;
+      font-size: 0.85rem;
+      color: var(--pearl);
+      box-shadow: 0 8px 32px rgba(6,1,15,0.5);
+      z-index: 9000;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar { width: 64px; padding: 20px 0; }
+      .sidebar__logo, .nav-item span:not(.icon), .sidebar__badge, .logout-btn span { display: none; }
+      .nav-item { justify-content: center; padding: 12px; }
+      .nav-item .badge { position: absolute; top: 4px; right: 4px; }
+      .main { margin-left: 64px; padding: 24px 20px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 580px) {
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .booking-card__top, .msg-card__top { flex-direction: column; }
+      .booking-card__datetime, .msg-card__ts { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── LOGIN ── -->
+  <div id="login-screen">
+    <div class="login-box">
+      <div class="login-box__logo">Spirit Tree <span>Ceramics</span></div>
+      <div class="login-box__sub">Admin Dashboard</div>
+      <input type="password" id="login-pw" placeholder="Enter password" autocomplete="current-password" />
+      <button class="login-btn" id="login-btn">Enter →</button>
+      <p class="login-error" id="login-error">Incorrect password. Try again.</p>
+      <p class="login-hint">Contact John Ruiz for access.</p>
+    </div>
+  </div>
+
+  <!-- ── APP ── -->
+  <div id="app">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar__logo">
+        Spirit Tree <span>Ceramics</span>
+        <span class="sidebar__badge">Admin</span>
+      </div>
+      <nav class="sidebar__nav">
+        <div class="nav-item active" data-panel="bookings" id="nav-bookings">
+          <span class="icon">🗓️</span>
+          <span>Bookings</span>
+          <span class="badge" id="badge-bookings">0</span>
+        </div>
+        <div class="nav-item" data-panel="messages" id="nav-messages">
+          <span class="icon">💬</span>
+          <span>Messages</span>
+          <span class="badge" id="badge-messages" style="display:none;">0</span>
+        </div>
+        <a href="index.html" class="nav-item" target="_blank">
+          <span class="icon">🌐</span>
+          <span>View Site</span>
+        </a>
+      </nav>
+      <div class="sidebar__bottom">
+        <button class="logout-btn" id="logout-btn">
+          <span class="icon">🚪</span>
+          <span>Log Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <div class="topbar">
+        <div>
+          <div class="topbar__title" id="page-title">Bookings</div>
+          <div class="topbar__sub" id="page-sub">All scheduled sessions</div>
+        </div>
+        <div class="topbar__actions">
+          <button class="btn-sm btn-danger" id="clear-btn" style="display:none;">Clear All</button>
+          <button class="btn-sm btn-ghost" id="refresh-btn">↻ Refresh</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card stat-card--violet">
+          <div class="stat-card__label">Total Bookings</div>
+          <div class="stat-card__value" id="stat-total">0</div>
+          <div class="stat-card__sub">All time</div>
+        </div>
+        <div class="stat-card stat-card--teal">
+          <div class="stat-card__label">Upcoming</div>
+          <div class="stat-card__value" id="stat-upcoming">0</div>
+          <div class="stat-card__sub">Confirmed or new</div>
+        </div>
+        <div class="stat-card stat-card--gold">
+          <div class="stat-card__label">This Month</div>
+          <div class="stat-card__value" id="stat-month">0</div>
+          <div class="stat-card__sub" id="stat-month-label">Sessions booked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card__label">Unread Messages</div>
+          <div class="stat-card__value" id="stat-unread">0</div>
+          <div class="stat-card__sub">Awaiting reply</div>
+        </div>
+      </div>
+
+      <!-- Bookings Panel -->
+      <div class="panel active" id="panel-bookings">
+        <div class="section-hdr">
+          <h2>Sessions</h2>
+          <div class="section-hdr__filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="new">New</button>
+            <button class="filter-btn" data-filter="confirmed">Confirmed</button>
+            <button class="filter-btn" data-filter="completed">Completed</button>
+            <button class="filter-btn" data-filter="cancelled">Cancelled</button>
+          </div>
+        </div>
+        <div class="bookings-list" id="bookings-list"></div>
+      </div>
+
+      <!-- Messages Panel -->
+      <div class="panel" id="panel-messages">
+        <div class="section-hdr">
+          <h2>Messages</h2>
+          <div class="section-hdr__filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="unread">Unread</button>
+          </div>
+        </div>
+        <div class="messages-list" id="messages-list"></div>
+      </div>
+
+    </main>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // ── Constants ──
+    const PASSWORD    = 'JQR3pots';
+    const SESSION_KEY = 'stc_admin_session';
+    const BK_KEY      = 'stc_bookings';
+    const MSG_KEY     = 'stc_messages';
+
+    // ── Auth ──
+    const loginScreen = document.getElementById('login-screen');
+    const app         = document.getElementById('app');
+    const loginPw     = document.getElementById('login-pw');
+    const loginBtn    = document.getElementById('login-btn');
+    const loginError  = document.getElementById('login-error');
+
+    function checkSession() {
+      if (sessionStorage.getItem(SESSION_KEY) === '1') {
+        loginScreen.style.display = 'none';
+        app.style.display = 'block';
+        init();
+      }
+    }
+
+    function doLogin() {
+      if (loginPw.value === PASSWORD) {
+        sessionStorage.setItem(SESSION_KEY, '1');
+        loginScreen.style.display = 'none';
+        app.style.display = 'block';
+        loginError.style.display = 'none';
+        init();
+      } else {
+        loginPw.classList.add('error');
+        loginError.style.display = 'block';
+        loginPw.value = '';
+        loginPw.addEventListener('input', () => loginPw.classList.remove('error'), { once: true });
+      }
+    }
+
+    loginBtn.addEventListener('click', doLogin);
+    loginPw.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    });
+
+    checkSession();
+
+    // ── Data helpers ──
+    function getBookings() { return JSON.parse(localStorage.getItem(BK_KEY) || '[]'); }
+    function saveBookings(arr) { localStorage.setItem(BK_KEY, JSON.stringify(arr)); }
+    function getMessages() { return JSON.parse(localStorage.getItem(MSG_KEY) || '[]'); }
+    function saveMessages(arr) { localStorage.setItem(MSG_KEY, JSON.stringify(arr)); }
+
+    // ── Toast ──
+    const toastEl = document.getElementById('toast');
+    let toastTimer;
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2800);
+    }
+
+    // ── Navigation ──
+    let currentPanel = 'bookings';
+    let bookingFilter = 'all';
+    let messageFilter = 'all';
+
+    document.querySelectorAll('.nav-item[data-panel]').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+        const panel = item.dataset.panel;
+        currentPanel = panel;
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-' + panel).classList.add('active');
+        if (panel === 'bookings') {
+          document.getElementById('page-title').textContent = 'Bookings';
+          document.getElementById('page-sub').textContent = 'All scheduled sessions';
+          document.getElementById('clear-btn').style.display = '';
+          renderBookings();
+        } else {
+          document.getElementById('page-title').textContent = 'Messages';
+          document.getElementById('page-sub').textContent = 'Customer inquiries';
+          document.getElementById('clear-btn').style.display = 'none';
+          renderMessages();
+        }
+      });
+    });
+
+    // ── Booking Filters ──
+    document.querySelectorAll('#panel-bookings .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#panel-bookings .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        bookingFilter = btn.dataset.filter;
+        renderBookings();
+      });
+    });
+
+    // ── Message Filters ──
+    document.querySelectorAll('#panel-messages .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#panel-messages .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        messageFilter = btn.dataset.filter;
+        renderMessages();
+      });
+    });
+
+    // ── Refresh ──
+    document.getElementById('refresh-btn').addEventListener('click', () => {
+      updateStats();
+      if (currentPanel === 'bookings') renderBookings();
+      else renderMessages();
+      toast('Refreshed ↻');
+    });
+
+    // ── Clear All ──
+    document.getElementById('clear-btn').addEventListener('click', () => {
+      if (!confirm('Delete ALL bookings? This cannot be undone.')) return;
+      saveBookings([]);
+      renderBookings();
+      updateStats();
+      toast('All bookings cleared.');
+    });
+
+    // ── Stats ──
+    function updateStats() {
+      const bookings = getBookings();
+      const messages = getMessages();
+      const now = new Date();
+      const thisMonth = now.getMonth();
+      const thisYear  = now.getFullYear();
+
+      const upcoming = bookings.filter(b => {
+        const d = new Date(b.date);
+        return d >= now && (b.status !== 'cancelled');
+      });
+      const monthBk = bookings.filter(b => {
+        const d = new Date(b.date);
+        return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
+      });
+      const unread = messages.filter(m => !m.read);
+
+      document.getElementById('stat-total').textContent = bookings.length;
+      document.getElementById('stat-upcoming').textContent = upcoming.length;
+      document.getElementById('stat-month').textContent = monthBk.length;
+      document.getElementById('stat-unread').textContent = unread.length;
+
+      // Nav badges
+      const newBk = bookings.filter(b => !b.status || b.status === 'new');
+      const bkBadge = document.getElementById('badge-bookings');
+      bkBadge.textContent = newBk.length;
+      bkBadge.style.display = newBk.length ? '' : 'none';
+
+      const msgBadge = document.getElementById('badge-messages');
+      msgBadge.textContent = unread.length;
+      msgBadge.style.display = unread.length ? '' : 'none';
+    }
+
+    // ── Render Bookings ──
+    function renderBookings() {
+      let bookings = getBookings().slice().reverse();
+      if (bookingFilter !== 'all') {
+        bookings = bookings.filter(b => (b.status || 'new') === bookingFilter);
+      }
+      const list = document.getElementById('bookings-list');
+
+      if (bookings.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state__icon">🏺</div>
+            <h3>No sessions yet</h3>
+            <p>Bookings made on the site will appear here.</p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = bookings.map(b => {
+        const d = new Date(b.date);
+        const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+        const ts = new Date(b.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const status = b.status || 'new';
+
+        const badgeMap = {
+          new:       '<span class="status-badge status-badge--new">● New</span>',
+          confirmed: '<span class="status-badge status-badge--confirmed">✓ Confirmed</span>',
+          cancelled: '<span class="status-badge status-badge--cancelled">✕ Cancelled</span>',
+          completed: '<span class="status-badge status-badge--completed">★ Completed</span>',
+        };
+
+        return `
+          <div class="booking-card" id="bk-${b.id}">
+            <div class="booking-card__top">
+              <div>
+                <div class="booking-card__id">${b.id} · Booked ${ts}</div>
+                <div class="booking-card__name">${b.details.firstName} ${b.details.lastName}</div>
+                <div class="booking-card__session">${b.class}</div>
+              </div>
+              <div class="booking-card__datetime">
+                <div class="booking-card__date">📅 ${dateStr}</div>
+                <div class="booking-card__time">🕐 ${b.time}</div>
+                <div style="margin-top:6px;">${badgeMap[status] || badgeMap.new}</div>
+              </div>
+            </div>
+            <div class="booking-card__meta">
+              <span>📧 <a href="mailto:${b.details.email}" style="color:var(--teal-lt)">${b.details.email}</a></span>
+              <span>📱 <a href="tel:${b.details.phone}" style="color:var(--teal-lt)">${b.details.phone}</a></span>
+              <span>📍 ${b.details.address}${b.details.city ? `, ${b.details.city}` : ''}${b.details.state ? `, ${b.details.state}` : ''}</span>
+              <span>👥 ${b.details.guests} guest${b.details.guests > 1 ? 's' : ''} · ${b.details.experience}</span>
+            </div>
+            ${b.details.notes ? `<div class="booking-card__notes">💬 "${b.details.notes}"</div>` : ''}
+            <div class="booking-card__actions">
+              ${status !== 'confirmed'  && status !== 'cancelled' && status !== 'completed' ? `<button class="action-btn action-btn--confirm" onclick="setStatus('${b.id}','confirmed')">✓ Confirm</button>` : ''}
+              ${status !== 'completed'  && status !== 'cancelled' ? `<button class="action-btn action-btn--done" onclick="setStatus('${b.id}','completed')">★ Mark Done</button>` : ''}
+              ${status !== 'cancelled' ? `<button class="action-btn action-btn--cancel" onclick="setStatus('${b.id}','cancelled')">✕ Cancel</button>` : ''}
+              ${status === 'cancelled' ? `<button class="action-btn action-btn--confirm" onclick="setStatus('${b.id}','new')">↺ Restore</button>` : ''}
+              <button class="action-btn action-btn--delete" onclick="deleteBooking('${b.id}')">🗑 Delete</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function setStatus(id, status) {
+      const bookings = getBookings();
+      const b = bookings.find(x => x.id === id);
+      if (b) { b.status = status; saveBookings(bookings); }
+      renderBookings();
+      updateStats();
+      const labels = { confirmed: 'Confirmed ✓', cancelled: 'Cancelled', completed: 'Marked complete ★', new: 'Restored' };
+      toast(labels[status] || 'Updated');
+    }
+
+    function deleteBooking(id) {
+      if (!confirm('Delete this booking permanently?')) return;
+      const bookings = getBookings().filter(x => x.id !== id);
+      saveBookings(bookings);
+      renderBookings();
+      updateStats();
+      toast('Booking deleted.');
+    }
+
+    // ── Render Messages ──
+    function renderMessages() {
+      let messages = getMessages().slice().reverse();
+      if (messageFilter === 'unread') messages = messages.filter(m => !m.read);
+
+      const list = document.getElementById('messages-list');
+
+      if (messages.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state__icon">💬</div>
+            <h3>No messages yet</h3>
+            <p>Messages submitted via the contact form will appear here.</p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = messages.map(m => {
+        const ts = new Date(m.timestamp).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+        return `
+          <div class="msg-card ${m.read ? '' : 'unread'}" id="msg-${m.id}">
+            <div class="msg-card__top">
+              <div>
+                <div class="msg-card__id">${m.id}</div>
+                <div class="msg-card__name">
+                  ${!m.read ? '<span class="unread-dot"></span>' : ''}${m.name}
+                </div>
+                <div class="msg-card__email">${m.email}</div>
+              </div>
+              <div class="msg-card__ts">${ts}</div>
+            </div>
+            <div class="msg-card__body">${m.message}</div>
+            <div class="msg-card__actions">
+              <a class="reply-link" href="mailto:${m.email}?subject=Re: Your inquiry — Spirit Tree Ceramics" target="_blank" onclick="markRead('${m.id}')">
+                ✉ Reply via Email
+              </a>
+              ${!m.read ? `<button class="action-btn action-btn--done" onclick="markRead('${m.id}')">Mark Read</button>` : '<span style="font-size:0.75rem;color:var(--smoke);">✓ Read</span>'}
+              <button class="action-btn action-btn--delete" onclick="deleteMessage('${m.id}')">🗑 Delete</button>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function markRead(id) {
+      const messages = getMessages();
+      const m = messages.find(x => x.id === id);
+      if (m) { m.read = true; saveMessages(messages); }
+      renderMessages();
+      updateStats();
+      toast('Marked as read');
+    }
+
+    function deleteMessage(id) {
+      if (!confirm('Delete this message?')) return;
+      saveMessages(getMessages().filter(x => x.id !== id));
+      renderMessages();
+      updateStats();
+      toast('Message deleted.');
+    }
+
+    // ── Init ──
+    function init() {
+      updateStats();
+      renderBookings();
+    }
+  </script>
+</body>
+</html>
