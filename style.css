@@ -125,20 +125,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .btn--primary {
   background: linear-gradient(135deg, var(--amethyst), var(--violet));
   color: #fff;
-  box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+  box-shadow: 0 4px 20px rgba(193,84,10,0.4);
 }
 .btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(124,58,237,0.55);
+  box-shadow: 0 8px 32px rgba(193,84,10,0.55);
   filter: brightness(1.1);
 }
 .btn--accent {
-  background: rgba(124,58,237,0.18);
+  background: rgba(193,84,10,0.18);
   color: var(--mist);
-  border: 1px solid rgba(124,58,237,0.35);
+  border: 1px solid rgba(193,84,10,0.35);
 }
 .btn--accent:hover {
-  background: rgba(124,58,237,0.3);
+  background: rgba(193,84,10,0.3);
   color: var(--pearl);
   border-color: var(--am-lt);
 }
@@ -155,11 +155,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .btn--clay {
   background: linear-gradient(135deg, var(--teal), #065f6b);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(13,148,136,0.35);
+  box-shadow: 0 4px 16px rgba(74,122,74,0.35);
 }
 .btn--clay:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(13,148,136,0.5);
+  box-shadow: 0 8px 28px rgba(74,122,74,0.5);
   filter: brightness(1.1);
 }
 .btn--lg { padding: 16px 38px; font-size: 0.98rem; }
@@ -178,7 +178,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .nav.scrolled {
   background: rgba(6,1,15,0.88);
   backdrop-filter: blur(16px);
-  box-shadow: 0 1px 0 rgba(124,58,237,0.2), 0 4px 24px rgba(0,0,0,0.5);
+  box-shadow: 0 1px 0 rgba(193,84,10,0.2), 0 4px 24px rgba(0,0,0,0.5);
   padding: 14px 0;
 }
 .nav__inner {
@@ -232,7 +232,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 16px;
   padding: 20px 24px;
   background: rgba(6,1,15,0.96);
-  border-top: 1px solid rgba(124,58,237,0.2);
+  border-top: 1px solid rgba(193,84,10,0.2);
 }
 .nav__mobile a, .nav__mobile button {
   color: var(--mist);
@@ -276,10 +276,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: absolute;
   inset: 0;
   background: linear-gradient(
-    135deg,
-    rgba(6,1,15,0.88) 0%,
-    rgba(21,9,48,0.72) 45%,
-    rgba(59,29,138,0.3) 100%
+    160deg,
+    rgba(15,10,6,0.90) 0%,
+    rgba(36,21,9,0.75) 45%,
+    rgba(74,48,20,0.35) 100%
   );
 }
 
@@ -316,7 +316,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .geo-ring--2 { display: none; }
 }
 
-/* Particles */
+/* Particles — subtle dust motes */
 .hero__particles {
   position: absolute;
   inset: 0;
@@ -327,12 +327,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   position: absolute;
   border-radius: 50%;
   animation: floatPart linear infinite;
+  opacity: 0.4;
 }
 @keyframes floatPart {
   from { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 0.5; }
-  to   { transform: translateY(-120px) rotate(720deg); opacity: 0; }
+  10%  { opacity: 0.35; }
+  90%  { opacity: 0.15; }
+  to   { transform: translateY(-120px) rotate(360deg); opacity: 0; }
 }
 
 .hero__content {
@@ -451,7 +452,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 28px rgba(124,58,237,0.5);
+  box-shadow: 0 6px 28px rgba(193,84,10,0.5);
 }
 .about__badge-num {
   font-family: var(--font-head);
@@ -493,8 +494,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   flex-shrink: 0;
   width: 48px;
   height: 48px;
-  background: rgba(124,58,237,0.12);
-  border: 1px solid rgba(124,58,237,0.25);
+  background: rgba(193,84,10,0.12);
+  border: 1px solid rgba(193,84,10,0.25);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -527,8 +528,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .class-card:hover {
   transform: translateY(-8px);
-  border-color: rgba(124,58,237,0.45);
-  background: rgba(124,58,237,0.07);
+  border-color: rgba(193,84,10,0.45);
+  background: rgba(193,84,10,0.07);
   box-shadow: var(--glow-v);
 }
 .class-card__icon { font-size: 2rem; }
@@ -635,7 +636,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   flex-shrink: 0;
   width: 48px;
   height: 1px;
-  background: linear-gradient(90deg, rgba(124,58,237,0.4), rgba(13,148,136,0.4));
+  background: linear-gradient(90deg, rgba(193,84,10,0.4), rgba(74,122,74,0.4));
   margin-top: 82px;
 }
 @media (max-width: 700px) {
@@ -657,7 +658,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   border-radius: var(--radius);
   overflow: hidden;
   cursor: pointer;
-  border: 1px solid rgba(124,58,237,0.12);
+  border: 1px solid rgba(193,84,10,0.12);
 }
 .gallery__item img {
   width: 100%;
@@ -737,7 +738,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .contact__form .form__group input:focus,
 .contact__form .form__group textarea:focus {
   border-color: var(--amethyst);
-  background: rgba(124,58,237,0.05);
+  background: rgba(193,84,10,0.05);
 }
 .contact__form .form__group input::placeholder,
 .contact__form .form__group textarea::placeholder { color: var(--smoke); }
@@ -749,7 +750,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .contact__cta-box {
   background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(124,58,237,0.25);
+  border: 1px solid rgba(193,84,10,0.25);
   border-radius: var(--radius-lg);
   padding: 48px 40px;
   text-align: center;
@@ -790,7 +791,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ══════════════════════════════════════════ */
 .footer {
   background: var(--void);
-  border-top: 1px solid rgba(124,58,237,0.15);
+  border-top: 1px solid rgba(193,84,10,0.15);
   padding: 52px 0;
   text-align: center;
 }
@@ -852,7 +853,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .modal {
   background: var(--deep);
-  border: 1px solid rgba(124,58,237,0.25);
+  border: 1px solid rgba(193,84,10,0.25);
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 620px;
@@ -875,7 +876,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: linear-gradient(90deg, var(--amethyst), var(--teal-lt));
   border-radius: 4px;
   transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-  box-shadow: 0 0 10px rgba(124,58,237,0.5);
+  box-shadow: 0 0 10px rgba(193,84,10,0.5);
 }
 
 .modal__steps-label {
@@ -898,8 +899,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   top: 20px; right: 20px;
   width: 32px; height: 32px;
   border-radius: 50%;
-  background: rgba(124,58,237,0.12);
-  border: 1px solid rgba(124,58,237,0.25);
+  background: rgba(193,84,10,0.12);
+  border: 1px solid rgba(193,84,10,0.25);
   color: var(--mist);
   font-size: 0.88rem;
   display: flex;
@@ -908,7 +909,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: background var(--transition);
   z-index: 1;
 }
-.modal__close:hover { background: rgba(124,58,237,0.25); color: var(--pearl); }
+.modal__close:hover { background: rgba(193,84,10,0.25); color: var(--pearl); }
 
 .modal__step {
   padding: 28px 32px 32px;
@@ -946,9 +947,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .modal__class-opt input:checked + .modal__class-opt-inner {
   border-color: var(--amethyst);
-  background: rgba(124,58,237,0.1);
+  background: rgba(193,84,10,0.1);
 }
-.modal__class-opt-inner:hover { border-color: rgba(124,58,237,0.4); background: rgba(124,58,237,0.06); }
+.modal__class-opt-inner:hover { border-color: rgba(193,84,10,0.4); background: rgba(193,84,10,0.06); }
 .modal__class-opt-icon { font-size: 1.4rem; flex-shrink: 0; }
 .modal__class-opt-inner div { display: flex; flex-direction: column; gap: 2px; }
 .modal__class-opt-inner strong { font-size: 0.92rem; color: var(--pearl); }
@@ -976,7 +977,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .form__group select option { background: var(--deep); color: var(--pearl); }
 .form__group input:focus,
 .form__group select:focus,
-.form__group textarea:focus { border-color: var(--amethyst); background: rgba(124,58,237,0.05); }
+.form__group textarea:focus { border-color: var(--amethyst); background: rgba(193,84,10,0.05); }
 .form__group input.error,
 .form__group select.error { border-color: #f87171; }
 .form__group textarea { resize: vertical; min-height: 80px; }
@@ -989,7 +990,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   top: 50%; right: 14px;
   transform: translateY(-50%);
   width: 16px; height: 16px;
-  border: 2px solid rgba(124,58,237,0.2);
+  border: 2px solid rgba(193,84,10,0.2);
   border-top-color: var(--amethyst);
   border-radius: 50%;
   display: none;
@@ -1003,7 +1004,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   top: calc(100% + 4px);
   left: 0; right: 0;
   background: #1A0B38;
-  border: 1.5px solid rgba(124,58,237,0.35);
+  border: 1.5px solid rgba(193,84,10,0.35);
   border-radius: var(--radius);
   max-height: 220px;
   overflow-y: auto;
@@ -1019,12 +1020,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 0.85rem;
   color: var(--mist);
   cursor: pointer;
-  border-bottom: 1px solid rgba(124,58,237,0.08);
+  border-bottom: 1px solid rgba(193,84,10,0.08);
   transition: background var(--transition);
   line-height: 1.4;
 }
 .ac-item:last-child { border-bottom: none; }
-.ac-item:hover, .ac-item.highlighted { background: rgba(124,58,237,0.18); color: var(--pearl); }
+.ac-item:hover, .ac-item.highlighted { background: rgba(193,84,10,0.18); color: var(--pearl); }
 .ac-item__primary { font-weight: 600; color: var(--pearl); margin-bottom: 2px; }
 .ac-item__secondary { font-size: 0.76rem; color: var(--smoke); }
 .ac-item--info {
@@ -1063,7 +1064,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex; align-items: center; justify-content: center;
   transition: background var(--transition);
 }
-.calendar__header button:hover { background: rgba(124,58,237,0.2); }
+.calendar__header button:hover { background: rgba(193,84,10,0.2); }
 .calendar__header span { font-weight: 600; font-size: 0.88rem; color: var(--pearl); }
 .calendar__weekdays {
   display: grid;
@@ -1086,9 +1087,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: all var(--transition);
   color: var(--mist);
 }
-.cal-day:hover:not(.disabled):not(.empty) { background: rgba(124,58,237,0.2); color: var(--pearl); }
+.cal-day:hover:not(.disabled):not(.empty) { background: rgba(193,84,10,0.2); color: var(--pearl); }
 .cal-day.today { color: var(--am-lt); font-weight: 700; }
-.cal-day.selected { background: var(--amethyst); color: #fff; box-shadow: 0 0 12px rgba(124,58,237,0.5); }
+.cal-day.selected { background: var(--amethyst); color: #fff; box-shadow: 0 0 12px rgba(193,84,10,0.5); }
 .cal-day.disabled, .cal-day.empty { color: rgba(123,111,160,0.3); cursor: default; pointer-events: none; }
 
 .timeslots-wrap { display: flex; flex-direction: column; }
@@ -1106,8 +1107,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--mist);
   text-align: left;
 }
-.timeslot:hover { border-color: rgba(124,58,237,0.4); background: rgba(124,58,237,0.08); color: var(--pearl); }
-.timeslot.selected { border-color: var(--amethyst); background: rgba(124,58,237,0.15); color: var(--am-lt); }
+.timeslot:hover { border-color: rgba(193,84,10,0.4); background: rgba(193,84,10,0.08); color: var(--pearl); }
+.timeslot.selected { border-color: var(--amethyst); background: rgba(193,84,10,0.15); color: var(--am-lt); }
 
 /* Confirm Card */
 .confirm__card {
@@ -1146,8 +1147,8 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .success p { font-size: 0.92rem; color: var(--smoke); max-width: 380px; line-height: 1.65; }
 .success__detail {
-  background: rgba(124,58,237,0.1);
-  border: 1px solid rgba(124,58,237,0.25);
+  background: rgba(193,84,10,0.1);
+  border: 1px solid rgba(193,84,10,0.25);
   border-radius: var(--radius);
   padding: 14px 20px;
   font-size: 0.88rem;

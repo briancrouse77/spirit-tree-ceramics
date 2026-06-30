@@ -49,31 +49,30 @@
   });
 
   // ── Particles ──
-  // Particle colors: violet, teal, gold
+  // Earthy dust motes — terracotta, sienna, warm gold, sage
   const PARTICLE_COLORS = [
-    'rgba(124,58,237,0.5)',
-    'rgba(13,148,136,0.45)',
-    'rgba(212,175,55,0.4)',
-    'rgba(167,139,250,0.35)',
-    'rgba(94,234,212,0.3)',
+    'rgba(193,84,10,0.4)',
+    'rgba(160,60,10,0.35)',
+    'rgba(200,149,42,0.38)',
+    'rgba(74,122,74,0.30)',
+    'rgba(212,180,120,0.28)',
   ];
 
   function generateParticles() {
     const container = document.getElementById('particles');
-    for (let i = 0; i < 22; i++) {
+    for (let i = 0; i < 18; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
-      const size = Math.random() * 8 + 3;
+      const size = Math.random() * 5 + 2;
       const color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
       p.style.cssText = `
         width: ${size}px;
         height: ${size}px;
         left: ${Math.random() * 100}%;
         background: ${color};
-        box-shadow: 0 0 ${size * 2}px ${color};
-        animation-duration: ${Math.random() * 20 + 14}s;
-        animation-delay: ${Math.random() * 12}s;
-        opacity: ${Math.random() * 0.5 + 0.15};
+        animation-duration: ${Math.random() * 24 + 16}s;
+        animation-delay: ${Math.random() * 14}s;
+        opacity: ${Math.random() * 0.35 + 0.1};
       `;
       container.appendChild(p);
     }
