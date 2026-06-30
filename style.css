@@ -1,23 +1,23 @@
 /* ══════════════════════════════════════════
    Spirit Tree Ceramics — Design System
-   Cosmic / Earthen palette
+   Earthy / Natural palette
    ══════════════════════════════════════════ */
 
 :root {
-  /* Core palette */
-  --void:       #06010F;   /* deepest bg */
-  --cosmos:     #0D0520;   /* dark sections */
-  --deep:       #150930;   /* card bg */
-  --violet:     #3B1D8A;   /* mid accent */
-  --amethyst:   #7C3AED;   /* primary accent */
-  --am-lt:      #A78BFA;   /* light amethyst */
-  --teal:       #0D9488;   /* secondary */
-  --teal-lt:    #5EEAD4;   /* light teal */
-  --gold:       #D4AF37;   /* sacred gold */
-  --gold-lt:    #F0D060;   /* light gold */
-  --pearl:      #F0E6FF;   /* light text */
-  --mist:       #C4B5FD;   /* mid light text */
-  --smoke:      #7B6FA0;   /* dim text */
+  /* Core palette — earthy, grounded */
+  --void:       #0F0A06;   /* deepest bg — charred wood */
+  --cosmos:     #1A110A;   /* dark sections — dark soil */
+  --deep:       #241509;   /* card bg — rich earth */
+  --violet:     #7A4520;   /* mid accent — burnt sienna */
+  --amethyst:   #C1540A;   /* primary accent — terracotta */
+  --am-lt:      #E07840;   /* light terracotta */
+  --teal:       #4A7A4A;   /* secondary — forest green */
+  --teal-lt:    #8FBF6A;   /* light sage */
+  --gold:       #C8952A;   /* warm gold */
+  --gold-lt:    #E8B84A;   /* light gold */
+  --pearl:      #F5EDD8;   /* warm cream — natural light text */
+  --mist:       #D4BC8E;   /* warm tan — mid text */
+  --smoke:      #8B7355;   /* warm smoke — dim text */
   --earth:      #2A1A10;   /* earthy dark */
   --bark:       #4A3020;   /* earthy mid */
 
@@ -26,10 +26,10 @@
 
   --radius:   12px;
   --radius-lg: 20px;
-  --shadow:   0 4px 24px rgba(6,1,15,0.4);
-  --shadow-lg: 0 16px 56px rgba(6,1,15,0.55);
-  --glow-v:   0 0 40px rgba(124,58,237,0.25);
-  --glow-t:   0 0 40px rgba(13,148,136,0.2);
+  --shadow:   0 4px 24px rgba(10,5,2,0.4);
+  --shadow-lg: 0 16px 56px rgba(10,5,2,0.55);
+  --glow-v:   0 0 40px rgba(193,84,10,0.2);
+  --glow-t:   0 0 40px rgba(74,122,74,0.18);
 
   --transition: 0.28s cubic-bezier(0.4,0,0.2,1);
 }
