@@ -57,7 +57,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ── Section helpers ── */
-.section { padding: 100px 0; position: relative; overflow: hidden; }
+.section { padding: 84px 0; position: relative; overflow: hidden; }
 .section--dark  { background: var(--cosmos); }
 .section--void  { background: var(--void); }
 .section--warm  { background: var(--earth); }
@@ -83,12 +83,20 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .section__title--light { color: var(--pearl); }
 
+/* Centered section header block (used by shop, classes, etc.) */
+.section__header {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 48px;
+}
+.section__header .section__eyebrow { margin-bottom: 14px; }
+.section__header .section__title  { margin-bottom: 14px; }
+
 .section__sub {
-  font-size: 1.02rem;
+  font-size: 0.98rem;
   color: var(--smoke);
-  max-width: 560px;
-  margin-bottom: 60px;
   line-height: 1.7;
+  margin-top: 8px;
 }
 .section__sub--light { color: var(--mist); }
 
@@ -422,7 +430,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .about__grid {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
-  gap: 80px;
+  gap: 56px;
   align-items: center;
 }
 @media (max-width: 860px) {
@@ -598,6 +606,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   align-items: flex-start;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 0 8px;
 }
 .how__step {
   flex: 1;
@@ -1238,14 +1247,7 @@ body.modal-open { overflow: hidden; }
   transition: filter 0.2s;
 }
 .shop-card__cta:hover { filter: brightness(1.15); }
-.section__sub {
-  font-size: 0.95rem;
-  color: var(--smoke);
-  max-width: 560px;
-  margin: 12px auto 0;
-  text-align: center;
-  line-height: 1.7;
-}
+
 
 /* Purchase delivery options */
 .purchase-delivery-opt {
