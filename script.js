@@ -717,12 +717,12 @@
       const pots = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
 
       if (pots.length === 0) {
-        shopSection.style.display = 'none';
+        shopGrid.innerHTML = '';
+        shopEmpty.style.display = '';
         return;
       }
 
-      shopSection.style.display = '';
-      shopEmpty.style.display   = 'none';
+      shopEmpty.style.display = 'none';
       shopGrid.innerHTML = pots.map(p => `
         <div class="shop-card" onclick="openPurchaseModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
           ${p.imageUrl
