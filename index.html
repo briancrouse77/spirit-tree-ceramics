@@ -21,6 +21,7 @@
         <li><a href="#classes">Sessions</a></li>
         <li><a href="#how">The Journey</a></li>
         <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#shop">Shop</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
       <button class="btn btn--accent nav__cta" id="nav-book-btn">Book a Session</button>
@@ -302,6 +303,90 @@
     </div>
   </section>
 
+  <!-- ── SHOP ── -->
+  <section class="section section--dark" id="shop" style="display:none">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__eyebrow section__eyebrow--light">From the Wheel</p>
+        <h2 class="section__title">Available Pieces</h2>
+        <p class="section__sub">Each piece is handthrown by John — one of a kind. Click any piece to inquire about purchasing.</p>
+      </div>
+      <div class="shop-grid" id="shop-grid"></div>
+      <p class="shop-empty" id="shop-empty" style="display:none;text-align:center;color:var(--smoke);padding:48px 0">Nothing listed right now — check back soon.</p>
+    </div>
+  </section>
+
+  <!-- ── PURCHASE MODAL ── -->
+  <div class="modal" id="purchase-modal" role="dialog" aria-modal="true" style="display:none">
+    <div class="modal__backdrop" id="purchase-backdrop"></div>
+    <div class="modal__box" style="max-width:560px">
+      <button class="modal__close" id="purchase-close" aria-label="Close">×</button>
+
+      <!-- Step 1: Piece Review -->
+      <div class="purchase-step" id="pstep-1">
+        <div id="purchase-pot-preview" style="display:flex;gap:20px;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap">
+          <img id="purchase-pot-img" src="" alt="" style="width:140px;height:140px;object-fit:cover;border-radius:12px;display:none" />
+          <div>
+            <p style="font-size:0.72rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--amethyst);margin-bottom:6px">Selected Piece</p>
+            <div id="purchase-pot-title" style="font-family:var(--font-head);font-size:1.6rem;font-weight:600;color:var(--pearl)"></div>
+            <div id="purchase-pot-price" style="font-family:var(--font-head);font-size:2rem;color:var(--gold);margin-top:4px"></div>
+            <div id="purchase-pot-desc" style="font-size:0.85rem;color:var(--smoke);margin-top:8px;line-height:1.6"></div>
+          </div>
+        </div>
+        <p style="font-size:0.85rem;color:var(--smoke);margin-bottom:24px">Submitting this form sends John your inquiry. He’ll reach out within 24 hours to confirm and arrange payment.</p>
+        <button class="btn btn--primary" style="width:100%" onclick="goPurchaseStep(2)">Proceed →</button>
+      </div>
+
+      <!-- Step 2: Your Info -->
+      <div class="purchase-step" id="pstep-2" style="display:none">
+        <h3 style="font-family:var(--font-head);font-size:1.5rem;margin-bottom:6px;color:var(--pearl)">Your Info</h3>
+        <p style="font-size:0.82rem;color:var(--smoke);margin-bottom:22px">Step 2 of 3</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <input type="text" id="pur-name" class="form__input" placeholder="Full name" />
+          <input type="email" id="pur-email" class="form__input" placeholder="Email address" />
+          <input type="tel" id="pur-phone" class="form__input" placeholder="Phone number" />
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn--ghost" style="flex:1" onclick="goPurchaseStep(1)">← Back</button>
+          <button class="btn btn--primary" style="flex:2" onclick="goPurchaseStep(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Delivery -->
+      <div class="purchase-step" id="pstep-3" style="display:none">
+        <h3 style="font-family:var(--font-head);font-size:1.5rem;margin-bottom:6px;color:var(--pearl)">Delivery Preference</h3>
+        <p style="font-size:0.82rem;color:var(--smoke);margin-bottom:22px">Step 3 of 3</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+          <label class="purchase-delivery-opt" id="popt-pickup">
+            <input type="radio" name="pur-delivery" value="pickup" checked /> Pickup at a wheel session (DFW area)
+          </label>
+          <label class="purchase-delivery-opt" id="popt-local">
+            <input type="radio" name="pur-delivery" value="local" /> Local delivery (DFW area)
+          </label>
+          <label class="purchase-delivery-opt" id="popt-ship">
+            <input type="radio" name="pur-delivery" value="ship" /> Ship to me
+          </label>
+        </div>
+        <div id="pur-address-wrap" style="display:none">
+          <input type="text" id="pur-address" class="form__input" placeholder="Shipping address" style="margin-bottom:10px" />
+        </div>
+        <textarea id="pur-notes" class="form__input" placeholder="Any notes for John… (optional)" style="min-height:72px;resize:vertical"></textarea>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn--ghost" style="flex:1" onclick="goPurchaseStep(2)">← Back</button>
+          <button class="btn btn--primary" style="flex:2" id="pur-submit-btn" onclick="submitPurchase()">Send Inquiry →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Success -->
+      <div class="purchase-step" id="pstep-4" style="display:none;text-align:center;padding:24px 0">
+        <div style="font-size:3rem;margin-bottom:16px">🏺</div>
+        <h3 style="font-family:var(--font-head);font-size:1.8rem;color:var(--pearl);margin-bottom:10px">Inquiry Sent!</h3>
+        <p style="color:var(--smoke);font-size:0.9rem;line-height:1.7">John will be in touch within 24 hours to confirm your piece and arrange payment. Thank you!</p>
+        <button class="btn btn--ghost" style="margin-top:24px" onclick="closePurchaseModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ── CONTACT ── -->
   <section class="contact section" id="contact">
     <div class="container contact__inner">
@@ -572,6 +657,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
   <script src="firebase-config.js"></script>
   <script src="script.js"></script>
 </body>

@@ -699,3 +699,146 @@
   }
 
 })();
+
+// ── Shop: Load & Render ──────────────────────────────────────────────────────
+(function initShop() {
+  const shopSection = document.getElementById('shop');
+  const shopGrid    = document.getElementById('shop-grid');
+  const shopEmpty   = document.getElementById('shop-empty');
+  if (!shopSection || !shopGrid) return;
+
+  const USE_FIREBASE = typeof db !== 'undefined';
+  if (!USE_FIREBASE) return; // no pots without Firestore
+
+  db.collection('pots')
+    .where('status', '==', 'available')
+    .orderBy('timestamp', 'desc')
+    .onSnapshot(snap => {
+      const pots = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+
+      if (pots.length === 0) {
+        shopSection.style.display = 'none';
+        return;
+      }
+
+      shopSection.style.display = '';
+      shopEmpty.style.display   = 'none';
+      shopGrid.innerHTML = pots.map(p => `
+        <div class="shop-card" onclick="openPurchaseModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
+          ${p.imageUrl
+            ? `<img src="${p.imageUrl}" class="shop-card__img" alt="${p.title}" loading="lazy" />`
+            : `<div class="shop-card__img-ph">🏺</div>`}
+          <div class="shop-card__body">
+            <div class="shop-card__title">${p.title}</div>
+            ${p.description ? `<div class="shop-card__desc">${p.description}</div>` : ''}
+            <div class="shop-card__footer">
+              <div class="shop-card__price">$${Number(p.price).toFixed(0)}</div>
+              <button class="shop-card__cta" onclick="event.stopPropagation();openPurchaseModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">Inquire →</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    });
+})();
+
+// ── Purchase Modal ───────────────────────────────────────────────────────────
+let _purchasePot = null;
+
+function openPurchaseModal(pot) {
+  _purchasePot = pot;
+
+  // Populate step 1
+  const img = document.getElementById('purchase-pot-img');
+  if (pot.imageUrl) { img.src = pot.imageUrl; img.style.display = 'block'; }
+  else              { img.style.display = 'none'; }
+  document.getElementById('purchase-pot-title').textContent = pot.title || '';
+  document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
+  document.getElementById('purchase-pot-desc').textContent  = pot.description || '';
+
+  // Reset steps and form fields
+  goPurchaseStep(1);
+  ['pur-name','pur-email','pur-phone','pur-address','pur-notes'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  document.querySelector('input[name="pur-delivery"][value="pickup"]').checked = true;
+  document.getElementById('pur-address-wrap').style.display = 'none';
+
+  const modal = document.getElementById('purchase-modal');
+  modal.style.display = 'flex';
+  document.body.classList.add('modal-open');
+}
+
+function closePurchaseModal() {
+  document.getElementById('purchase-modal').style.display = 'none';
+  document.body.classList.remove('modal-open');
+}
+
+function goPurchaseStep(n) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById('pstep-' + i);
+    if (el) el.style.display = i === n ? '' : 'none';
+  });
+
+  // Validate step 2 before moving to 3
+  if (n === 3) {
+    const name  = (document.getElementById('pur-name')?.value  || '').trim();
+    const email = (document.getElementById('pur-email')?.value || '').trim();
+    const phone = (document.getElementById('pur-phone')?.value || '').trim();
+    if (!name || !email) {
+      goPurchaseStep(2);
+      const bad = !name ? 'pur-name' : 'pur-email';
+      document.getElementById(bad)?.focus();
+      return;
+    }
+  }
+}
+
+// Show/hide address field when "ship" is selected
+document.addEventListener('change', e => {
+  if (e.target.name === 'pur-delivery') {
+    document.getElementById('pur-address-wrap').style.display =
+      e.target.value === 'ship' ? '' : 'none';
+  }
+});
+
+// Close on backdrop or × button
+document.getElementById('purchase-close')?.addEventListener('click', closePurchaseModal);
+document.getElementById('purchase-backdrop')?.addEventListener('click', closePurchaseModal);
+
+async function submitPurchase() {
+  const name     = (document.getElementById('pur-name')?.value  || '').trim();
+  const email    = (document.getElementById('pur-email')?.value || '').trim();
+  const phone    = (document.getElementById('pur-phone')?.value || '').trim();
+  const delivery = document.querySelector('input[name="pur-delivery"]:checked')?.value || 'pickup';
+  const address  = (document.getElementById('pur-address')?.value || '').trim();
+  const notes    = (document.getElementById('pur-notes')?.value  || '').trim();
+
+  if (!name || !email) { goPurchaseStep(2); return; }
+
+  const btn = document.getElementById('pur-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  const record = {
+    id:        'PUR-' + Math.random().toString(36).substr(2,6).toUpperCase(),
+    potId:     _purchasePot?.id    || '',
+    potTitle:  _purchasePot?.title || '',
+    potPrice:  _purchasePot?.price || 0,
+    name, email, phone, delivery, address, notes,
+    status:    'new',
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    if (typeof db !== 'undefined') {
+      await db.collection('purchases').add(record);
+    }
+    goPurchaseStep(4);
+  } catch(err) {
+    console.error(err);
+    btn.textContent = 'Error — try again';
+  } finally {
+    btn.disabled = false;
+  }
+}

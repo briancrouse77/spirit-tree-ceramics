@@ -791,6 +791,57 @@
       .booking-card__top, .msg-card__top { flex-direction: column; }
       .booking-card__datetime, .msg-card__ts { text-align: left; }
     }
+    /* ── Shop Panel ── */
+    .shop-layout { display: grid; grid-template-columns: 340px 1fr; gap: 28px; align-items: start; }
+    @media (max-width: 900px) { .shop-layout { grid-template-columns: 1fr; } }
+
+    .img-upload-zone {
+      width: 100%; aspect-ratio: 4/3; border-radius: var(--r-lg);
+      border: 2px dashed rgba(193,84,10,0.3); background: var(--deep);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; overflow: hidden; margin-bottom: 14px;
+      transition: border-color var(--tr);
+      position: relative;
+    }
+    .img-upload-zone:hover, .img-upload-zone.drag-over { border-color: var(--amethyst); }
+    .img-upload-zone img { width: 100%; height: 100%; object-fit: cover; display: none; }
+    .img-upload-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--smoke); font-size: 0.82rem; text-align: center; padding: 20px; pointer-events: none; }
+    .img-upload-placeholder .icon { font-size: 2.4rem; opacity: 0.5; }
+
+    .field-input, .field-textarea, .field-select {
+      width: 100%; padding: 10px 14px;
+      border: 1.5px solid rgba(212,188,142,0.15);
+      border-radius: var(--r); background: rgba(255,255,255,0.04);
+      color: var(--pearl); font-size: 0.88rem; outline: none;
+      transition: border-color var(--tr);
+      font-family: var(--font-b);
+    }
+    .field-textarea { min-height: 80px; resize: vertical; }
+    .field-input:focus, .field-textarea:focus, .field-select:focus { border-color: var(--amethyst); }
+    .field-select option { background: var(--deep); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
+    .field-group label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--smoke); }
+    .pot-form-fields { display: flex; flex-direction: column; gap: 10px; }
+
+    .upload-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; margin-bottom: 6px; }
+    .upload-fill { height: 100%; background: var(--amethyst); border-radius: 4px; width: 0%; transition: width 0.2s; }
+    .upload-pct { font-size: 0.75rem; color: var(--smoke); }
+
+    .pot-list { display: flex; flex-direction: column; gap: 12px; }
+    .pot-card {
+      background: var(--deep); border: 1px solid rgba(193,84,10,0.12);
+      border-radius: var(--r-lg); overflow: hidden;
+      display: grid; grid-template-columns: 120px 1fr;
+      transition: border-color var(--tr);
+    }
+    .pot-card:hover { border-color: rgba(193,84,10,0.3); }
+    .pot-card__img { width: 120px; height: 120px; object-fit: cover; display: block; }
+    .pot-card__img-ph { width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: rgba(255,255,255,0.03); color: var(--smoke); }
+    .pot-card__body { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+    .pot-card__title { font-size: 0.98rem; font-weight: 600; color: var(--pearl); }
+    .pot-card__price { font-family: var(--font-h); font-size: 1.3rem; color: var(--gold); font-weight: 700; }
+    .pot-card__desc { font-size: 0.78rem; color: var(--smoke); line-height: 1.5; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   </style>
 </head>
 <body>
@@ -826,6 +877,16 @@
           <span class="icon">💬</span>
           <span>Messages</span>
           <span class="badge" id="badge-messages" style="display:none;">0</span>
+        </div>
+        <div class="nav-item" data-panel="shop" id="nav-shop">
+          <span class="icon">🏺</span>
+          <span>Shop</span>
+          <span class="badge" id="badge-shop" style="display:none;">0</span>
+        </div>
+        <div class="nav-item" data-panel="purchases" id="nav-purchases">
+          <span class="icon">💳</span>
+          <span>Purchases</span>
+          <span class="badge" id="badge-purchases" style="display:none;">0</span>
         </div>
         <a href="index.html" class="nav-item" target="_blank">
           <span class="icon">🌐</span>
@@ -866,9 +927,9 @@
           <div class="stat-card__sub">Confirmed or new</div>
         </div>
         <div class="stat-card stat-card--gold">
-          <div class="stat-card__label">This Month</div>
-          <div class="stat-card__value" id="stat-month">0</div>
-          <div class="stat-card__sub" id="stat-month-label">Sessions booked</div>
+          <div class="stat-card__label">Shop Listings</div>
+          <div class="stat-card__value" id="stat-pots">0</div>
+          <div class="stat-card__sub" id="stat-pots-sub">Available pieces</div>
         </div>
         <div class="stat-card">
           <div class="stat-card__label">Unread Messages</div>
@@ -904,6 +965,84 @@
         <div class="messages-list" id="messages-list"></div>
       </div>
 
+      <!-- Shop Panel -->
+      <div class="panel" id="panel-shop">
+        <div class="shop-layout">
+
+          <!-- Left: Add/Edit Form -->
+          <div class="shop-form-col">
+            <div class="section-hdr" style="margin-bottom:16px">
+              <h2 id="pot-form-title">Add New Piece</h2>
+              <button class="btn-sm btn-ghost" id="pot-cancel-btn" style="display:none">✕ Cancel</button>
+            </div>
+
+            <div class="img-upload-zone" id="img-upload-zone" title="Click or drag an image here">
+              <img id="img-preview" alt="preview" />
+              <div class="img-upload-placeholder" id="img-placeholder">
+                <div class="icon">📷</div>
+                <p>Click or drag image here</p>
+              </div>
+              <input type="file" id="pot-img-input" accept="image/*" style="display:none" />
+            </div>
+
+            <div class="pot-form-fields">
+              <div class="field-group">
+                <label>Title</label>
+                <input type="text" id="pot-title" class="field-input" placeholder="e.g. Celadon Bottle Vase" />
+              </div>
+              <div class="field-group">
+                <label>Description</label>
+                <textarea id="pot-desc" class="field-textarea" placeholder="Materials, dimensions, story..."></textarea>
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label>Price (USD)</label>
+                  <input type="number" id="pot-price" class="field-input" placeholder="85" min="0" step="1" />
+                </div>
+                <div class="field-group">
+                  <label>Status</label>
+                  <select id="pot-status" class="field-select">
+                    <option value="available">Available</option>
+                    <option value="sold">Sold</option>
+                  </select>
+                </div>
+              </div>
+              <div id="upload-progress" style="display:none">
+                <div class="upload-bar"><div class="upload-fill" id="upload-fill"></div></div>
+                <p class="upload-pct" id="upload-pct">Uploading…</p>
+              </div>
+              <button class="btn-sm btn-primary" id="pot-save-btn" style="width:100%;padding:12px">Add Piece →</button>
+            </div>
+          </div>
+
+          <!-- Right: Listings -->
+          <div class="shop-list-col">
+            <div class="section-hdr">
+              <h2>Listings</h2>
+              <div class="section-hdr__filters">
+                <button class="filter-btn active" data-shop-filter="all">All</button>
+                <button class="filter-btn" data-shop-filter="available">Available</button>
+                <button class="filter-btn" data-shop-filter="sold">Sold</button>
+              </div>
+            </div>
+            <div class="pot-list" id="pot-list"></div>
+          </div>
+
+        </div>
+      </div>
+      <!-- Purchases Panel -->
+      <div class="panel" id="panel-purchases">
+        <div class="section-hdr">
+          <h2>Purchase Inquiries</h2>
+          <div class="section-hdr__filters">
+            <button class="filter-btn active" data-pur-filter="all">All</button>
+            <button class="filter-btn" data-pur-filter="new">New</button>
+            <button class="filter-btn" data-pur-filter="confirmed">Confirmed</button>
+          </div>
+        </div>
+        <div class="bookings-list" id="purchases-list"></div>
+      </div>
+
     </main>
   </div>
 
@@ -911,6 +1050,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
   <script src="firebase-config.js"></script>
   <script>
     // ── Constants ──
@@ -927,6 +1067,11 @@
     // In-memory cache (populated by Firestore listeners)
     let _bookings = [];
     let _messages = [];
+    let _pots     = [];
+    let _purchases = [];
+    let _editingPotId = null;
+    let _selectedImageFile = null;
+    let _shopFilter = 'all';
 
     const loginScreen = document.getElementById('login-screen');
     const app         = document.getElementById('app');
@@ -983,6 +1128,16 @@
         updateStats();
         if (currentPanel === 'messages') renderMessages();
       });
+      db.collection('pots').orderBy('timestamp','desc').onSnapshot(snap => {
+        _pots = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        updateStats();
+        if (currentPanel === 'shop') renderPots();
+      });
+      db.collection('purchases').orderBy('timestamp','desc').onSnapshot(snap => {
+        _purchases = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        updateStats();
+        if (currentPanel === 'purchases') renderPurchases();
+      });
     }
 
     // ── Toast ──
@@ -1013,6 +1168,16 @@
           document.getElementById('page-sub').textContent = 'All scheduled sessions';
           document.getElementById('clear-btn').style.display = '';
           renderBookings();
+        } else if (panel === 'shop') {
+          document.getElementById('page-title').textContent = 'Shop';
+          document.getElementById('page-sub').textContent = 'Manage pieces for sale';
+          document.getElementById('clear-btn').style.display = 'none';
+          renderPots();
+        } else if (panel === 'purchases') {
+          document.getElementById('page-title').textContent = 'Purchases';
+          document.getElementById('page-sub').textContent = 'Customer purchase inquiries';
+          document.getElementById('clear-btn').style.display = 'none';
+          renderPurchases();
         } else {
           document.getElementById('page-title').textContent = 'Messages';
           document.getElementById('page-sub').textContent = 'Customer inquiries';
@@ -1085,10 +1250,11 @@
       });
       const unread = messages.filter(m => !m.read);
 
-      document.getElementById('stat-total').textContent = bookings.length;
-      document.getElementById('stat-upcoming').textContent = upcoming.length;
-      document.getElementById('stat-month').textContent = monthBk.length;
-      document.getElementById('stat-unread').textContent = unread.length;
+      document.getElementById('stat-total').textContent    = bookings.length;
+      document.getElementById('stat-upcoming').textContent  = upcoming.length;
+      const availPots = _pots.filter(p => p.status === 'available').length;
+      document.getElementById('stat-pots').textContent     = availPots;
+      document.getElementById('stat-unread').textContent   = unread.length;
 
       // Nav badges
       const newBk = bookings.filter(b => !b.status || b.status === 'new');
@@ -1260,10 +1426,234 @@
       }
     }
 
+    // ── Purchases: Filter ──
+    let _purFilter = 'all';
+    document.querySelectorAll('[data-pur-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-pur-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        _purFilter = btn.dataset.purFilter;
+        renderPurchases();
+      });
+    });
+
+    // ── Purchases: Render ──
+    function renderPurchases() {
+      let purs = _purchases;
+      if (_purFilter !== 'all') purs = purs.filter(p => p.status === _purFilter);
+      const list = document.getElementById('purchases-list');
+      if (!list) return;
+      if (purs.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-state__icon">💳</div><h3>No inquiries yet</h3><p>When a customer clicks "Inquire" on a pot, it will appear here.</p></div>`;
+        return;
+      }
+      list.innerHTML = purs.map(p => {
+        const ts = p.timestamp ? new Date(p.timestamp).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) : '';
+        return `
+        <div class="booking-card">
+          <div class="booking-card__top">
+            <div>
+              <div class="booking-card__id">${p.id || ''}</div>
+              <div class="booking-card__name">${p.name}</div>
+              <div class="booking-card__session">${p.potTitle} — <strong style="color:var(--gold)">$${Number(p.potPrice||0).toFixed(0)}</strong></div>
+            </div>
+            <div class="booking-card__datetime">
+              <div class="booking-card__date">${ts}</div>
+              <div class="booking-card__time">${p.delivery || 'pickup'}</div>
+            </div>
+          </div>
+          <div class="booking-card__meta">
+            <span>📧 ${p.email}</span>
+            ${p.phone ? `<span>📱 ${p.phone}</span>` : ''}
+            ${p.address ? `<span>📬 ${p.address}</span>` : ''}
+            ${p.notes ? `<span>📝 ${p.notes}</span>` : ''}
+          </div>
+          <div class="booking-card__actions">
+            ${p.status === 'new'
+              ? `<span class="status-badge status-badge--new">● New</span>`
+              : p.status === 'confirmed'
+                ? `<span class="status-badge status-badge--confirmed">✓ Confirmed</span>`
+                : `<span class="status-badge status-badge--completed">✓ Done</span>`}
+            ${p.status !== 'confirmed' ? `<button class="action-btn action-btn--confirm" onclick="setPurStatus('${p._docId}','confirmed')">Confirm</button>` : ''}
+            ${p.status !== 'completed' ? `<button class="action-btn action-btn--done" onclick="setPurStatus('${p._docId}','completed')">Mark Done</button>` : ''}
+            <a class="action-btn action-btn--confirm" href="mailto:${p.email}?subject=Your inquiry for ${encodeURIComponent(p.potTitle)} — Spirit Tree Ceramics" style="text-decoration:none">✉ Email</a>
+            <button class="action-btn action-btn--delete" onclick="deletePurchase('${p._docId}')">Delete</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function setPurStatus(docId, status) {
+      db.collection('purchases').doc(docId).update({ status }).then(() => toast('Updated.'));
+    }
+    function deletePurchase(docId) {
+      if (!confirm('Delete this inquiry?')) return;
+      db.collection('purchases').doc(docId).delete().then(() => toast('Deleted.'));
+    }
+
+    // ── Shop: Image Upload Zone ──
+    const imgZone  = document.getElementById('img-upload-zone');
+    const imgInput = document.getElementById('pot-img-input');
+    const imgPrev  = document.getElementById('img-preview');
+    const imgPh    = document.getElementById('img-placeholder');
+
+    imgZone.addEventListener('click', () => imgInput.click());
+    imgZone.addEventListener('dragover', e => { e.preventDefault(); imgZone.classList.add('drag-over'); });
+    imgZone.addEventListener('dragleave', () => imgZone.classList.remove('drag-over'));
+    imgZone.addEventListener('drop', e => {
+      e.preventDefault(); imgZone.classList.remove('drag-over');
+      const f = e.dataTransfer.files[0];
+      if (f && f.type.startsWith('image/')) setImageFile(f);
+    });
+    imgInput.addEventListener('change', e => { if (e.target.files[0]) setImageFile(e.target.files[0]); });
+
+    function setImageFile(file) {
+      _selectedImageFile = file;
+      const r = new FileReader();
+      r.onload = ev => { imgPrev.src = ev.target.result; imgPrev.style.display = 'block'; imgPh.style.display = 'none'; };
+      r.readAsDataURL(file);
+    }
+
+    // ── Shop: Save Pot ──
+    document.getElementById('pot-save-btn').addEventListener('click', savePot);
+    document.getElementById('pot-cancel-btn').addEventListener('click', resetPotForm);
+
+    async function savePot() {
+      const title  = document.getElementById('pot-title').value.trim();
+      const desc   = document.getElementById('pot-desc').value.trim();
+      const price  = parseFloat(document.getElementById('pot-price').value);
+      const status = document.getElementById('pot-status').value;
+      if (!title || isNaN(price) || price < 0) { toast('Please add a title and price.'); return; }
+
+      document.getElementById('pot-save-btn').disabled = true;
+      let imageUrl = '';
+      if (_editingPotId) {
+        const ex = _pots.find(p => p.id === _editingPotId);
+        if (ex) imageUrl = ex.imageUrl || '';
+      }
+      if (_selectedImageFile) {
+        try { imageUrl = await uploadImage(_selectedImageFile); }
+        catch(e) { toast('Image upload failed. Try again.'); document.getElementById('pot-save-btn').disabled = false; return; }
+      }
+
+      const data = { title, description: desc, price, status, imageUrl, timestamp: new Date().toISOString() };
+
+      if (_editingPotId) {
+        const pot = _pots.find(p => p.id === _editingPotId);
+        if (pot) await db.collection('pots').doc(pot._docId).update(data);
+        toast('Piece updated.');
+      } else {
+        data.id = 'POT-' + Math.random().toString(36).substr(2,6).toUpperCase();
+        await db.collection('pots').add(data);
+        toast('Piece added!');
+      }
+      document.getElementById('pot-save-btn').disabled = false;
+      resetPotForm();
+    }
+
+    function uploadImage(file) {
+      return new Promise((resolve, reject) => {
+        const ref  = firebase.storage().ref(`pots/${Date.now()}_${file.name}`);
+        const task = ref.put(file);
+        const prog = document.getElementById('upload-progress');
+        const fill = document.getElementById('upload-fill');
+        const pct  = document.getElementById('upload-pct');
+        prog.style.display = 'block';
+        task.on('state_changed',
+          s => { const p = Math.round(s.bytesTransferred/s.totalBytes*100); fill.style.width=p+'%'; pct.textContent='Uploading... '+p+'%'; },
+          e => { prog.style.display='none'; reject(e); },
+          () => { prog.style.display='none'; task.snapshot.ref.getDownloadURL().then(resolve); }
+        );
+      });
+    }
+
+    function resetPotForm() {
+      _editingPotId = null; _selectedImageFile = null;
+      document.getElementById('pot-title').value = '';
+      document.getElementById('pot-desc').value  = '';
+      document.getElementById('pot-price').value = '';
+      document.getElementById('pot-status').value = 'available';
+      imgPrev.src = ''; imgPrev.style.display = 'none'; imgPh.style.display = 'flex';
+      document.getElementById('pot-form-title').textContent   = 'Add New Piece';
+      document.getElementById('pot-save-btn').textContent     = 'Add Piece →';
+      document.getElementById('pot-cancel-btn').style.display = 'none';
+      imgInput.value = '';
+    }
+
+    function editPot(id) {
+      const p = _pots.find(x => x.id === id);
+      if (!p) return;
+      _editingPotId = id;
+      document.getElementById('pot-title').value  = p.title || '';
+      document.getElementById('pot-desc').value   = p.description || '';
+      document.getElementById('pot-price').value  = p.price || '';
+      document.getElementById('pot-status').value = p.status || 'available';
+      if (p.imageUrl) { imgPrev.src = p.imageUrl; imgPrev.style.display='block'; imgPh.style.display='none'; }
+      document.getElementById('pot-form-title').textContent   = 'Edit Piece';
+      document.getElementById('pot-save-btn').textContent     = 'Save Changes →';
+      document.getElementById('pot-cancel-btn').style.display = '';
+      document.querySelector('.shop-form-col').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function deletePot(id) {
+      if (!confirm('Delete this listing permanently?')) return;
+      const p = _pots.find(x => x.id === id);
+      if (p) db.collection('pots').doc(p._docId).delete().then(() => toast('Listing deleted.'));
+    }
+
+    function setPotStatus(id, status) {
+      const p = _pots.find(x => x.id === id);
+      if (p) db.collection('pots').doc(p._docId).update({ status }).then(() =>
+        toast(status === 'sold' ? 'Marked as sold.' : 'Re-listed as available.')
+      );
+    }
+
+    // ── Shop: Filter buttons ──
+    document.querySelectorAll('[data-shop-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-shop-filter]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        _shopFilter = btn.dataset.shopFilter;
+        renderPots();
+      });
+    });
+
+    // ── Shop: Render ──
+    function renderPots() {
+      let pots = _pots;
+      if (_shopFilter !== 'all') pots = pots.filter(p => p.status === _shopFilter);
+      const list = document.getElementById('pot-list');
+      if (pots.length === 0) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-state__icon">🏺</div><h3>No pieces yet</h3><p>Add your first piece using the form.</p></div>`;
+        return;
+      }
+      list.innerHTML = pots.map(p => `
+        <div class="pot-card">
+          ${p.imageUrl ? `<img src="${p.imageUrl}" class="pot-card__img" alt="${p.title}" />` : `<div class="pot-card__img-ph">🏺</div>`}
+          <div class="pot-card__body">
+            <div class="pot-card__title">${p.title}</div>
+            <div class="pot-card__price">$${Number(p.price).toFixed(0)}</div>
+            ${p.description ? `<div class="pot-card__desc">${p.description}</div>` : ''}
+            <div style="margin-top:6px">
+              ${p.status === 'sold'
+                ? '<span class="status-badge status-badge--cancelled">✕ Sold</span>'
+                : '<span class="status-badge status-badge--confirmed">✓ Available</span>'}
+            </div>
+            <div class="booking-card__actions" style="margin-top:8px;border:none;padding:0">
+              <button class="action-btn action-btn--done" onclick="editPot('${p.id}')">✏ Edit</button>
+              ${p.status !== 'sold'
+                ? `<button class="action-btn action-btn--cancel" onclick="setPotStatus('${p.id}','sold')">Mark Sold</button>`
+                : `<button class="action-btn action-btn--confirm" onclick="setPotStatus('${p.id}','available')">Re-list</button>`}
+              <button class="action-btn action-btn--delete" onclick="deletePot('${p.id}')">🗑</button>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
     // ── Init ──
     function init() {
       if (USE_FIREBASE) {
-        startListeners(); // real-time from Firestore
+        startListeners();
       } else {
         updateStats();
         renderBookings();
