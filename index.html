@@ -233,9 +233,8 @@
   </section>
 
   <!-- ── PURCHASE MODAL ── -->
-  <div class="modal" id="purchase-modal" role="dialog" aria-modal="true" style="display:none">
-    <div class="modal__backdrop" id="purchase-backdrop"></div>
-    <div class="modal__box" style="max-width:560px">
+  <div class="modal-overlay" id="purchase-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="purchase-modal" style="max-width:560px;padding:32px">
       <button class="modal__close" id="purchase-close" aria-label="Close">×</button>
 
       <!-- Step 1: Piece Review -->
@@ -273,13 +272,13 @@
         <h3 style="font-family:var(--font-head);font-size:1.5rem;margin-bottom:6px;color:var(--pearl)">Delivery Preference</h3>
         <p style="font-size:0.82rem;color:var(--smoke);margin-bottom:22px">Step 3 of 3</p>
         <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
-          <label class="purchase-delivery-opt" id="popt-pickup">
+          <label class="purchase-delivery-opt">
             <input type="radio" name="pur-delivery" value="pickup" checked /> Pickup at a wheel session (DFW area)
           </label>
-          <label class="purchase-delivery-opt" id="popt-local">
+          <label class="purchase-delivery-opt">
             <input type="radio" name="pur-delivery" value="local" /> Local delivery (DFW area)
           </label>
-          <label class="purchase-delivery-opt" id="popt-ship">
+          <label class="purchase-delivery-opt">
             <input type="radio" name="pur-delivery" value="ship" /> Ship to me
           </label>
         </div>

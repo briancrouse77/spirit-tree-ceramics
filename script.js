@@ -771,13 +771,13 @@ function openPurchaseModal(potId) {
   document.querySelector('input[name="pur-delivery"][value="pickup"]').checked = true;
   document.getElementById('pur-address-wrap').style.display = 'none';
 
-  const modal = document.getElementById('purchase-modal');
-  modal.style.display = 'flex';
+  var overlay = document.getElementById('purchase-overlay');
+  overlay.classList.add('open');
   document.body.classList.add('modal-open');
 }
 
 function closePurchaseModal() {
-  document.getElementById('purchase-modal').style.display = 'none';
+  document.getElementById('purchase-overlay').classList.remove('open');
   document.body.classList.remove('modal-open');
 }
 
@@ -811,7 +811,12 @@ document.addEventListener('change', e => {
 
 // Close on backdrop or × button
 document.getElementById('purchase-close')?.addEventListener('click', closePurchaseModal);
-document.getElementById('purchase-backdrop')?.addEventListener('click', closePurchaseModal);
+var purOverlay = document.getElementById('purchase-overlay');
+if (purOverlay) {
+  purOverlay.addEventListener('click', function(e) {
+    if (e.target === purOverlay) closePurchaseModal();
+  });
+}
 
 async function submitPurchase() {
   const name     = (document.getElementById('pur-name')?.value  || '').trim();
