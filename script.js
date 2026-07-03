@@ -711,10 +711,11 @@
   if (!USE_FIREBASE) return; // no pots without Firestore
 
   db.collection('pots')
-    .where('status', '==', 'available')
     .orderBy('timestamp', 'desc')
     .onSnapshot(snap => {
-      const pots = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+      const pots = snap.docs
+        .map(d => ({ ...d.data(), _docId: d.id }))
+        .filter(p => p.status === 'available');
 
       if (pots.length === 0) {
         shopGrid.innerHTML = '';
