@@ -1,5 +1,5 @@
 // ── Firebase Configuration ──────────────────────────────────────────────────
-const firebaseConfig = {
+var firebaseConfig = {
   apiKey:            "AIzaSyCtJCXA4UmNU3zWq778ZcOPvTOxZE6HRJE",
   authDomain:        "spirit-tree-ceramics.firebaseapp.com",
   projectId:         "spirit-tree-ceramics",
@@ -9,6 +9,6 @@ const firebaseConfig = {
   measurementId:     "G-0RG8MXX2WS"
 };
 
-// Initialize Firebase
+// Initialize Firebase — use var so db is accessible across all scripts
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+var db = firebase.firestore();
