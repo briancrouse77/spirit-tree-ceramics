@@ -701,21 +701,26 @@
 })();
 
 // ── Shop: Load & Render ──────────────────────────────────────────────────────
+var _shopPotsMap = {};
+
 (function initShop() {
   const shopSection = document.getElementById('shop');
   const shopGrid    = document.getElementById('shop-grid');
   const shopEmpty   = document.getElementById('shop-empty');
   if (!shopSection || !shopGrid) return;
 
-  const USE_FIREBASE = typeof db !== 'undefined';
-  if (!USE_FIREBASE) return; // no pots without Firestore
+  if (typeof db === 'undefined') return;
 
   db.collection('pots')
     .orderBy('timestamp', 'desc')
-    .onSnapshot(snap => {
-      const pots = snap.docs
-        .map(d => ({ ...d.data(), _docId: d.id }))
-        .filter(p => p.status === 'available');
+    .onSnapshot(function(snap) {
+      var pots = snap.docs
+        .map(function(d) { return Object.assign({}, d.data(), { _docId: d.id }); })
+        .filter(function(p) { return p.status === 'available'; });
+
+      // Update the global registry
+      _shopPotsMap = {};
+      pots.forEach(function(p) { _shopPotsMap[p.id || p._docId] = p; });
 
       if (pots.length === 0) {
         shopGrid.innerHTML = '';
@@ -724,28 +729,29 @@
       }
 
       shopEmpty.style.display = 'none';
-      shopGrid.innerHTML = pots.map(p => `
-        <div class="shop-card" onclick="openPurchaseModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">
-          ${p.imageUrl
-            ? `<img src="${p.imageUrl}" class="shop-card__img" alt="${p.title}" loading="lazy" />`
-            : `<div class="shop-card__img-ph">🏺</div>`}
-          <div class="shop-card__body">
-            <div class="shop-card__title">${p.title}</div>
-            ${p.description ? `<div class="shop-card__desc">${p.description}</div>` : ''}
-            <div class="shop-card__footer">
-              <div class="shop-card__price">$${Number(p.price).toFixed(0)}</div>
-              <button class="shop-card__cta" onclick="event.stopPropagation();openPurchaseModal(${JSON.stringify(p).replace(/"/g,'&quot;')})">Inquire →</button>
-            </div>
-          </div>
-        </div>
-      `).join('');
+      shopGrid.innerHTML = pots.map(function(p) {
+        var key = p.id || p._docId;
+        return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
+          + (p.imageUrl
+              ? '<img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" />'
+              : '<div class="shop-card__img-ph">🏺</div>')
+          + '<div class="shop-card__body">'
+          + '<div class="shop-card__title">' + p.title + '</div>'
+          + (p.description ? '<div class="shop-card__desc">' + p.description + '</div>' : '')
+          + '<div class="shop-card__footer">'
+          + '<div class="shop-card__price">$' + Number(p.price).toFixed(0) + '</div>'
+          + '<button class="shop-card__cta" onclick="event.stopPropagation();openPurchaseModal(\'' + key + '\')">Inquire \u2192</button>'
+          + '</div></div></div>';
+      }).join('');
     });
 })();
 
 // ── Purchase Modal ───────────────────────────────────────────────────────────
-let _purchasePot = null;
+var _purchasePot = null;
 
-function openPurchaseModal(pot) {
+function openPurchaseModal(potId) {
+  var pot = _shopPotsMap[potId];
+  if (!pot) return;
   _purchasePot = pot;
 
   // Populate step 1
