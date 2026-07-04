@@ -97,6 +97,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--smoke);
   line-height: 1.7;
   margin-top: 8px;
+  margin-bottom: 40px;
 }
 .section__sub--light { color: var(--mist); }
 
