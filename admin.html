@@ -1533,7 +1533,12 @@
       }
       if (_selectedImageFile) {
         try { imageUrl = await uploadImage(_selectedImageFile); }
-        catch(e) { toast('Image upload failed. Try again.'); document.getElementById('pot-save-btn').disabled = false; return; }
+        catch(e) {
+          console.error('Firebase Storage upload failed:', e);
+          toast('Image upload failed: ' + (e.message || e));
+          document.getElementById('pot-save-btn').disabled = false;
+          return;
+        }
       }
 
       const data = { title, description: desc, price, status, imageUrl, timestamp: new Date().toISOString() };
