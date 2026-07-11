@@ -980,7 +980,7 @@ window.openCheckoutModal = function(tier) {
     submitBtn.textContent = 'Register Now';
   } else if (tier === 'premium') {
     title.textContent = 'Join Studio Circle';
-    desc.textContent = 'Full video library + monthly 1-on-1 critique for $29/month.';
+    desc.textContent = 'Full video library + monthly group critique for $29/month.';
     paymentFields.style.display = 'block';
     submitBtn.textContent = 'Subscribe ($29/mo)';
   }
