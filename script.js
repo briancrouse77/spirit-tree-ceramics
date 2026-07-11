@@ -857,14 +857,14 @@ async function submitPurchase() {
 
 // ── Subscription Membership Mockup Logic ─────────────────────────────────────
 var currentRole = 'free';
-var selectedUpgradeTier = 'studio';
+var selectedUpgradeTier = 'premium';
 
 const mockVideos = [
   {
     id: 'vid-1',
-    title: 'Centering & Wedging Clay',
-    description: 'The foundation of all pottery. Learn the physical stance, body positioning, and coning techniques to perfectly center your clay on the wheel.',
-    duration: '18 min',
+    title: 'Centering & Wedging Clay (Teaser)',
+    description: 'A brief overview of coning, wedging, and finding your physical center at the wheel. Perfect introductory lesson to get a feel for the clay.',
+    duration: '8 min',
     difficulty: 'Beginner',
     tier: 'free',
     thumbnailUrl: 'images/gallery3.png',
@@ -872,31 +872,31 @@ const mockVideos = [
   },
   {
     id: 'vid-2',
-    title: 'Opening & Pulling the Cylinder',
-    description: 'Step-by-step masterclass on opening the centered clay and pulling uniform walls to create basic cups, mugs, and cylinders.',
+    title: 'Opening & Pulling the Cylinder (Detailed)',
+    description: 'Step-by-step detailed masterclass on opening the centered clay and pulling uniform walls to create basic cups, mugs, and cylinders.',
     duration: '24 min',
     difficulty: 'Beginner',
-    tier: 'studio',
+    tier: 'premium',
     thumbnailUrl: 'images/gallery2.png',
     youtubeId: 'OnYSjEehxH0'
   },
   {
     id: 'vid-3',
-    title: 'Trimming & Foot Rings',
+    title: 'Trimming & Foot Rings (Detailed)',
     description: 'Turn your greenware into refined pieces. John demonstrates wheel trimming, using loop tools, and throwing clean foot rings.',
     duration: '15 min',
     difficulty: 'Intermediate',
-    tier: 'studio',
+    tier: 'premium',
     thumbnailUrl: 'images/gallery1.png',
     youtubeId: 'OnYSjEehxH0'
   },
   {
     id: 'vid-4',
-    title: 'Masterclass: Tall Bottle Forms',
+    title: 'Masterclass: Tall Bottle Forms (Detailed)',
     description: 'Collaring, shaping, and managing thin clay walls to pull tall, graceful narrow-neck bottle vases.',
     duration: '32 min',
     difficulty: 'Advanced',
-    tier: 'mastery',
+    tier: 'premium',
     thumbnailUrl: 'images/hero.png',
     youtubeId: 'OnYSjEehxH0'
   }
@@ -909,10 +909,7 @@ function renderVideos() {
   grid.innerHTML = mockVideos.map(v => {
     // Check if the video is locked for the current role
     var isLocked = false;
-    if (v.tier === 'studio' && currentRole === 'free') isLocked = true;
-    if (v.tier === 'mastery' && currentRole !== 'mastery') isLocked = true;
-
-    var badgeText = v.tier === 'studio' ? 'Studio Circle' : 'Mastery Circle';
+    if (v.tier === 'premium' && currentRole === 'free') isLocked = true;
 
     return '<div class="shop-card video-card" onclick="handleVideoClick(\'' + v.id + '\')">'
       + '<div style="position:relative; overflow:hidden; aspect-ratio:4/3;">'
@@ -920,7 +917,7 @@ function renderVideos() {
       + (!isLocked ? '<div class="video-play-indicator">▶</div>' : '')
       + (isLocked 
           ? '<div class="video-lock-overlay">'
-            + '<div class="video-lock-badge">🔒 ' + badgeText + '</div>'
+            + '<div class="video-lock-badge">🔒 Premium Access</div>'
             + '<div class="video-lock-text">Click to Unlock</div>'
             + '</div>'
           : '')
@@ -938,8 +935,7 @@ function handleVideoClick(id) {
   if (!v) return;
 
   var isLocked = false;
-  if (v.tier === 'studio' && currentRole === 'free') isLocked = true;
-  if (v.tier === 'mastery' && currentRole !== 'mastery') isLocked = true;
+  if (v.tier === 'premium' && currentRole === 'free') isLocked = true;
 
   if (isLocked) {
     openUpgradeModal(v.tier);
@@ -953,10 +949,10 @@ window.changeStagingRole = function(role) {
   const select = document.getElementById('state-role-select');
   if (select) select.value = role;
 
-  // Show/hide Mastery Coaching booking option
-  const dash = document.getElementById('mastery-dashboard');
+  // Show/hide Premium Coaching booking option
+  const dash = document.getElementById('premium-dashboard');
   if (dash) {
-    dash.style.display = role === 'mastery' ? 'block' : 'none';
+    dash.style.display = role === 'premium' ? 'block' : 'none';
   }
 
   renderVideos();
@@ -979,19 +975,14 @@ window.openCheckoutModal = function(tier) {
 
   if (tier === 'free') {
     title.textContent = 'Join the Community';
-    desc.textContent = 'Get access to updates, alerts, and public features.';
+    desc.textContent = 'Get access to updates, alerts, and public teaser features.';
     paymentFields.style.display = 'none';
     submitBtn.textContent = 'Register Now';
-  } else if (tier === 'studio') {
+  } else if (tier === 'premium') {
     title.textContent = 'Join Studio Circle';
-    desc.textContent = 'Full video library access for $19/month.';
+    desc.textContent = 'Full video library + monthly 1-on-1 critique for $29/month.';
     paymentFields.style.display = 'block';
-    submitBtn.textContent = 'Subscribe ($19/mo)';
-  } else if (tier === 'mastery') {
-    title.textContent = 'Join Mastery Circle';
-    desc.textContent = 'Videos + monthly 1-on-1 critique for $79/month.';
-    paymentFields.style.display = 'block';
-    submitBtn.textContent = 'Subscribe ($79/mo)';
+    submitBtn.textContent = 'Subscribe ($29/mo)';
   }
 
   const overlay = document.getElementById('checkout-overlay');
@@ -1027,10 +1018,8 @@ window.submitCheckout = function() {
   const msg = document.getElementById('checkout-success-msg');
   if (selectedUpgradeTier === 'free') {
     msg.textContent = 'You have registered for the free Clay Community. John will keep you posted on new drops and public tutorial highlights!';
-  } else if (selectedUpgradeTier === 'studio') {
-    msg.textContent = 'Your Studio Circle membership is active. The complete wheel tutorial library is now fully unlocked for you!';
-  } else if (selectedUpgradeTier === 'mastery') {
-    msg.textContent = 'Your Mastery membership is active. The complete video library is unlocked, and you can now schedule your monthly Zoom critiques!';
+  } else if (selectedUpgradeTier === 'premium') {
+    msg.textContent = 'Your Studio Circle membership is active. The complete wheel tutorial library is now fully unlocked for you, and you can schedule your monthly critiques!';
   }
 };
 
@@ -1039,13 +1028,8 @@ window.openUpgradeModal = function(requiredTier) {
   const title = document.getElementById('upgrade-title');
   const desc  = document.getElementById('upgrade-desc');
 
-  if (requiredTier === 'studio') {
-    title.textContent = 'Unlock Studio Circle';
-    desc.textContent = 'This video tutorial requires a Studio Circle membership. Upgrade to get full access to all step-by-step wheel masterclasses for just $19/mo.';
-  } else if (requiredTier === 'mastery') {
-    title.textContent = 'Unlock Mastery Circle';
-    desc.textContent = 'This advanced masterclass is restricted to Mastery members. Upgrade to get all tutorials plus private monthly Zoom video coaching with John for $79/mo.';
-  }
+  title.textContent = 'Unlock Studio Circle';
+  desc.textContent = 'This detailed masterclass requires a Studio Circle membership. Upgrade to get full access to all step-by-step wheel tutorials and monthly Zoom critique calls with John for just $29/mo.';
 
   const overlay = document.getElementById('upgrade-overlay');
   overlay.style.display = 'flex';

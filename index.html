@@ -250,31 +250,21 @@
           <div class="class-card__icon">🌱</div>
           <h3 class="class-card__title">Clay Community</h3>
           <p class="class-card__subtitle">Free Tier</p>
-          <p class="class-card__meta"><span>Shop Access</span> · <span>News & Alerts</span></p>
-          <p class="class-card__desc">Become part of the circle. Browse John's latest handthrown collections, get early email alerts for shop drops, and view public video highlights.</p>
+          <p class="class-card__meta"><span>Shop Access</span> · <span>News & Alerts</span> · <span>Teaser Videos</span></p>
+          <p class="class-card__desc">Become part of the circle. Browse John's latest handthrown collections, get early email alerts for shop drops, and view public introductory tutorials.</p>
           <div class="class-card__price"><strong>Free</strong></div>
           <button class="btn btn--ghost class-card__btn" onclick="openCheckoutModal('free')">Sign Up Free</button>
         </div>
 
-        <div class="class-card" data-tier="studio">
+        <div class="class-card" data-tier="premium">
           <div class="class-card__icon">🌀</div>
-          <div class="class-card__badge">Most Sought</div>
+          <div class="class-card__badge">Full Access</div>
           <h3 class="class-card__title">Studio Circle</h3>
-          <p class="class-card__subtitle">Full Video Access</p>
-          <p class="class-card__meta"><span>Full Tutorial Library</span> · <span>Glaze Guides</span> · <span>15% Shop Discount</span></p>
-          <p class="class-card__desc">Dive deep into the craft. Access hours of high-definition tutorials on clay prep, centering, opening, pulling, trimming, and raw glazing secrets.</p>
-          <div class="class-card__price"><strong>$19</strong> <span>/ month</span></div>
-          <button class="btn btn--primary class-card__btn" onclick="openCheckoutModal('studio')">Join Studio Circle</button>
-        </div>
-
-        <div class="class-card" data-tier="mastery">
-          <div class="class-card__icon">🔮</div>
-          <h3 class="class-card__title">Mastery Circle</h3>
-          <p class="class-card__subtitle">Mentor & Critique</p>
-          <p class="class-card__meta"><span>All Video Access</span> · <span>Monthly 1-on-1 Zoom</span> · <span>Critiques</span></p>
-          <p class="class-card__desc">For dedicated potters. Includes full studio library access plus a monthly 45-minute private Zoom coaching session with John to critique your throws and glaze results.</p>
-          <div class="class-card__price"><strong>$79</strong> <span>/ month</span></div>
-          <button class="btn btn--clay class-card__btn" onclick="openCheckoutModal('mastery')">Join Mastery Circle</button>
+          <p class="class-card__subtitle">Premium Membership</p>
+          <p class="class-card__meta"><span>Full Tutorial Library</span> · <span>1-on-1 Monthly Zoom</span> · <span>Glaze Vault</span></p>
+          <p class="class-card__desc">Our complete wheel education. Access hours of high-definition masterclasses (centering, pulling, trimming, glaze mixing) plus a monthly 45-minute private Zoom critique call with John.</p>
+          <div class="class-card__price"><strong>$29</strong> <span>/ month</span></div>
+          <button class="btn btn--clay class-card__btn" onclick="openCheckoutModal('premium')">Join Studio Circle</button>
         </div>
 
       </div>
@@ -294,17 +284,16 @@
           <span style="font-size:0.75rem;font-weight:600;color:var(--mist);text-transform:uppercase;letter-spacing:0.04em;">Preview Role:</span>
           <select id="state-role-select" onchange="changeStagingRole(this.value)" style="background:var(--deep);color:var(--pearl);border:none;border-radius:4px;padding:4px 8px;font-size:0.8rem;outline:none;cursor:pointer;">
             <option value="free">Logged Out (Free)</option>
-            <option value="studio">Studio Circle Member</option>
-            <option value="mastery">Mastery Circle Member</option>
+            <option value="premium">Studio Circle Member (Premium)</option>
           </select>
         </div>
       </div>
 
-      <!-- Member Dashboard Scheduling Panel (Mastery Members Only) -->
-      <div id="mastery-dashboard" style="display:none;background:rgba(193,84,10,0.06);border:1px solid rgba(193,84,10,0.3);border-radius:var(--radius-lg);padding:24px 32px;margin-bottom:48px;text-align:center;animation:fadeIn 0.5s;">
+      <!-- Member Dashboard Scheduling Panel (Premium Members Only) -->
+      <div id="premium-dashboard" style="display:none;background:rgba(193,84,10,0.06);border:1px solid rgba(193,84,10,0.3);border-radius:var(--radius-lg);padding:24px 32px;margin-bottom:48px;text-align:center;animation:fadeIn 0.5s;">
         <span style="font-size:1.8rem;margin-bottom:8px;display:block;">🔮</span>
-        <h3 style="font-family:var(--font-head);font-size:1.5rem;color:var(--pearl);margin-bottom:6px;">Your Mastery Coaching</h3>
-        <p style="font-size:0.88rem;color:var(--mist);max-width:520px;margin:0 auto 16px;">As a Mastery Member, you get one-on-one video coaching with John. Schedule your Zoom critique session below.</p>
+        <h3 style="font-family:var(--font-head);font-size:1.5rem;color:var(--pearl);margin-bottom:6px;">Your Studio Circle Coaching</h3>
+        <p style="font-size:0.88rem;color:var(--mist);max-width:520px;margin:0 auto 16px;">As a Premium Member, you get a monthly one-on-one Zoom video critique with John. Schedule your session below.</p>
         <button class="btn btn--clay" id="dash-schedule-btn" style="margin:0 auto;">Schedule Zoom Call →</button>
       </div>
 

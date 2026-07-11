@@ -1062,8 +1062,7 @@
           <h2>Subscribers</h2>
           <div class="section-hdr__filters">
             <button class="filter-btn active" data-mem-filter="all">All</button>
-            <button class="filter-btn" data-mem-filter="studio">Studio Circle</button>
-            <button class="filter-btn" data-mem-filter="mastery">Mastery Circle</button>
+            <button class="filter-btn" data-mem-filter="premium">Studio Circle (Premium)</button>
           </div>
         </div>
         <div class="bookings-list" id="members-list"></div>
@@ -1112,9 +1111,8 @@
                   <div class="form__group" style="flex:1;">
                     <label style="font-size:0.75rem;font-weight:600;">Tier Required</label>
                     <select id="vid-tier" class="form__input">
-                      <option value="free">Free Community</option>
-                      <option value="studio">Studio Circle ($19/mo)</option>
-                      <option value="mastery">Mastery Circle ($79/mo)</option>
+                      <option value="free">Free Community Teaser</option>
+                      <option value="premium">Studio Circle Premium ($29/mo)</option>
                     </select>
                   </div>
                 </div>
@@ -1841,9 +1839,9 @@
     // ── Members / Subscribers Mockup Logic ──
     let memberFilter = 'all';
     var _members = [
-      { id: 'MEM-1', name: 'Alice Smith', email: 'alice@email.com', tier: 'studio', status: 'active', renewal: 'Aug 1, 2026' },
-      { id: 'MEM-2', name: 'Robert Johnson', email: 'robert@email.com', tier: 'mastery', status: 'active', renewal: 'Aug 5, 2026' },
-      { id: 'MEM-3', name: 'Sarah Miller', email: 'sarah@email.com', tier: 'studio', status: 'active', renewal: 'Jul 28, 2026' },
+      { id: 'MEM-1', name: 'Alice Smith', email: 'alice@email.com', tier: 'premium', status: 'active', renewal: 'Aug 1, 2026' },
+      { id: 'MEM-2', name: 'Robert Johnson', email: 'robert@email.com', tier: 'premium', status: 'active', renewal: 'Aug 5, 2026' },
+      { id: 'MEM-3', name: 'Sarah Miller', email: 'sarah@email.com', tier: 'premium', status: 'active', renewal: 'Jul 28, 2026' },
       { id: 'MEM-4', name: 'David Lee', email: 'david@email.com', tier: 'free', status: 'active', renewal: '-' }
     ];
 
@@ -1866,8 +1864,8 @@
               <span class="booking-card__time">👤 ${m.name}</span>
               <span class="booking-card__date">${m.email}</span>
             </div>
-            <span class="status-badge ${m.tier === 'mastery' ? 'status-badge--confirmed' : m.tier === 'studio' ? 'status-badge--pending' : 'status-badge--cancelled'}">
-              ${m.tier === 'mastery' ? '🔮 Mastery Circle' : m.tier === 'studio' ? '🌀 Studio Circle' : '🌱 Clay Community'}
+            <span class="status-badge ${m.tier === 'premium' ? 'status-badge--confirmed' : 'status-badge--cancelled'}">
+              ${m.tier === 'premium' ? '🔮 Studio Circle (Premium)' : '🌱 Clay Community'}
             </span>
           </div>
           <div class="booking-card__details" style="display:flex; justify-content:space-between; align-items:center;">
@@ -1915,9 +1913,9 @@
 
     // ── Videos Manager Mockup Logic ──
     var _adminVideos = [
-      { id: 'vid-1', title: 'Centering & Wedging Clay', description: 'The foundation of all pottery. Learn the physical stance, body positioning, and coning techniques to perfectly center your clay on the wheel.', duration: '18 min', difficulty: 'Beginner', tier: 'free', ytid: 'OnYSjEehxH0' },
-      { id: 'vid-2', title: 'Opening & Pulling the Cylinder', description: 'Step-by-step masterclass on opening the centered clay and pulling uniform walls to create basic cups, mugs, and cylinders.', duration: '24 min', difficulty: 'Beginner', tier: 'studio', ytid: 'OnYSjEehxH0' },
-      { id: 'vid-3', title: 'Trimming & Foot Rings', description: 'Turn your greenware into refined pieces. John demonstrates wheel trimming, using loop tools, and throwing clean foot rings.', duration: '15 min', difficulty: 'Intermediate', tier: 'studio', ytid: 'OnYSjEehxH0' }
+      { id: 'vid-1', title: 'Centering & Wedging Clay (Teaser)', description: 'A brief overview of coning, wedging, and finding your physical center at the wheel. Perfect introductory lesson to get a feel for the clay.', duration: '8 min', difficulty: 'Beginner', tier: 'free', ytid: 'OnYSjEehxH0' },
+      { id: 'vid-2', title: 'Opening & Pulling the Cylinder (Detailed)', description: 'Step-by-step detailed masterclass on opening the centered clay and pulling uniform walls to create basic cups, mugs, and cylinders.', duration: '24 min', difficulty: 'Beginner', tier: 'premium', ytid: 'OnYSjEehxH0' },
+      { id: 'vid-3', title: 'Trimming & Foot Rings (Detailed)', description: 'Turn your greenware into refined pieces. John demonstrates wheel trimming, using loop tools, and throwing clean foot rings.', duration: '15 min', difficulty: 'Intermediate', tier: 'premium', ytid: 'OnYSjEehxH0' }
     ];
 
     function renderAdminVideos() {
@@ -1936,8 +1934,8 @@
               <span class="booking-card__time">📹 ${v.title}</span>
               <span class="booking-card__date">${v.duration} · ${v.difficulty}</span>
             </div>
-            <span class="status-badge ${v.tier === 'mastery' ? 'status-badge--confirmed' : v.tier === 'studio' ? 'status-badge--pending' : 'status-badge--cancelled'}">
-              ${v.tier === 'mastery' ? '🔮 Mastery Required' : v.tier === 'studio' ? '🌀 Studio Required' : '🌱 Free Public'}
+            <span class="status-badge ${v.tier === 'premium' ? 'status-badge--confirmed' : 'status-badge--cancelled'}">
+              ${v.tier === 'premium' ? '🔮 Premium Required' : '🌱 Free Public'}
             </span>
           </div>
           <div class="booking-card__details" style="display:flex; justify-content:space-between; align-items:center;">

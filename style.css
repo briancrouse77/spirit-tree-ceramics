@@ -1330,3 +1330,7 @@ body.modal-open { overflow: hidden; }
   color: var(--mist);
   font-weight: 500;
 }
+#memberships .classes__grid {
+  max-width: 800px;
+  margin: 0 auto;
+}
