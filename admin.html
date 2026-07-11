@@ -1134,15 +1134,15 @@
           </div>
           <div class="shop-form-col">
             <div class="form-card">
-              <h3>Schedule Zoom Session</h3>
+              <h3>Schedule Group Critique</h3>
               <form id="zoom-form" onsubmit="event.preventDefault(); saveZoomSession();" style="margin-top:16px;">
                 <div class="form__group" style="margin-bottom:12px;">
-                  <label style="font-size:0.75rem;font-weight:600;">Session Name</label>
-                  <input type="text" id="zoom-name" class="form__input" placeholder="e.g. Monthly Throwing Critique" required />
+                  <label style="font-size:0.75rem;font-weight:600;">Session Title</label>
+                  <input type="text" id="zoom-name" class="form__input" placeholder="e.g. August Critique Circle" required />
                 </div>
                 <div class="form__group" style="margin-bottom:12px;">
-                  <label style="font-size:0.75rem;font-weight:600;">Attendee Email (or 'Group Session')</label>
-                  <input type="text" id="zoom-member" class="form__input" placeholder="e.g. member@email.com or Group" required />
+                  <label style="font-size:0.75rem;font-weight:600;">Session Host</label>
+                  <input type="text" id="zoom-member" class="form__input" value="John Ruiz" required />
                 </div>
                 <div class="form__row" style="display:flex;gap:12px;margin-bottom:12px;">
                   <div class="form__group" style="flex:1;">
@@ -1158,7 +1158,7 @@
                   <label style="font-size:0.75rem;font-weight:600;">Zoom Link</label>
                   <input type="url" id="zoom-link" class="form__input" value="https://zoom.us/j/820287397307" required />
                 </div>
-                <button type="submit" class="btn btn--clay" style="width:100%;margin-top:16px;">Schedule Session →</button>
+                <button type="submit" class="btn btn--clay" style="width:100%;margin-top:16px;">Schedule Critique →</button>
               </form>
             </div>
           </div>
@@ -1986,9 +1986,7 @@
 
     // ── Zoom Scheduler Mockup Logic ──
     var _zoomSessions = [
-      { id: 'Z-1', name: 'July Group Circle Critique', email: 'Group Session', date: '2026-07-15', time: '18:00', link: 'https://zoom.us/j/820287397307' },
-      { id: 'Z-2', name: 'Sarah Miller 1-on-1 Critique', email: 'sarah@email.com', date: '2026-07-16', time: '14:00', link: 'https://zoom.us/j/820287397307' },
-      { id: 'Z-3', name: 'Robert Johnson 1-on-1 Coaching', email: 'robert@email.com', date: '2026-07-19', time: '10:30', link: 'https://zoom.us/j/820287397307' }
+      { id: 'Z-1', name: 'July Group Circle Critique', email: 'John Ruiz', date: '2026-07-15', time: '18:00', link: 'https://zoom.us/j/820287397307' }
     ];
 
     function renderZoomSessions() {
@@ -1996,7 +1994,7 @@
       if (!list) return;
 
       if (_zoomSessions.length === 0) {
-        list.innerHTML = `<div class="empty-state"><h3>No scheduled Zoom calls</h3></div>`;
+        list.innerHTML = `<div class="empty-state"><h3>No scheduled Zoom critiques</h3></div>`;
         return;
       }
 
@@ -2011,7 +2009,7 @@
           </div>
           <div class="booking-card__details" style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div><strong>Attendee:</strong> ${z.email}</div>
+              <div><strong>Session Host:</strong> ${z.email}</div>
               <div><strong>Zoom link:</strong> <a href="${z.link}" target="_blank" style="color:var(--gold);text-decoration:underline;">${z.link}</a></div>
             </div>
             <div class="booking-card__actions" style="margin-top:0; border:none; padding:0;">
@@ -2042,11 +2040,11 @@
 
       // Reset form
       document.getElementById('zoom-name').value = '';
-      document.getElementById('zoom-member').value = '';
+      document.getElementById('zoom-member').value = 'John Ruiz';
       document.getElementById('zoom-date').value = '';
       document.getElementById('zoom-time').value = '';
 
-      toast('Zoom critique session scheduled.');
+      toast('Group Zoom critique session scheduled.');
     };
 
     window.deleteZoom = function(id) {

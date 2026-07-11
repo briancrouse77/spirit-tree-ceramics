@@ -1019,7 +1019,7 @@ window.submitCheckout = function() {
   if (selectedUpgradeTier === 'free') {
     msg.textContent = 'You have registered for the free Clay Community. John will keep you posted on new drops and public tutorial highlights!';
   } else if (selectedUpgradeTier === 'premium') {
-    msg.textContent = 'Your Studio Circle membership is active. The complete wheel tutorial library is now fully unlocked, you can join our monthly group Zoom calls, and you can schedule private 1-on-1 critiques directly with John!';
+    msg.textContent = 'Your Studio Circle membership is active. The complete wheel tutorial library is now fully unlocked, and you can join our monthly group Zoom circle critiques!';
   }
 };
 
@@ -1029,7 +1029,7 @@ window.openUpgradeModal = function(requiredTier) {
   const desc  = document.getElementById('upgrade-desc');
 
   title.textContent = 'Unlock Studio Circle';
-  desc.textContent = 'This detailed masterclass requires a Studio Circle membership. Upgrade to get full access to all step-by-step wheel tutorials, monthly group Zoom critiques, and private 1-on-1 Zoom reviews with John for just $29/mo.';
+  desc.textContent = 'This detailed masterclass requires a Studio Circle membership. Upgrade to get full access to all step-by-step wheel tutorials and monthly group Zoom critiques with John for just $29/mo.';
 
   const overlay = document.getElementById('upgrade-overlay');
   overlay.style.display = 'flex';
