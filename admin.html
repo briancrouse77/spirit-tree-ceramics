@@ -873,6 +873,19 @@
           <span>Bookings</span>
           <span class="badge" id="badge-bookings">0</span>
         </div>
+        <div class="nav-item" data-panel="members" id="nav-members">
+          <span class="icon">👥</span>
+          <span>Subscribers</span>
+          <span class="badge" id="badge-members">0</span>
+        </div>
+        <div class="nav-item" data-panel="videos" id="nav-videos">
+          <span class="icon">🎥</span>
+          <span>Videos</span>
+        </div>
+        <div class="nav-item" data-panel="zoom" id="nav-zoom">
+          <span class="icon">📹</span>
+          <span>Zoom Sessions</span>
+        </div>
         <div class="nav-item" data-panel="messages" id="nav-messages">
           <span class="icon">💬</span>
           <span>Messages</span>
@@ -1043,6 +1056,117 @@
         <div class="bookings-list" id="purchases-list"></div>
       </div>
 
+      <!-- Members Panel -->
+      <div class="panel" id="panel-members">
+        <div class="section-hdr">
+          <h2>Subscribers</h2>
+          <div class="section-hdr__filters">
+            <button class="filter-btn active" data-mem-filter="all">All</button>
+            <button class="filter-btn" data-mem-filter="studio">Studio Circle</button>
+            <button class="filter-btn" data-mem-filter="mastery">Mastery Circle</button>
+          </div>
+        </div>
+        <div class="bookings-list" id="members-list"></div>
+      </div>
+
+      <!-- Videos Panel -->
+      <div class="panel" id="panel-videos">
+        <div class="shop-grid-col">
+          <div class="shop-list-col">
+            <div class="section-hdr">
+              <h2>Video Tutorials</h2>
+            </div>
+            <div class="bookings-list" id="admin-videos-list"></div>
+          </div>
+          <div class="shop-form-col">
+            <div class="form-card">
+              <h3 id="video-form-title">Add New Video</h3>
+              <form id="video-form" onsubmit="event.preventDefault(); saveVideo();" style="margin-top:16px;">
+                <div class="form__group" style="margin-bottom:12px;">
+                  <label style="font-size:0.75rem;font-weight:600;">Video Title *</label>
+                  <input type="text" id="vid-title" class="form__input" placeholder="e.g. Center & Wedge Clay" required />
+                </div>
+                <div class="form__group" style="margin-bottom:12px;">
+                  <label style="font-size:0.75rem;font-weight:600;">Description</label>
+                  <textarea id="vid-desc" class="form__input" placeholder="What does this video teach?" rows="3"></textarea>
+                </div>
+                <div class="form__row" style="display:flex;gap:12px;margin-bottom:12px;">
+                  <div class="form__group" style="flex:1;">
+                    <label style="font-size:0.75rem;font-weight:600;">Duration</label>
+                    <input type="text" id="vid-duration" class="form__input" placeholder="e.g. 18 min" />
+                  </div>
+                  <div class="form__group" style="flex:1;">
+                    <label style="font-size:0.75rem;font-weight:600;">Difficulty</label>
+                    <select id="vid-difficulty" class="form__input">
+                      <option value="Beginner">Beginner</option>
+                      <option value="Intermediate">Intermediate</option>
+                      <option value="Advanced">Advanced</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form__row" style="display:flex;gap:12px;margin-bottom:12px;">
+                  <div class="form__group" style="flex:1;">
+                    <label style="font-size:0.75rem;font-weight:600;">YouTube ID</label>
+                    <input type="text" id="vid-ytid" class="form__input" placeholder="e.g. OnYSjEehxH0" />
+                  </div>
+                  <div class="form__group" style="flex:1;">
+                    <label style="font-size:0.75rem;font-weight:600;">Tier Required</label>
+                    <select id="vid-tier" class="form__input">
+                      <option value="free">Free Community</option>
+                      <option value="studio">Studio Circle ($19/mo)</option>
+                      <option value="mastery">Mastery Circle ($79/mo)</option>
+                    </select>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn--primary" style="width:100%;margin-top:16px;">Add Video →</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zoom Panel -->
+      <div class="panel" id="panel-zoom">
+        <div class="shop-grid-col">
+          <div class="shop-list-col">
+            <div class="section-hdr">
+              <h2>Zoom Sessions</h2>
+            </div>
+            <div class="bookings-list" id="zoom-sessions-list"></div>
+          </div>
+          <div class="shop-form-col">
+            <div class="form-card">
+              <h3>Schedule Zoom Session</h3>
+              <form id="zoom-form" onsubmit="event.preventDefault(); saveZoomSession();" style="margin-top:16px;">
+                <div class="form__group" style="margin-bottom:12px;">
+                  <label style="font-size:0.75rem;font-weight:600;">Session Name</label>
+                  <input type="text" id="zoom-name" class="form__input" placeholder="e.g. Monthly Throwing Critique" required />
+                </div>
+                <div class="form__group" style="margin-bottom:12px;">
+                  <label style="font-size:0.75rem;font-weight:600;">Member Email</label>
+                  <input type="email" id="zoom-member" class="form__input" placeholder="e.g. member@email.com" required />
+                </div>
+                <div class="form__row" style="display:flex;gap:12px;margin-bottom:12px;">
+                  <div class="form__group" style="flex:1;">
+                    <label style="font-size:0.75rem;font-weight:600;">Date</label>
+                    <input type="date" id="zoom-date" class="form__input" required />
+                  </div>
+                  <div class="form__group" style="flex:1;">
+                    <label style="font-size:0.75rem;font-weight:600;">Time</label>
+                    <input type="time" id="zoom-time" class="form__input" required />
+                  </div>
+                </div>
+                <div class="form__group" style="margin-bottom:12px;">
+                  <label style="font-size:0.75rem;font-weight:600;">Zoom Link</label>
+                  <input type="url" id="zoom-link" class="form__input" value="https://zoom.us/j/820287397307" required />
+                </div>
+                <button type="submit" class="btn btn--clay" style="width:100%;margin-top:16px;">Schedule Session →</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
@@ -1178,6 +1302,21 @@
           document.getElementById('page-sub').textContent = 'Customer purchase inquiries';
           document.getElementById('clear-btn').style.display = 'none';
           renderPurchases();
+        } else if (panel === 'members') {
+          document.getElementById('page-title').textContent = 'Subscribers';
+          document.getElementById('page-sub').textContent = 'Manage active membership subscriptions';
+          document.getElementById('clear-btn').style.display = 'none';
+          renderMembers();
+        } else if (panel === 'videos') {
+          document.getElementById('page-title').textContent = 'Video Library';
+          document.getElementById('page-sub').textContent = 'Manage studio tutorial library';
+          document.getElementById('clear-btn').style.display = 'none';
+          renderAdminVideos();
+        } else if (panel === 'zoom') {
+          document.getElementById('page-title').textContent = 'Zoom Coaching';
+          document.getElementById('page-sub').textContent = 'Manage 1-on-1 member critique calls';
+          document.getElementById('clear-btn').style.display = 'none';
+          renderZoomSessions();
         } else {
           document.getElementById('page-title').textContent = 'Messages';
           document.getElementById('page-sub').textContent = 'Customer inquiries';
@@ -1252,7 +1391,7 @@
 
       document.getElementById('stat-total').textContent    = bookings.length;
       document.getElementById('stat-upcoming').textContent  = upcoming.length;
-      const availPots = _pots.filter(p => p.status === 'available').length;
+      const availPots = (typeof _pots !== 'undefined' ? _pots.filter(p => p.status === 'available').length : 0);
       document.getElementById('stat-pots').textContent     = availPots;
       document.getElementById('stat-unread').textContent   = unread.length;
 
@@ -1265,6 +1404,12 @@
       const msgBadge = document.getElementById('badge-messages');
       msgBadge.textContent = unread.length;
       msgBadge.style.display = unread.length ? '' : 'none';
+
+      const subBadge = document.getElementById('badge-members');
+      if (subBadge) {
+        subBadge.textContent = _members.length;
+        subBadge.style.display = _members.length ? '' : 'none';
+      }
     }
 
     // ── Render Bookings ──
@@ -1693,6 +1838,225 @@
         </div>`).join('');
     }
 
+    // ── Members / Subscribers Mockup Logic ──
+    let memberFilter = 'all';
+    var _members = [
+      { id: 'MEM-1', name: 'Alice Smith', email: 'alice@email.com', tier: 'studio', status: 'active', renewal: 'Aug 1, 2026' },
+      { id: 'MEM-2', name: 'Robert Johnson', email: 'robert@email.com', tier: 'mastery', status: 'active', renewal: 'Aug 5, 2026' },
+      { id: 'MEM-3', name: 'Sarah Miller', email: 'sarah@email.com', tier: 'studio', status: 'active', renewal: 'Jul 28, 2026' },
+      { id: 'MEM-4', name: 'David Lee', email: 'david@email.com', tier: 'free', status: 'active', renewal: '-' }
+    ];
+
+    function renderMembers() {
+      const list = document.getElementById('members-list');
+      if (!list) return;
+
+      let filtered = _members;
+      if (memberFilter !== 'all') filtered = _members.filter(m => m.tier === memberFilter);
+
+      if (filtered.length === 0) {
+        list.innerHTML = `<div class="empty-state"><h3>No subscribers found</h3></div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(m => `
+        <div class="booking-card">
+          <div class="booking-card__header">
+            <div>
+              <span class="booking-card__time">👤 ${m.name}</span>
+              <span class="booking-card__date">${m.email}</span>
+            </div>
+            <span class="status-badge ${m.tier === 'mastery' ? 'status-badge--confirmed' : m.tier === 'studio' ? 'status-badge--pending' : 'status-badge--cancelled'}">
+              ${m.tier === 'mastery' ? '🔮 Mastery Circle' : m.tier === 'studio' ? '🌀 Studio Circle' : '🌱 Clay Community'}
+            </span>
+          </div>
+          <div class="booking-card__details" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div><strong>Status:</strong> <span style="text-transform:capitalize">${m.status}</span></div>
+              <div><strong>Next Renewal:</strong> ${m.renewal}</div>
+            </div>
+            <div class="booking-card__actions" style="margin-top:0; border:none; padding:0;">
+              <button class="action-btn action-btn--done" onclick="emailMember('${m.email}')">✉ Email</button>
+              <button class="action-btn action-btn--cancel" onclick="deleteMember('${m.id}')">Cancel Subs</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Update badge count
+      const badge = document.getElementById('badge-members');
+      if (badge) {
+        badge.textContent = _members.length;
+        badge.style.display = _members.length > 0 ? '' : 'none';
+      }
+    }
+
+    window.emailMember = function(email) {
+      window.location.href = `mailto:${email}?subject=Spirit Tree Ceramics Membership`;
+    };
+
+    window.deleteMember = function(id) {
+      if (!confirm('Are you sure you want to cancel this subscription?')) return;
+      _members = _members.filter(m => m.id !== id);
+      renderMembers();
+      updateStats();
+      toast('Subscription cancelled.');
+    };
+
+    // Member Filters Listeners
+    document.querySelectorAll('#panel-members .filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#panel-members .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        memberFilter = btn.dataset.memFilter;
+        renderMembers();
+      });
+    });
+
+    // ── Videos Manager Mockup Logic ──
+    var _adminVideos = [
+      { id: 'vid-1', title: 'Centering & Wedging Clay', description: 'The foundation of all pottery. Learn the physical stance, body positioning, and coning techniques to perfectly center your clay on the wheel.', duration: '18 min', difficulty: 'Beginner', tier: 'free', ytid: 'OnYSjEehxH0' },
+      { id: 'vid-2', title: 'Opening & Pulling the Cylinder', description: 'Step-by-step masterclass on opening the centered clay and pulling uniform walls to create basic cups, mugs, and cylinders.', duration: '24 min', difficulty: 'Beginner', tier: 'studio', ytid: 'OnYSjEehxH0' },
+      { id: 'vid-3', title: 'Trimming & Foot Rings', description: 'Turn your greenware into refined pieces. John demonstrates wheel trimming, using loop tools, and throwing clean foot rings.', duration: '15 min', difficulty: 'Intermediate', tier: 'studio', ytid: 'OnYSjEehxH0' }
+    ];
+
+    function renderAdminVideos() {
+      const list = document.getElementById('admin-videos-list');
+      if (!list) return;
+
+      if (_adminVideos.length === 0) {
+        list.innerHTML = `<div class="empty-state"><h3>No videos listed</h3></div>`;
+        return;
+      }
+
+      list.innerHTML = _adminVideos.map(v => `
+        <div class="booking-card">
+          <div class="booking-card__header">
+            <div>
+              <span class="booking-card__time">📹 ${v.title}</span>
+              <span class="booking-card__date">${v.duration} · ${v.difficulty}</span>
+            </div>
+            <span class="status-badge ${v.tier === 'mastery' ? 'status-badge--confirmed' : v.tier === 'studio' ? 'status-badge--pending' : 'status-badge--cancelled'}">
+              ${v.tier === 'mastery' ? '🔮 Mastery Required' : v.tier === 'studio' ? '🌀 Studio Required' : '🌱 Free Public'}
+            </span>
+          </div>
+          <div class="booking-card__details" style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="flex:1; padding-right:20px;">
+              <p style="font-size:0.85rem; color:var(--smoke); margin:0;">${v.description}</p>
+            </div>
+            <div class="booking-card__actions" style="margin-top:0; border:none; padding:0;">
+              <button class="action-btn action-btn--delete" onclick="deleteVideo('${v.id}')">🗑 Delete</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.saveVideo = function() {
+      const title = document.getElementById('vid-title').value.trim();
+      const desc = document.getElementById('vid-desc').value.trim();
+      const duration = document.getElementById('vid-duration').value.trim() || '10 min';
+      const difficulty = document.getElementById('vid-difficulty').value;
+      const ytid = document.getElementById('vid-ytid').value.trim() || 'OnYSjEehxH0';
+      const tier = document.getElementById('vid-tier').value;
+
+      if (!title) return;
+
+      const newVid = {
+        id: 'VID-' + Math.random().toString(36).substr(2,6).toUpperCase(),
+        title, description: desc, duration, difficulty, ytid, tier
+      };
+
+      _adminVideos.push(newVid);
+      renderAdminVideos();
+      
+      // Reset form
+      document.getElementById('vid-title').value = '';
+      document.getElementById('vid-desc').value = '';
+      document.getElementById('vid-duration').value = '';
+      document.getElementById('vid-ytid').value = '';
+      
+      toast('Video tutorial added successfully!');
+    };
+
+    window.deleteVideo = function(id) {
+      if (!confirm('Are you sure you want to delete this video?')) return;
+      _adminVideos = _adminVideos.filter(v => v.id !== id);
+      renderAdminVideos();
+      toast('Video deleted.');
+    };
+
+    // ── Zoom Scheduler Mockup Logic ──
+    var _zoomSessions = [
+      { id: 'Z-1', name: 'Sarah Miller Critique Call', email: 'sarah@email.com', date: '2026-07-15', time: '14:00', link: 'https://zoom.us/j/820287397307' },
+      { id: 'Z-2', name: 'Robert Johnson coaching call', email: 'robert@email.com', date: '2026-07-19', time: '10:30', link: 'https://zoom.us/j/820287397307' }
+    ];
+
+    function renderZoomSessions() {
+      const list = document.getElementById('zoom-sessions-list');
+      if (!list) return;
+
+      if (_zoomSessions.length === 0) {
+        list.innerHTML = `<div class="empty-state"><h3>No scheduled Zoom calls</h3></div>`;
+        return;
+      }
+
+      list.innerHTML = _zoomSessions.map(z => `
+        <div class="booking-card">
+          <div class="booking-card__header">
+            <div>
+              <span class="booking-card__time">📹 ${z.name}</span>
+              <span class="booking-card__date">${z.date} at ${z.time}</span>
+            </div>
+            <span class="status-badge status-badge--pending">Scheduled</span>
+          </div>
+          <div class="booking-card__details" style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div><strong>Attendee:</strong> ${z.email}</div>
+              <div><strong>Zoom link:</strong> <a href="${z.link}" target="_blank" style="color:var(--gold);text-decoration:underline;">${z.link}</a></div>
+            </div>
+            <div class="booking-card__actions" style="margin-top:0; border:none; padding:0;">
+              <a href="${z.link}" target="_blank" class="action-btn action-btn--done" style="text-decoration:none; display:inline-block; line-height:22px; text-align:center;">▶ Launch Call</a>
+              <button class="action-btn action-btn--delete" onclick="deleteZoom('${z.id}')">🗑 Cancel</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.saveZoomSession = function() {
+      const name = document.getElementById('zoom-name').value.trim();
+      const email = document.getElementById('zoom-member').value.trim();
+      const date = document.getElementById('zoom-date').value;
+      const time = document.getElementById('zoom-time').value;
+      const link = document.getElementById('zoom-link').value.trim() || 'https://zoom.us/j/820287397307';
+
+      if (!name || !email || !date || !time) return;
+
+      const newZoom = {
+        id: 'Z-' + Math.random().toString(36).substr(2,6).toUpperCase(),
+        name, email, date, time, link
+      };
+
+      _zoomSessions.push(newZoom);
+      renderZoomSessions();
+
+      // Reset form
+      document.getElementById('zoom-name').value = '';
+      document.getElementById('zoom-member').value = '';
+      document.getElementById('zoom-date').value = '';
+      document.getElementById('zoom-time').value = '';
+
+      toast('Zoom critique session scheduled.');
+    };
+
+    window.deleteZoom = function(id) {
+      if (!confirm('Are you sure you want to cancel this Zoom call?')) return;
+      _zoomSessions = _zoomSessions.filter(z => z.id !== id);
+      renderZoomSessions();
+      toast('Zoom session cancelled.');
+    };
+
     // ── Init ──
     function init() {
       if (USE_FIREBASE) {
@@ -1701,6 +2065,10 @@
         updateStats();
         renderBookings();
       }
+      // Populate mock tables
+      renderMembers();
+      renderAdminVideos();
+      renderZoomSessions();
     }
   </script>
 </body>

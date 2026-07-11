@@ -1269,3 +1269,64 @@ body.modal-open { overflow: hidden; }
   color: var(--pearl);
 }
 .purchase-delivery-opt input { accent-color: var(--amethyst); }
+
+/* ── Video Card Styles ── */
+.video-card {
+  position: relative;
+}
+.video-play-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  height: 48px;
+  background: rgba(193,84,10,0.85);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #fff;
+  opacity: 0.8;
+  transition: transform 0.2s, opacity 0.2s;
+  pointer-events: none;
+  z-index: 2;
+}
+.video-card:hover .video-play-indicator {
+  transform: translate(-50%, -50%) scale(1.1);
+  opacity: 1;
+  background: var(--amethyst);
+}
+.video-lock-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15,10,6,0.75);
+  backdrop-filter: blur(3px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  opacity: 1;
+  transition: background 0.2s;
+  z-index: 3;
+}
+.video-lock-badge {
+  background: linear-gradient(135deg, var(--gold), #e8c840);
+  color: var(--void);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 6px 14px;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.video-lock-text {
+  font-size: 0.8rem;
+  color: var(--mist);
+  font-weight: 500;
+}

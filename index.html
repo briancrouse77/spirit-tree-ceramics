@@ -111,11 +111,12 @@
       <ul class="nav__links">
         <li><a href="#about">About John</a></li>
         <li><a href="#shop">Shop</a></li>
-        <li><a href="#classes">Book a Session</a></li>
+        <li><a href="#memberships">Memberships</a></li>
+        <li><a href="#videos">Video Library</a></li>
         <li><a href="#how">How It Works</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
-      <button class="btn btn--accent nav__cta" id="nav-book-btn">Book a Session</button>
+      <a href="#memberships" class="btn btn--accent nav__cta" id="nav-book-btn">Join the Club</a>
       <button class="nav__hamburger" id="hamburger" aria-label="Open menu">
         <span></span><span></span><span></span>
       </button>
@@ -123,10 +124,11 @@
     <div class="nav__mobile" id="mobile-menu">
       <a href="#about">About John</a>
       <a href="#shop">Shop</a>
-      <a href="#classes">Book a Session</a>
+      <a href="#memberships">Memberships</a>
+      <a href="#videos">Video Library</a>
       <a href="#how">How It Works</a>
       <a href="#contact">Contact</a>
-      <button class="btn btn--accent" id="mobile-book-btn">Book a Session</button>
+      <a href="#memberships" class="btn btn--accent" id="mobile-book-btn" style="text-align:center;">Join the Club</a>
     </div>
   </nav>
 
@@ -162,7 +164,7 @@
       <p class="hero__sub">Ancient craft. Present moment. The wheel comes to you — and something always shifts when your hands meet the clay.</p>
       <div class="hero__actions">
         <a href="#shop" class="btn btn--primary btn--lg">Shop the Collection</a>
-        <button class="btn btn--ghost btn--lg" id="hero-book-btn">Book a Session</button>
+        <a href="#memberships" class="btn btn--ghost btn--lg" id="hero-book-btn">Join the Club</a>
       </div>
     </div>
     <a href="#about" class="hero__scroll" aria-label="Scroll down">
@@ -225,8 +227,8 @@
     </div>
   </section>
 
-  <!-- ── CLASSES ── -->
-  <section class="classes section section--dark" id="classes">
+  <!-- ── MEMBERSHIPS ── -->
+  <section class="classes section section--dark" id="memberships">
     <!-- Decorative background geometry -->
     <div class="section__geo" aria-hidden="true">
       <svg viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -237,52 +239,78 @@
       </svg>
     </div>
     <div class="container">
-      <p class="section__eyebrow section__eyebrow--light">Sacred Offerings</p>
-      <h2 class="section__title section__title--light">Choose Your Session</h2>
-      <p class="section__sub section__sub--light">All sessions include materials, aprons, and expert guidance. We handle setup and cleanup. You handle the transformation.</p>
+      <div class="section__header">
+        <p class="section__eyebrow section__eyebrow--light">Sacred Offerings</p>
+        <h2 class="section__title section__title--light">Join the Circle</h2>
+        <p class="section__sub section__sub--light">Choose a membership tier that matches your rhythm. Unlock access to masterclass tutorials, glaze guides, and direct mentorship.</p>
+      </div>
       <div class="classes__grid">
 
-        <div class="class-card" data-class="First Spiral — Intro Session">
+        <div class="class-card" data-tier="free">
           <div class="class-card__icon">🌱</div>
+          <h3 class="class-card__title">Clay Community</h3>
+          <p class="class-card__subtitle">Free Tier</p>
+          <p class="class-card__meta"><span>Shop Access</span> · <span>News & Alerts</span></p>
+          <p class="class-card__desc">Become part of the circle. Browse John's latest handthrown collections, get early email alerts for shop drops, and view public video highlights.</p>
+          <div class="class-card__price"><strong>Free</strong></div>
+          <button class="btn btn--ghost class-card__btn" onclick="openCheckoutModal('free')">Sign Up Free</button>
+        </div>
+
+        <div class="class-card" data-tier="studio">
+          <div class="class-card__icon">🌀</div>
           <div class="class-card__badge">Most Sought</div>
-          <h3 class="class-card__title">First Spiral</h3>
-          <p class="class-card__subtitle">Intro to the Wheel</p>
-          <p class="class-card__meta"><span>2 Hours</span> · <span>Beginner</span> · <span>Up to 6 people</span></p>
-          <p class="class-card__desc">No experience needed. Learn to center, open, and pull your first vessel from a living lump of earth. Every person leaves having made something real.</p>
-          <div class="class-card__price">From <strong>$75</strong> <span>/ person</span></div>
-          <button class="btn btn--clay class-card__btn" data-class="First Spiral — Intro Session">Book Now</button>
+          <h3 class="class-card__title">Studio Circle</h3>
+          <p class="class-card__subtitle">Full Video Access</p>
+          <p class="class-card__meta"><span>Full Tutorial Library</span> · <span>Glaze Guides</span> · <span>15% Shop Discount</span></p>
+          <p class="class-card__desc">Dive deep into the craft. Access hours of high-definition tutorials on clay prep, centering, opening, pulling, trimming, and raw glazing secrets.</p>
+          <div class="class-card__price"><strong>$19</strong> <span>/ month</span></div>
+          <button class="btn btn--primary class-card__btn" onclick="openCheckoutModal('studio')">Join Studio Circle</button>
         </div>
 
-        <div class="class-card" data-class="Deeper Waters — Intermediate Session">
-          <div class="class-card__icon">🌊</div>
-          <h3 class="class-card__title">Deeper Waters</h3>
-          <p class="class-card__subtitle">Intermediate Throwing</p>
-          <p class="class-card__meta"><span>3 Hours</span> · <span>Some Experience</span> · <span>Up to 4 people</span></p>
-          <p class="class-card__desc">For those who've felt the spin before. We go deeper — consistent forms, trimming, and an expanded vocabulary of shape.</p>
-          <div class="class-card__price">From <strong>$95</strong> <span>/ person</span></div>
-          <button class="btn btn--clay class-card__btn" data-class="Deeper Waters — Intermediate Session">Book Now</button>
+        <div class="class-card" data-tier="mastery">
+          <div class="class-card__icon">🔮</div>
+          <h3 class="class-card__title">Mastery Circle</h3>
+          <p class="class-card__subtitle">Mentor & Critique</p>
+          <p class="class-card__meta"><span>All Video Access</span> · <span>Monthly 1-on-1 Zoom</span> · <span>Critiques</span></p>
+          <p class="class-card__desc">For dedicated potters. Includes full studio library access plus a monthly 45-minute private Zoom coaching session with John to critique your throws and glaze results.</p>
+          <div class="class-card__price"><strong>$79</strong> <span>/ month</span></div>
+          <button class="btn btn--clay class-card__btn" onclick="openCheckoutModal('mastery')">Join Mastery Circle</button>
         </div>
 
-        <div class="class-card" data-class="The Still Point — Private Session">
-          <div class="class-card__icon">✨</div>
-          <h3 class="class-card__title">The Still Point</h3>
-          <p class="class-card__subtitle">Private 1-on-1 Session</p>
-          <p class="class-card__meta"><span>2 Hours</span> · <span>Any Level</span> · <span>Just You</span></p>
-          <p class="class-card__desc">Undivided presence, your rhythm, your intention. The most intimate way to encounter the wheel — and yourself.</p>
-          <div class="class-card__price">From <strong>$150</strong> <span>/ session</span></div>
-          <button class="btn btn--clay class-card__btn" data-class="The Still Point — Private Session">Book Now</button>
-        </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="class-card" data-class="The Gathering — Group Ceremony">
-          <div class="class-card__icon">🌕</div>
-          <h3 class="class-card__title">The Gathering</h3>
-          <p class="class-card__subtitle">Group Ceremony / Event</p>
-          <p class="class-card__meta"><span>2–3 Hours</span> · <span>Any Level</span> · <span>Up to 12 people</span></p>
-          <p class="class-card__desc">Birthdays, sacred circles, corporate gatherings, or just a night where your group makes something together. We transform any space.</p>
-          <div class="class-card__price">From <strong>$65</strong> <span>/ person</span></div>
-          <button class="btn btn--clay class-card__btn" data-class="The Gathering — Group Ceremony">Book Now</button>
+  <!-- ── VIDEO LIBRARY ── -->
+  <section class="section section--void" id="videos">
+    <div class="container">
+      <div class="section__header">
+        <p class="section__eyebrow section__eyebrow--light">Master the Wheel</p>
+        <h2 class="section__title">The Studio Library</h2>
+        <p class="section__sub">Unlock access to our growing library of clay masterclasses and tutorials. Study John's techniques from home.</p>
+        
+        <!-- Live State Simulator (Crucial for mockup validation) -->
+        <div class="state-simulator" style="display:inline-flex;align-items:center;gap:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(193,84,10,0.25);border-radius:50px;padding:6px 16px;margin-top:16px;">
+          <span style="font-size:0.75rem;font-weight:600;color:var(--mist);text-transform:uppercase;letter-spacing:0.04em;">Preview Role:</span>
+          <select id="state-role-select" onchange="changeStagingRole(this.value)" style="background:var(--deep);color:var(--pearl);border:none;border-radius:4px;padding:4px 8px;font-size:0.8rem;outline:none;cursor:pointer;">
+            <option value="free">Logged Out (Free)</option>
+            <option value="studio">Studio Circle Member</option>
+            <option value="mastery">Mastery Circle Member</option>
+          </select>
         </div>
+      </div>
 
+      <!-- Member Dashboard Scheduling Panel (Mastery Members Only) -->
+      <div id="mastery-dashboard" style="display:none;background:rgba(193,84,10,0.06);border:1px solid rgba(193,84,10,0.3);border-radius:var(--radius-lg);padding:24px 32px;margin-bottom:48px;text-align:center;animation:fadeIn 0.5s;">
+        <span style="font-size:1.8rem;margin-bottom:8px;display:block;">🔮</span>
+        <h3 style="font-family:var(--font-head);font-size:1.5rem;color:var(--pearl);margin-bottom:6px;">Your Mastery Coaching</h3>
+        <p style="font-size:0.88rem;color:var(--mist);max-width:520px;margin:0 auto 16px;">As a Mastery Member, you get one-on-one video coaching with John. Schedule your Zoom critique session below.</p>
+        <button class="btn btn--clay" id="dash-schedule-btn" style="margin:0 auto;">Schedule Zoom Call →</button>
+      </div>
+
+      <!-- Video Grid -->
+      <div class="shop-grid" id="video-grid">
+        <!-- Videos will be rendered here dynamically via JS -->
       </div>
     </div>
   </section>
@@ -295,30 +323,30 @@
       <div class="how__steps">
         <div class="how__step">
           <div class="how__step-num">01</div>
-          <div class="how__step-icon">🌿</div>
-          <h3>Set Your Intention</h3>
-          <p>Choose the session that calls to you — beginner, intermediate, private, or group.</p>
+          <div class="how__step-icon">🌱</div>
+          <h3>Choose Your Circle</h3>
+          <p>Sign up for the tier that fits your needs: Free, Studio (Videos), or Mastery (Mentor).</p>
         </div>
         <div class="how__connector"></div>
         <div class="how__step">
           <div class="how__step-num">02</div>
-          <div class="how__step-icon">🗓️</div>
-          <h3>Choose Your Moment</h3>
-          <p>Select from available dates and times. Morning, evening, or weekend — the timing is yours.</p>
+          <div class="how__step-icon">🎥</div>
+          <h3>Stream Tutorials</h3>
+          <p>Access masterclass videos detailing clay preparation, centering, trimming, and glazing.</p>
         </div>
         <div class="how__connector"></div>
         <div class="how__step">
           <div class="how__step-num">03</div>
-          <div class="how__step-icon">🚐</div>
-          <h3>We Arrive</h3>
-          <p>John loads the van with wheels, clay, tools, and aprons and sets up in your space.</p>
+          <div class="how__step-icon">💻</div>
+          <h3>Coaching &amp; Critique</h3>
+          <p>Mastery members book Zoom coaching sessions to get direct critiques on their work.</p>
         </div>
         <div class="how__connector"></div>
         <div class="how__step">
           <div class="how__step-num">04</div>
           <div class="how__step-icon">🏺</div>
-          <h3>Create &amp; Carry</h3>
-          <p>Shape something from the earth. Your vessel is yours to keep after firing and glazing.</p>
+          <h3>Refine Your Art</h3>
+          <p>Apply feedback, practice the cycles, and create pieces that flow with intent.</p>
         </div>
       </div>
     </div>
@@ -659,6 +687,77 @@
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ── MEMBERSHIP CHECKOUT MODAL ── -->
+  <div class="modal-overlay" id="checkout-overlay" style="display:none;z-index:2001;">
+    <div class="modal" style="max-width:500px;padding:32px;">
+      <button class="modal__close" onclick="closeCheckoutModal()">×</button>
+      <div id="checkout-step-form">
+        <h3 style="font-family:var(--font-head);font-size:1.8rem;margin-bottom:6px;color:var(--pearl)" id="checkout-tier-title">Join the Circle</h3>
+        <p style="font-size:0.85rem;color:var(--smoke);margin-bottom:24px" id="checkout-tier-desc">Register your subscription</p>
+        
+        <form class="modal__form" id="checkout-form" onsubmit="event.preventDefault(); submitCheckout();" novalidate>
+          <div class="form__group">
+            <label for="check-name">Name</label>
+            <input type="text" id="check-name" placeholder="Full name" required />
+          </div>
+          <div class="form__group">
+            <label for="check-email">Email</label>
+            <input type="email" id="check-email" placeholder="Email address" required />
+          </div>
+          <div id="checkout-payment-fields" style="display:none;">
+            <div class="form__group">
+              <label for="check-card">Card Number</label>
+              <input type="text" id="check-card" placeholder="4111 2222 3333 4444" />
+            </div>
+            <div class="form__row">
+              <div class="form__group">
+                <label for="check-exp">Expiry</label>
+                <input type="text" id="check-exp" placeholder="MM/YY" />
+              </div>
+              <div class="form__group">
+                <label for="check-cvc">CVC</label>
+                <input type="password" id="check-cvc" placeholder="123" />
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:16px;" id="checkout-submit-btn">Subscribe Now</button>
+        </form>
+      </div>
+      <div id="checkout-step-success" style="display:none;text-align:center;padding:24px 0;">
+        <span style="font-size:3rem;margin-bottom:16px;display:block;">🌀</span>
+        <h3 style="font-family:var(--font-head);font-size:1.8rem;color:var(--pearl);margin-bottom:10px">Welcome to the Circle!</h3>
+        <p style="color:var(--smoke);font-size:0.9rem;line-height:1.7" id="checkout-success-msg">Your subscription is active. Access the video library and membership benefits now.</p>
+        <button class="btn btn--ghost" style="margin-top:24px;width:100%;" onclick="closeCheckoutModal()">Start Exploring</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PREMIUM UPGRADE MODAL ── -->
+  <div class="modal-overlay" id="upgrade-overlay" style="display:none;z-index:2001;">
+    <div class="modal" style="max-width:440px;padding:32px;text-align:center;">
+      <button class="modal__close" onclick="closeUpgradeModal()">×</button>
+      <span style="font-size:3rem;margin-bottom:16px;display:block;">🔒</span>
+      <h3 style="font-family:var(--font-head);font-size:1.8rem;color:var(--pearl);margin-bottom:10px" id="upgrade-title">Premium Content</h3>
+      <p style="color:var(--smoke);font-size:0.9rem;line-height:1.7;margin-bottom:24px" id="upgrade-desc">Upgrade your membership to unlock this video tutorial and master the wheel.</p>
+      <button class="btn btn--primary" style="width:100%;margin-bottom:12px;" id="upgrade-cta-btn" onclick="goToCheckoutFromUpgrade()">Upgrade Membership</button>
+      <button class="btn btn--ghost" style="width:100%;" onclick="closeUpgradeModal()">Maybe Later</button>
+    </div>
+  </div>
+
+  <!-- ── VIDEO PLAY MODAL ── -->
+  <div class="modal-overlay" id="video-play-overlay" style="display:none;z-index:2001;">
+    <div class="modal" style="max-width:800px;padding:16px;background:#000;">
+      <button class="modal__close" onclick="closeVideoPlayModal()" style="top:10px;right:10px;background:rgba(0,0,0,0.5);border:none;">×</button>
+      <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;background:#111;">
+        <iframe id="video-iframe" src="" style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+      <div style="padding:16px 8px 8px;">
+        <h3 id="video-play-title" style="font-family:var(--font-head);font-size:1.6rem;color:var(--pearl);margin-bottom:4px;"></h3>
+        <p id="video-play-desc" style="font-size:0.88rem;color:var(--smoke);margin:0;line-height:1.6;"></p>
+      </div>
     </div>
   </div>
 

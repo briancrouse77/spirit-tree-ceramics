@@ -854,3 +854,260 @@ async function submitPurchase() {
     btn.disabled = false;
   }
 }
+
+// ── Subscription Membership Mockup Logic ─────────────────────────────────────
+var currentRole = 'free';
+var selectedUpgradeTier = 'studio';
+
+const mockVideos = [
+  {
+    id: 'vid-1',
+    title: 'Centering & Wedging Clay',
+    description: 'The foundation of all pottery. Learn the physical stance, body positioning, and coning techniques to perfectly center your clay on the wheel.',
+    duration: '18 min',
+    difficulty: 'Beginner',
+    tier: 'free',
+    thumbnailUrl: 'images/gallery3.png',
+    youtubeId: 'OnYSjEehxH0'
+  },
+  {
+    id: 'vid-2',
+    title: 'Opening & Pulling the Cylinder',
+    description: 'Step-by-step masterclass on opening the centered clay and pulling uniform walls to create basic cups, mugs, and cylinders.',
+    duration: '24 min',
+    difficulty: 'Beginner',
+    tier: 'studio',
+    thumbnailUrl: 'images/gallery2.png',
+    youtubeId: 'OnYSjEehxH0'
+  },
+  {
+    id: 'vid-3',
+    title: 'Trimming & Foot Rings',
+    description: 'Turn your greenware into refined pieces. John demonstrates wheel trimming, using loop tools, and throwing clean foot rings.',
+    duration: '15 min',
+    difficulty: 'Intermediate',
+    tier: 'studio',
+    thumbnailUrl: 'images/gallery1.png',
+    youtubeId: 'OnYSjEehxH0'
+  },
+  {
+    id: 'vid-4',
+    title: 'Masterclass: Tall Bottle Forms',
+    description: 'Collaring, shaping, and managing thin clay walls to pull tall, graceful narrow-neck bottle vases.',
+    duration: '32 min',
+    difficulty: 'Advanced',
+    tier: 'mastery',
+    thumbnailUrl: 'images/hero.png',
+    youtubeId: 'OnYSjEehxH0'
+  }
+];
+
+function renderVideos() {
+  const grid = document.getElementById('video-grid');
+  if (!grid) return;
+
+  grid.innerHTML = mockVideos.map(v => {
+    // Check if the video is locked for the current role
+    var isLocked = false;
+    if (v.tier === 'studio' && currentRole === 'free') isLocked = true;
+    if (v.tier === 'mastery' && currentRole !== 'mastery') isLocked = true;
+
+    var badgeText = v.tier === 'studio' ? 'Studio Circle' : 'Mastery Circle';
+
+    return '<div class="shop-card video-card" onclick="handleVideoClick(\'' + v.id + '\')">'
+      + '<div style="position:relative; overflow:hidden; aspect-ratio:4/3;">'
+      + '<img src="' + v.thumbnailUrl + '" class="shop-card__img" alt="' + v.title + '" style="width:100%;height:100%;object-fit:cover;" />'
+      + (!isLocked ? '<div class="video-play-indicator">▶</div>' : '')
+      + (isLocked 
+          ? '<div class="video-lock-overlay">'
+            + '<div class="video-lock-badge">🔒 ' + badgeText + '</div>'
+            + '<div class="video-lock-text">Click to Unlock</div>'
+            + '</div>'
+          : '')
+      + '</div>'
+      + '<div class="shop-card__body">'
+      + '<div style="font-size:0.75rem;color:var(--teal-lt);text-transform:uppercase;font-weight:600;margin-bottom:6px;letter-spacing:0.04em;">' + v.difficulty + ' · ' + v.duration + '</div>'
+      + '<div class="shop-card__title">' + v.title + '</div>'
+      + '<div class="shop-card__desc">' + v.description + '</div>'
+      + '</div></div>';
+  }).join('');
+}
+
+function handleVideoClick(id) {
+  const v = mockVideos.find(x => x.id === id);
+  if (!v) return;
+
+  var isLocked = false;
+  if (v.tier === 'studio' && currentRole === 'free') isLocked = true;
+  if (v.tier === 'mastery' && currentRole !== 'mastery') isLocked = true;
+
+  if (isLocked) {
+    openUpgradeModal(v.tier);
+  } else {
+    openVideoPlayModal(v);
+  }
+}
+
+window.changeStagingRole = function(role) {
+  currentRole = role;
+  const select = document.getElementById('state-role-select');
+  if (select) select.value = role;
+
+  // Show/hide Mastery Coaching booking option
+  const dash = document.getElementById('mastery-dashboard');
+  if (dash) {
+    dash.style.display = role === 'mastery' ? 'block' : 'none';
+  }
+
+  renderVideos();
+};
+
+window.openCheckoutModal = function(tier) {
+  selectedUpgradeTier = tier;
+  
+  const title = document.getElementById('checkout-tier-title');
+  const desc  = document.getElementById('checkout-tier-desc');
+  const paymentFields = document.getElementById('checkout-payment-fields');
+  const submitBtn     = document.getElementById('checkout-submit-btn');
+
+  // Reset fields
+  document.getElementById('check-name').value = '';
+  document.getElementById('check-email').value = '';
+  
+  document.getElementById('checkout-step-form').style.display = 'block';
+  document.getElementById('checkout-step-success').style.display = 'none';
+
+  if (tier === 'free') {
+    title.textContent = 'Join the Community';
+    desc.textContent = 'Get access to updates, alerts, and public features.';
+    paymentFields.style.display = 'none';
+    submitBtn.textContent = 'Register Now';
+  } else if (tier === 'studio') {
+    title.textContent = 'Join Studio Circle';
+    desc.textContent = 'Full video library access for $19/month.';
+    paymentFields.style.display = 'block';
+    submitBtn.textContent = 'Subscribe ($19/mo)';
+  } else if (tier === 'mastery') {
+    title.textContent = 'Join Mastery Circle';
+    desc.textContent = 'Videos + monthly 1-on-1 critique for $79/month.';
+    paymentFields.style.display = 'block';
+    submitBtn.textContent = 'Subscribe ($79/mo)';
+  }
+
+  const overlay = document.getElementById('checkout-overlay');
+  overlay.style.display = 'flex';
+  overlay.classList.add('open');
+  document.body.classList.add('modal-open');
+};
+
+window.closeCheckoutModal = function() {
+  const overlay = document.getElementById('checkout-overlay');
+  overlay.style.display = 'none';
+  overlay.classList.remove('open');
+  document.body.classList.remove('modal-open');
+};
+
+window.submitCheckout = function() {
+  const name  = document.getElementById('check-name').value.trim();
+  const email = document.getElementById('check-email').value.trim();
+  
+  if (!name || !email) {
+    alert('Please enter your name and email.');
+    return;
+  }
+
+  // Upgrade the UI role simulator state dynamically to matching tier
+  window.changeStagingRole(selectedUpgradeTier);
+
+  // Show success step
+  document.getElementById('checkout-step-form').style.display = 'none';
+  const successStep = document.getElementById('checkout-step-success');
+  successStep.style.display = 'block';
+
+  const msg = document.getElementById('checkout-success-msg');
+  if (selectedUpgradeTier === 'free') {
+    msg.textContent = 'You have registered for the free Clay Community. John will keep you posted on new drops and public tutorial highlights!';
+  } else if (selectedUpgradeTier === 'studio') {
+    msg.textContent = 'Your Studio Circle membership is active. The complete wheel tutorial library is now fully unlocked for you!';
+  } else if (selectedUpgradeTier === 'mastery') {
+    msg.textContent = 'Your Mastery membership is active. The complete video library is unlocked, and you can now schedule your monthly Zoom critiques!';
+  }
+};
+
+window.openUpgradeModal = function(requiredTier) {
+  selectedUpgradeTier = requiredTier;
+  const title = document.getElementById('upgrade-title');
+  const desc  = document.getElementById('upgrade-desc');
+
+  if (requiredTier === 'studio') {
+    title.textContent = 'Unlock Studio Circle';
+    desc.textContent = 'This video tutorial requires a Studio Circle membership. Upgrade to get full access to all step-by-step wheel masterclasses for just $19/mo.';
+  } else if (requiredTier === 'mastery') {
+    title.textContent = 'Unlock Mastery Circle';
+    desc.textContent = 'This advanced masterclass is restricted to Mastery members. Upgrade to get all tutorials plus private monthly Zoom video coaching with John for $79/mo.';
+  }
+
+  const overlay = document.getElementById('upgrade-overlay');
+  overlay.style.display = 'flex';
+  overlay.classList.add('open');
+  document.body.classList.add('modal-open');
+};
+
+window.closeUpgradeModal = function() {
+  const overlay = document.getElementById('upgrade-overlay');
+  overlay.style.display = 'none';
+  overlay.classList.remove('open');
+  document.body.classList.remove('modal-open');
+};
+
+window.goToCheckoutFromUpgrade = function() {
+  window.closeUpgradeModal();
+  window.openCheckoutModal(selectedUpgradeTier);
+};
+
+window.openVideoPlayModal = function(video) {
+  document.getElementById('video-play-title').textContent = video.title;
+  document.getElementById('video-play-desc').textContent = video.description;
+  
+  // Use standard YouTube embed
+  document.getElementById('video-iframe').src = 'https://www.youtube.com/embed/' + video.youtubeId + '?autoplay=1';
+
+  const overlay = document.getElementById('video-play-overlay');
+  overlay.style.display = 'flex';
+  overlay.classList.add('open');
+  document.body.classList.add('modal-open');
+};
+
+window.closeVideoPlayModal = function() {
+  document.getElementById('video-iframe').src = ''; // stop playback
+  const overlay = document.getElementById('video-play-overlay');
+  overlay.style.display = 'none';
+  overlay.classList.remove('open');
+  document.body.classList.remove('modal-open');
+};
+
+// Hook up the Zoom coaching call scheduler inside dashboard
+document.addEventListener('DOMContentLoaded', () => {
+  renderVideos();
+  
+  document.getElementById('dash-schedule-btn')?.addEventListener('click', () => {
+    // Open existing scheduling modal
+    if (typeof openModal === 'function') {
+      openModal('The Still Point — Private Session');
+    }
+  });
+
+  // Close overlays on outside click
+  ['checkout-overlay', 'upgrade-overlay', 'video-play-overlay'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('click', e => {
+        if (e.target === el) {
+          if (id === 'checkout-overlay') window.closeCheckoutModal();
+          if (id === 'upgrade-overlay') window.closeUpgradeModal();
+          if (id === 'video-play-overlay') window.closeVideoPlayModal();
+        }
+      });
+    }
+  });
+});
