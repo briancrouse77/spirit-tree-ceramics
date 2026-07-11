@@ -1260,6 +1260,11 @@
         updateStats();
         if (currentPanel === 'purchases') renderPurchases();
       });
+      db.collection('subscribers').orderBy('timestamp','desc').onSnapshot(snap => {
+        _members = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        updateStats();
+        if (currentPanel === 'members') renderMembers();
+      });
     }
 
     // ── Toast ──
@@ -1839,10 +1844,9 @@
     // ── Members / Subscribers Mockup Logic ──
     let memberFilter = 'all';
     var _members = [
-      { id: 'MEM-1', name: 'Alice Smith', email: 'alice@email.com', tier: 'premium', status: 'active', renewal: 'Aug 1, 2026' },
-      { id: 'MEM-2', name: 'Robert Johnson', email: 'robert@email.com', tier: 'premium', status: 'active', renewal: 'Aug 5, 2026' },
-      { id: 'MEM-3', name: 'Sarah Miller', email: 'sarah@email.com', tier: 'premium', status: 'active', renewal: 'Jul 28, 2026' },
-      { id: 'MEM-4', name: 'David Lee', email: 'david@email.com', tier: 'free', status: 'active', renewal: '-' }
+      { id: 'MEM-1', name: 'Sarah Miller', email: 'sarah@email.com', tier: 'premium', status: 'active', renewal: 'Aug 1, 2026' },
+      { id: 'MEM-2', name: 'David Lee', email: 'david@email.com', tier: 'free', status: 'active', renewal: '-' },
+      { id: 'MEM-3', name: 'Robert Johnson', email: 'robert@email.com', tier: 'premium', status: 'pending', renewal: 'Pending Payment' }
     ];
 
     function renderMembers() {
@@ -1857,29 +1861,37 @@
         return;
       }
 
-      list.innerHTML = filtered.map(m => `
+      list.innerHTML = filtered.map(m => {
+        const docId = m._docId || m.id;
+        const isPending = m.status === 'pending';
+        const statusClass = isPending ? 'status-badge--pending' : 'status-badge--confirmed';
+        const statusLabel = isPending ? '⏰ Pending Payment' : '✓ Active';
+
+        return `
         <div class="booking-card">
           <div class="booking-card__header">
             <div>
               <span class="booking-card__time">👤 ${m.name}</span>
               <span class="booking-card__date">${m.email}</span>
             </div>
-            <span class="status-badge ${m.tier === 'premium' ? 'status-badge--confirmed' : 'status-badge--cancelled'}">
-              ${m.tier === 'premium' ? '🔮 Studio Circle (Premium)' : '🌱 Clay Community'}
+            <span class="status-badge ${statusClass}">
+              ${statusLabel}
             </span>
           </div>
           <div class="booking-card__details" style="display:flex; justify-content:space-between; align-items:center;">
             <div>
-              <div><strong>Status:</strong> <span style="text-transform:capitalize">${m.status}</span></div>
+              <div><strong>Tier:</strong> <span style="text-transform:capitalize">${m.tier === 'premium' ? 'Studio Circle' : 'Clay Community'}</span></div>
               <div><strong>Next Renewal:</strong> ${m.renewal}</div>
             </div>
             <div class="booking-card__actions" style="margin-top:0; border:none; padding:0;">
+              ${isPending ? `<button class="action-btn action-btn--confirm" onclick="approveMember('${docId}')">✓ Approve &amp; Activate</button>` : ''}
               <button class="action-btn action-btn--done" onclick="emailMember('${m.email}')">✉ Email</button>
-              <button class="action-btn action-btn--cancel" onclick="deleteMember('${m.id}')">Cancel Subs</button>
+              <button class="action-btn action-btn--delete" onclick="deleteMember('${docId}')">Cancel</button>
             </div>
           </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       // Update badge count
       const badge = document.getElementById('badge-members');
@@ -1893,12 +1905,43 @@
       window.location.href = `mailto:${email}?subject=Spirit Tree Ceramics Membership`;
     };
 
-    window.deleteMember = function(id) {
-      if (!confirm('Are you sure you want to cancel this subscription?')) return;
-      _members = _members.filter(m => m.id !== id);
-      renderMembers();
-      updateStats();
-      toast('Subscription cancelled.');
+    window.approveMember = async function(id) {
+      if (!confirm('Approve member and set status to active?')) return;
+      const renewal = new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      if (USE_FIREBASE && id.length > 10) {
+        try {
+          await db.collection('subscribers').doc(id).update({ status: 'active', renewal: renewal });
+          toast('Member approved & activated!');
+        } catch(err) {
+          console.error(err);
+        }
+      } else {
+        const m = _members.find(x => x.id === id);
+        if (m) {
+          m.status = 'active';
+          m.renewal = renewal;
+          renderMembers();
+          updateStats();
+          toast('Member approved & activated!');
+        }
+      }
+    };
+
+    window.deleteMember = async function(id) {
+      if (!confirm('Are you sure you want to cancel this subscriber/inquiry?')) return;
+      if (USE_FIREBASE && id.length > 10) {
+        try {
+          await db.collection('subscribers').doc(id).delete();
+          toast('Subscriber deleted.');
+        } catch(err) {
+          console.error(err);
+        }
+      } else {
+        _members = _members.filter(m => (m._docId || m.id) !== id);
+        renderMembers();
+        updateStats();
+        toast('Subscriber deleted.');
+      }
     };
 
     // Member Filters Listeners

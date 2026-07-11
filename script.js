@@ -963,7 +963,6 @@ window.openCheckoutModal = function(tier) {
   
   const title = document.getElementById('checkout-tier-title');
   const desc  = document.getElementById('checkout-tier-desc');
-  const paymentFields = document.getElementById('checkout-payment-fields');
   const submitBtn     = document.getElementById('checkout-submit-btn');
 
   // Reset fields
@@ -975,14 +974,12 @@ window.openCheckoutModal = function(tier) {
 
   if (tier === 'free') {
     title.textContent = 'Join the Community';
-    desc.textContent = 'Get access to updates, alerts, and public teaser features.';
-    paymentFields.style.display = 'none';
+    desc.textContent = 'Register free for shop drop notifications and teaser video updates.';
     submitBtn.textContent = 'Register Now';
   } else if (tier === 'premium') {
-    title.textContent = 'Join Studio Circle';
-    desc.textContent = 'Full video library + monthly group critique for $29/month.';
-    paymentFields.style.display = 'block';
-    submitBtn.textContent = 'Subscribe ($29/mo)';
+    title.textContent = 'Request Membership';
+    desc.textContent = 'Submit your email to join the Studio Circle ($29/mo). John Ruiz will reach out to collect payment.';
+    submitBtn.textContent = 'Send Membership Request';
   }
 
   const overlay = document.getElementById('checkout-overlay');
@@ -998,7 +995,7 @@ window.closeCheckoutModal = function() {
   document.body.classList.remove('modal-open');
 };
 
-window.submitCheckout = function() {
+window.submitCheckout = async function() {
   const name  = document.getElementById('check-name').value.trim();
   const email = document.getElementById('check-email').value.trim();
   
@@ -1007,8 +1004,35 @@ window.submitCheckout = function() {
     return;
   }
 
-  // Upgrade the UI role simulator state dynamically to matching tier
-  window.changeStagingRole(selectedUpgradeTier);
+  const btn = document.getElementById('checkout-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  const record = {
+    id:        'SUB-' + Math.random().toString(36).substr(2,6).toUpperCase(),
+    name,
+    email,
+    tier:      selectedUpgradeTier,
+    status:    selectedUpgradeTier === 'free' ? 'active' : 'pending',
+    renewal:   selectedUpgradeTier === 'free' ? '-' : new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    if (typeof db !== 'undefined') {
+      await db.collection('subscribers').add(record);
+    }
+  } catch(err) {
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = selectedUpgradeTier === 'free' ? 'Register Now' : 'Send Membership Request';
+  }
+
+  // If free, we can automatically grant access
+  if (selectedUpgradeTier === 'free') {
+    window.changeStagingRole('free');
+  }
 
   // Show success step
   document.getElementById('checkout-step-form').style.display = 'none';
@@ -1019,7 +1043,7 @@ window.submitCheckout = function() {
   if (selectedUpgradeTier === 'free') {
     msg.textContent = 'You have registered for the free Clay Community. John will keep you posted on new drops and public tutorial highlights!';
   } else if (selectedUpgradeTier === 'premium') {
-    msg.textContent = 'Your Studio Circle membership is active. The complete wheel tutorial library is now fully unlocked, and you can join our monthly group Zoom circle critiques!';
+    msg.textContent = 'Your Studio Circle request is being processed. John Ruiz will contact you via email within 24 hours to collect payment and finalize your membership access.';
   }
 };
 

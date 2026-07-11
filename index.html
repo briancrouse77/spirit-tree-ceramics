@@ -688,30 +688,15 @@
             <label for="check-email">Email</label>
             <input type="email" id="check-email" placeholder="Email address" required />
           </div>
-          <div id="checkout-payment-fields" style="display:none;">
-            <div class="form__group">
-              <label for="check-card">Card Number</label>
-              <input type="text" id="check-card" placeholder="4111 2222 3333 4444" />
-            </div>
-            <div class="form__row">
-              <div class="form__group">
-                <label for="check-exp">Expiry</label>
-                <input type="text" id="check-exp" placeholder="MM/YY" />
-              </div>
-              <div class="form__group">
-                <label for="check-cvc">CVC</label>
-                <input type="password" id="check-cvc" placeholder="123" />
-              </div>
-            </div>
-          </div>
-          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:16px;" id="checkout-submit-btn">Subscribe Now</button>
+          <button type="submit" class="btn btn--primary" style="width:100%;margin-top:16px;" id="checkout-submit-btn">Send Inquiry</button>
         </form>
       </div>
       <div id="checkout-step-success" style="display:none;text-align:center;padding:24px 0;">
         <span style="font-size:3rem;margin-bottom:16px;display:block;">🌀</span>
-        <h3 style="font-family:var(--font-head);font-size:1.8rem;color:var(--pearl);margin-bottom:10px">Welcome to the Circle!</h3>
-        <p style="color:var(--smoke);font-size:0.9rem;line-height:1.7" id="checkout-success-msg">Your subscription is active. Access the video library and membership benefits now.</p>
-        <button class="btn btn--ghost" style="margin-top:24px;width:100%;" onclick="closeCheckoutModal()">Start Exploring</button>
+        <h3 style="font-family:var(--font-head);font-size:1.8rem;color:var(--pearl);margin-bottom:10px">Inquiry Received!</h3>
+        <p style="color:var(--smoke);font-size:0.9rem;line-height:1.7" id="checkout-success-msg">Your Studio Circle request is being processed. John Ruiz will contact you via email within 24 hours to collect payment and finalize your membership access.</p>
+        <button class="btn btn--primary" style="margin-top:24px;width:100%;" onclick="closeCheckoutModal()">Got It</button>
+        <button class="btn btn--ghost" style="margin-top:8px;width:100%;font-size:0.75rem;border-color:rgba(193,84,10,0.3);color:var(--gold);" onclick="window.changeStagingRole('premium');closeCheckoutModal();">🔧 Demo Mode: Force Unlock Instantly</button>
       </div>
     </div>
   </div>
