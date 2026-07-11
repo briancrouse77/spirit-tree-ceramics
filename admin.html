@@ -1141,8 +1141,8 @@
                   <input type="text" id="zoom-name" class="form__input" placeholder="e.g. Monthly Throwing Critique" required />
                 </div>
                 <div class="form__group" style="margin-bottom:12px;">
-                  <label style="font-size:0.75rem;font-weight:600;">Member Email</label>
-                  <input type="email" id="zoom-member" class="form__input" placeholder="e.g. member@email.com" required />
+                  <label style="font-size:0.75rem;font-weight:600;">Attendee Email (or 'Group Session')</label>
+                  <input type="text" id="zoom-member" class="form__input" placeholder="e.g. member@email.com or Group" required />
                 </div>
                 <div class="form__row" style="display:flex;gap:12px;margin-bottom:12px;">
                   <div class="form__group" style="flex:1;">
@@ -1986,8 +1986,9 @@
 
     // ── Zoom Scheduler Mockup Logic ──
     var _zoomSessions = [
-      { id: 'Z-1', name: 'Sarah Miller Critique Call', email: 'sarah@email.com', date: '2026-07-15', time: '14:00', link: 'https://zoom.us/j/820287397307' },
-      { id: 'Z-2', name: 'Robert Johnson coaching call', email: 'robert@email.com', date: '2026-07-19', time: '10:30', link: 'https://zoom.us/j/820287397307' }
+      { id: 'Z-1', name: 'July Group Circle Critique', email: 'Group Session', date: '2026-07-15', time: '18:00', link: 'https://zoom.us/j/820287397307' },
+      { id: 'Z-2', name: 'Sarah Miller 1-on-1 Critique', email: 'sarah@email.com', date: '2026-07-16', time: '14:00', link: 'https://zoom.us/j/820287397307' },
+      { id: 'Z-3', name: 'Robert Johnson 1-on-1 Coaching', email: 'robert@email.com', date: '2026-07-19', time: '10:30', link: 'https://zoom.us/j/820287397307' }
     ];
 
     function renderZoomSessions() {
