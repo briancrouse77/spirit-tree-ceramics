@@ -762,6 +762,47 @@ function openPurchaseModal(potId) {
   document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
   document.getElementById('purchase-pot-desc').textContent  = pot.description || '';
 
+  // Populate specifications dynamically (fallbacks for rich ceramic detail)
+  var titleLower = (pot.title || '').toLowerCase();
+  var clay = pot.clay || '';
+  var glaze = pot.glaze || '';
+  var firing = pot.firing || '';
+  var dimensions = pot.dimensions || '';
+
+  if (!clay || !glaze || !firing || !dimensions) {
+    if (titleLower.includes('bowl')) {
+      clay = 'Texas Red Stoneware';
+      glaze = 'Aura Copper Red & Tenmoku';
+      firing = 'Cone 10 Reduction';
+      dimensions = '6.2" W x 3.2" H';
+    } else if (titleLower.includes('vase')) {
+      clay = 'Dallas White Stoneware';
+      glaze = 'Iron-Speckled Celadon';
+      firing = 'Cone 10 Reduction';
+      dimensions = '4.5" W x 8.2" H';
+    } else if (titleLower.includes('mug') || titleLower.includes('cup')) {
+      clay = 'Dallas Fine Porcelain';
+      glaze = 'Shino & Oatmeal Ash';
+      firing = 'Gas Fired Reduction';
+      dimensions = '3.8" W x 4.2" H';
+    } else if (titleLower.includes('plate') || titleLower.includes('platter')) {
+      clay = 'Texas Buff Stoneware';
+      glaze = 'Tenmoku & Copper Green';
+      firing = 'Gas Fired Reduction';
+      dimensions = '11.5" W x 1.2" H';
+    } else {
+      clay = 'Texas Buff Stoneware';
+      glaze = 'Hand-Mixed Celadon';
+      firing = 'Cone 10 Reduction';
+      dimensions = '5.0" W x 4.5" H';
+    }
+  }
+
+  document.getElementById('spec-clay').textContent = clay;
+  document.getElementById('spec-glaze').textContent = glaze;
+  document.getElementById('spec-firing').textContent = firing;
+  document.getElementById('spec-dimensions').textContent = dimensions;
+
   // Reset steps and form fields
   goPurchaseStep(1);
   ['pur-name','pur-email','pur-phone','pur-address','pur-notes'].forEach(id => {

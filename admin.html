@@ -1020,6 +1020,26 @@
                   </select>
                 </div>
               </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label>Clay Body</label>
+                  <input type="text" id="pot-clay" class="field-input" placeholder="e.g. Texas Buff Stoneware" />
+                </div>
+                <div class="field-group">
+                  <label>Glaze</label>
+                  <input type="text" id="pot-glaze" class="field-input" placeholder="e.g. Hand-Mixed Celadon" />
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field-group">
+                  <label>Firing</label>
+                  <input type="text" id="pot-firing" class="field-input" placeholder="e.g. Cone 10 Reduction" />
+                </div>
+                <div class="field-group">
+                  <label>Dimensions</label>
+                  <input type="text" id="pot-dimensions" class="field-input" placeholder="e.g. 5.5&quot; W x 4.0&quot; H" />
+                </div>
+              </div>
               <div id="upload-progress" style="display:none">
                 <div class="upload-bar"><div class="upload-fill" id="upload-fill"></div></div>
                 <p class="upload-pct" id="upload-pct">Uploading…</p>
@@ -1671,6 +1691,12 @@
       const desc   = document.getElementById('pot-desc').value.trim();
       const price  = parseFloat(document.getElementById('pot-price').value);
       const status = document.getElementById('pot-status').value;
+      
+      const clay = document.getElementById('pot-clay').value.trim();
+      const glaze = document.getElementById('pot-glaze').value.trim();
+      const firing = document.getElementById('pot-firing').value.trim();
+      const dimensions = document.getElementById('pot-dimensions').value.trim();
+
       if (!title || isNaN(price) || price < 0) { toast('Please add a title and price.'); return; }
 
       document.getElementById('pot-save-btn').disabled = true;
@@ -1689,7 +1715,18 @@
         }
       }
 
-      const data = { title, description: desc, price, status, imageUrl, timestamp: new Date().toISOString() };
+      const data = { 
+        title, 
+        description: desc, 
+        price, 
+        status, 
+        imageUrl, 
+        clay, 
+        glaze, 
+        firing, 
+        dimensions, 
+        timestamp: new Date().toISOString() 
+      };
 
       if (_editingPotId) {
         const pot = _pots.find(p => p.id === _editingPotId);
@@ -1764,6 +1801,10 @@
       document.getElementById('pot-desc').value  = '';
       document.getElementById('pot-price').value = '';
       document.getElementById('pot-status').value = 'available';
+      document.getElementById('pot-clay').value = '';
+      document.getElementById('pot-glaze').value = '';
+      document.getElementById('pot-firing').value = '';
+      document.getElementById('pot-dimensions').value = '';
       imgPrev.src = ''; imgPrev.style.display = 'none'; imgPh.style.display = 'flex';
       document.getElementById('pot-form-title').textContent   = 'Add New Piece';
       document.getElementById('pot-save-btn').textContent     = 'Add Piece →';
@@ -1779,6 +1820,10 @@
       document.getElementById('pot-desc').value   = p.description || '';
       document.getElementById('pot-price').value  = p.price || '';
       document.getElementById('pot-status').value = p.status || 'available';
+      document.getElementById('pot-clay').value   = p.clay || '';
+      document.getElementById('pot-glaze').value  = p.glaze || '';
+      document.getElementById('pot-firing').value = p.firing || '';
+      document.getElementById('pot-dimensions').value = p.dimensions || '';
       if (p.imageUrl) { imgPrev.src = p.imageUrl; imgPrev.style.display='block'; imgPh.style.display='none'; }
       document.getElementById('pot-form-title').textContent   = 'Edit Piece';
       document.getElementById('pot-save-btn').textContent     = 'Save Changes →';

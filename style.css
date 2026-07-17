@@ -1334,3 +1334,120 @@ body.modal-open { overflow: hidden; }
   max-width: 800px;
   margin: 0 auto;
 }
+
+/* ── Product Showcase Detail View ── */
+.showcase-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 36px;
+  align-items: start;
+  text-align: left;
+}
+@media (max-width: 768px) {
+  .showcase-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+.showcase-media {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+.showcase-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.showcase-details {
+  display: flex;
+  flex-direction: column;
+}
+.showcase-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--teal-lt);
+  margin-bottom: 8px;
+  display: inline-block;
+}
+.showcase-title {
+  font-family: var(--font-head);
+  font-size: 2.1rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--pearl);
+  margin-bottom: 8px;
+}
+.showcase-price {
+  font-family: var(--font-head);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.showcase-desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--mist);
+  margin-bottom: 20px;
+}
+.showcase-specs {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 18px;
+  margin-bottom: 24px;
+}
+.specs-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  margin-bottom: 14px;
+}
+.specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+}
+@media (max-width: 480px) {
+  .specs-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+.spec-item {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.spec-icon {
+  font-size: 1.3rem;
+  opacity: 0.85;
+}
+.spec-item strong {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--smoke);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+}
+.spec-item span {
+  font-size: 0.82rem;
+  color: var(--pearl);
+}
+.showcase-actions {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 18px;
+}
