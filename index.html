@@ -342,8 +342,9 @@
       <div class="purchase-step" id="pstep-1">
         <div class="showcase-grid">
           <!-- Left Column: Media -->
-          <div class="showcase-media">
+          <div class="showcase-media" onclick="openLightbox()">
             <img id="purchase-pot-img" src="" alt="Selected Ceramic Piece" class="showcase-img" />
+            <span style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);color:var(--pearl);font-size:0.68rem;padding:4px 8px;border-radius:4px;pointer-events:none;font-weight:600;letter-spacing:0.04em;">🔍 Tap to Expand</span>
           </div>
           <!-- Right Column: Details -->
           <div class="showcase-details">
@@ -768,7 +769,11 @@
       </div>
     </div>
   </div>
-
+  <!-- ── FULL-SCREEN LIGHTBOX OVERLAY ── -->
+  <div id="lightbox-overlay" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()">&times;</button>
+    <img id="lightbox-img" src="" alt="Enlarged Ceramic View" class="lightbox-img" onclick="event.stopPropagation()" />
+  </div>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>

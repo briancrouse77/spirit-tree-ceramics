@@ -1153,6 +1153,25 @@ window.closeVideoPlayModal = function() {
   document.body.classList.remove('modal-open');
 };
 
+window.openLightbox = function() {
+  const src = document.getElementById('purchase-pot-img').src;
+  if (!src) return;
+  const lb = document.getElementById('lightbox-overlay');
+  const lbImg = document.getElementById('lightbox-img');
+  lbImg.src = src;
+  lb.classList.add('open');
+  document.body.classList.add('modal-open');
+};
+
+window.closeLightbox = function() {
+  document.getElementById('lightbox-overlay').classList.remove('open');
+  // Only remove modal-open if showcase modal isn't also open
+  const purModal = document.getElementById('purchase-overlay');
+  if (!purModal || !purModal.classList.contains('open')) {
+    document.body.classList.remove('modal-open');
+  }
+};
+
 // Hook up the Zoom coaching call scheduler inside dashboard
 document.addEventListener('DOMContentLoaded', () => {
   renderVideos();
@@ -1165,7 +1184,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Close overlays on outside click
-  ['checkout-overlay', 'upgrade-overlay', 'video-play-overlay'].forEach(id => {
+  ['checkout-overlay', 'upgrade-overlay', 'video-play-overlay', 'lightbox-overlay'].forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       el.addEventListener('click', e => {
@@ -1173,6 +1192,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (id === 'checkout-overlay') window.closeCheckoutModal();
           if (id === 'upgrade-overlay') window.closeUpgradeModal();
           if (id === 'video-play-overlay') window.closeVideoPlayModal();
+          if (id === 'lightbox-overlay') window.closeLightbox();
         }
       });
     }
