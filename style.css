@@ -1360,12 +1360,18 @@ body.modal-open { overflow: hidden; }
   align-items: center;
   justify-content: center;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  cursor: zoom-in;
 }
 .showcase-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.15s ease-out;
+  transform-origin: center center;
+}
+.showcase-media:hover .showcase-img {
+  transform: scale(2.2);
 }
 .showcase-details {
   display: flex;

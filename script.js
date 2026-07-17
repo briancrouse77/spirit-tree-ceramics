@@ -812,6 +812,24 @@ function openPurchaseModal(potId) {
   document.querySelector('input[name="pur-delivery"][value="pickup"]').checked = true;
   document.getElementById('pur-address-wrap').style.display = 'none';
 
+  // Wire interactive magnifying hover-zoom once
+  const mediaContainer = document.querySelector('.showcase-media');
+  if (mediaContainer && !mediaContainer.dataset.zoomWired) {
+    mediaContainer.dataset.zoomWired = "true";
+    mediaContainer.addEventListener('mousemove', function(e) {
+      const imgEl = document.getElementById('purchase-pot-img');
+      if (!imgEl) return;
+      const rect = mediaContainer.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      imgEl.style.transformOrigin = `${x}% ${y}%`;
+    });
+    mediaContainer.addEventListener('mouseleave', function() {
+      const imgEl = document.getElementById('purchase-pot-img');
+      if (imgEl) imgEl.style.transformOrigin = 'center center';
+    });
+  }
+
   var overlay = document.getElementById('purchase-overlay');
   overlay.classList.add('open');
   document.body.classList.add('modal-open');
