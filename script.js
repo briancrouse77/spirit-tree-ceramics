@@ -762,46 +762,47 @@ function openPurchaseModal(potId) {
   document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
   document.getElementById('purchase-pot-desc').textContent  = pot.description || '';
 
-  // Populate specifications dynamically (fallbacks for rich ceramic detail)
-  var titleLower = (pot.title || '').toLowerCase();
-  var clay = pot.clay || '';
-  var glaze = pot.glaze || '';
-  var firing = pot.firing || '';
-  var dimensions = pot.dimensions || '';
-
-  if (!clay || !glaze || !firing || !dimensions) {
-    if (titleLower.includes('bowl')) {
-      clay = 'Texas Red Stoneware';
-      glaze = 'Aura Copper Red & Tenmoku';
-      firing = 'Cone 10 Reduction';
-      dimensions = '6.2" W x 3.2" H';
-    } else if (titleLower.includes('vase')) {
-      clay = 'Dallas White Stoneware';
-      glaze = 'Iron-Speckled Celadon';
-      firing = 'Cone 10 Reduction';
-      dimensions = '4.5" W x 8.2" H';
-    } else if (titleLower.includes('mug') || titleLower.includes('cup')) {
-      clay = 'Dallas Fine Porcelain';
-      glaze = 'Shino & Oatmeal Ash';
-      firing = 'Gas Fired Reduction';
-      dimensions = '3.8" W x 4.2" H';
-    } else if (titleLower.includes('plate') || titleLower.includes('platter')) {
-      clay = 'Texas Buff Stoneware';
-      glaze = 'Tenmoku & Copper Green';
-      firing = 'Gas Fired Reduction';
-      dimensions = '11.5" W x 1.2" H';
-    } else {
-      clay = 'Texas Buff Stoneware';
-      glaze = 'Hand-Mixed Celadon';
-      firing = 'Cone 10 Reduction';
-      dimensions = '5.0" W x 4.5" H';
+  // Populate alternative angle gallery thumbnails (max 6)
+  var gallery = [];
+  if (pot.imageUrl) gallery.push(pot.imageUrl);
+  
+  if (pot.galleryUrls) {
+    var extra = Array.isArray(pot.galleryUrls)
+      ? pot.galleryUrls
+      : pot.galleryUrls.split(',').map(s => s.trim()).filter(Boolean);
+    extra.forEach(url => { if (gallery.length < 6 && !gallery.includes(url)) gallery.push(url); });
+  } else {
+    // Staging Demo/Validation: auto-seed mock alternative images so we can test the 6-thumbnail click interaction
+    var mockAngles = [
+      'images/gallery1.png',
+      'images/gallery2.png',
+      'images/gallery3.png',
+      'images/shop_bowl.jpg',
+      'images/shop_mugs.jpg',
+      'images/shop_platter.jpg',
+      'images/shop_vase.jpg'
+    ];
+    mockAngles = mockAngles.filter(m => m !== pot.imageUrl);
+    while (gallery.length < 6 && mockAngles.length > 0) {
+      gallery.push(mockAngles.shift());
     }
   }
 
-  document.getElementById('spec-clay').textContent = clay;
-  document.getElementById('spec-glaze').textContent = glaze;
-  document.getElementById('spec-firing').textContent = firing;
-  document.getElementById('spec-dimensions').textContent = dimensions;
+  const thumbsGrid = document.getElementById('showcase-thumbs');
+  if (thumbsGrid) {
+    if (gallery.length > 0) {
+      thumbsGrid.parentElement.style.display = 'block';
+      thumbsGrid.innerHTML = gallery.map((url, idx) => {
+        const activeClass = idx === 0 ? 'active' : '';
+        return `<div class="gallery-thumb ${activeClass}" onclick="selectGalleryImage(this, '${url}')">
+          <img src="${url}" alt="Angle ${idx + 1}" />
+        </div>`;
+      }).join('');
+    } else {
+      thumbsGrid.innerHTML = '';
+      thumbsGrid.parentElement.style.display = 'none';
+    }
+  }
 
   // Reset steps and form fields
   goPurchaseStep(1);
@@ -1151,6 +1152,14 @@ window.closeVideoPlayModal = function() {
   overlay.style.display = 'none';
   overlay.classList.remove('open');
   document.body.classList.remove('modal-open');
+};
+
+window.selectGalleryImage = function(el, url) {
+  const imgEl = document.getElementById('purchase-pot-img');
+  if (imgEl) imgEl.src = url;
+
+  document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
 };
 
 window.openLightbox = function() {

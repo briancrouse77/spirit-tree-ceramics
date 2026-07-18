@@ -989,14 +989,11 @@
               <button class="btn-sm btn-ghost" id="pot-cancel-btn" style="display:none">✕ Cancel</button>
             </div>
 
-            <div class="img-upload-zone" id="img-upload-zone" title="Click or drag an image here">
-              <img id="img-preview" alt="preview" />
-              <div class="img-upload-placeholder" id="img-placeholder">
-                <div class="icon">📷</div>
-                <p>Click or drag image here</p>
-              </div>
-              <input type="file" id="pot-img-input" accept="image/*" style="display:none" />
+            <label style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:8px;display:block;">Product Image Gallery (Up to 6 Angles)</label>
+            <div class="gallery-upload-grid" id="gallery-upload-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+              <!-- 6 slots generated dynamically by script -->
             </div>
+            <input type="file" id="pot-gallery-input" accept="image/*" style="display:none" />
 
             <div class="pot-form-fields">
               <div class="field-group">
@@ -1018,26 +1015,6 @@
                     <option value="available">Available</option>
                     <option value="sold">Sold</option>
                   </select>
-                </div>
-              </div>
-              <div class="field-row">
-                <div class="field-group">
-                  <label>Clay Body</label>
-                  <input type="text" id="pot-clay" class="field-input" placeholder="e.g. Texas Buff Stoneware" />
-                </div>
-                <div class="field-group">
-                  <label>Glaze</label>
-                  <input type="text" id="pot-glaze" class="field-input" placeholder="e.g. Hand-Mixed Celadon" />
-                </div>
-              </div>
-              <div class="field-row">
-                <div class="field-group">
-                  <label>Firing</label>
-                  <input type="text" id="pot-firing" class="field-input" placeholder="e.g. Cone 10 Reduction" />
-                </div>
-                <div class="field-group">
-                  <label>Dimensions</label>
-                  <input type="text" id="pot-dimensions" class="field-input" placeholder="e.g. 5.5&quot; W x 4.0&quot; H" />
                 </div>
               </div>
               <div id="upload-progress" style="display:none">
@@ -1213,6 +1190,8 @@
     let _purchases = [];
     let _editingPotId = null;
     let _selectedImageFile = null;
+    let _activeUploadSlotIndex = null;
+    let _potGalleryImages = [null, null, null, null, null, null];
     let _shopFilter = 'all';
 
     const loginScreen = document.getElementById('login-screen');
@@ -1659,28 +1638,59 @@
       db.collection('purchases').doc(docId).delete().then(() => toast('Deleted.'));
     }
 
-    // ── Shop: Image Upload Zone ──
-    const imgZone  = document.getElementById('img-upload-zone');
-    const imgInput = document.getElementById('pot-img-input');
-    const imgPrev  = document.getElementById('img-preview');
-    const imgPh    = document.getElementById('img-placeholder');
+    // ── Shop: Image Gallery Upload Grid ──
+    function renderUploadSlots() {
+      const grid = document.getElementById('gallery-upload-grid');
+      if (!grid) return;
 
-    imgZone.addEventListener('click', () => imgInput.click());
-    imgZone.addEventListener('dragover', e => { e.preventDefault(); imgZone.classList.add('drag-over'); });
-    imgZone.addEventListener('dragleave', () => imgZone.classList.remove('drag-over'));
-    imgZone.addEventListener('drop', e => {
-      e.preventDefault(); imgZone.classList.remove('drag-over');
-      const f = e.dataTransfer.files[0];
-      if (f && f.type.startsWith('image/')) setImageFile(f);
-    });
-    imgInput.addEventListener('change', e => { if (e.target.files[0]) setImageFile(e.target.files[0]); });
+      grid.innerHTML = _potGalleryImages.map((imgSrc, i) => {
+        const isMain = i === 0;
+        const label = isMain ? 'Main Image *' : 'Angle ' + (i + 1);
 
-    function setImageFile(file) {
-      _selectedImageFile = file;
-      const r = new FileReader();
-      r.onload = ev => { imgPrev.src = ev.target.result; imgPrev.style.display = 'block'; imgPh.style.display = 'none'; };
-      r.readAsDataURL(file);
+        if (imgSrc) {
+          return `
+            <div style="position:relative;aspect-ratio:1/1;border-radius:8px;overflow:hidden;border:1px solid rgba(255,255,255,0.1);box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+              <img src="${imgSrc}" style="width:100%;height:100%;object-fit:cover;" />
+              <span style="position:absolute;bottom:4px;left:4px;background:rgba(0,0,0,0.7);color:var(--pearl);font-size:0.6rem;padding:2px 6px;border-radius:3px;font-weight:600;">${label}</span>
+              <button type="button" onclick="removeUploadSlot(event, ${i})" style="position:absolute;top:4px;right:4px;background:rgba(0,0,0,0.6);border:none;color:var(--pearl);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;cursor:pointer;line-height:1;outline:none;">&times;</button>
+            </div>
+          `;
+        } else {
+          return `
+            <div onclick="clickUploadSlot(${i})" style="aspect-ratio:1/1;border-radius:8px;border:2px dashed rgba(255,255,255,0.1);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,0.01);transition:all 0.2s;" onmouseover="this.style.borderColor='rgba(193,84,10,0.4)';this.style.background='rgba(193,84,10,0.02)';this.style.transform='translateY(-2px)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.background='rgba(255,255,255,0.01)';this.style.transform='none';">
+              <span style="font-size:1.2rem;margin-bottom:2px;opacity:0.7;">➕</span>
+              <span style="font-size:0.65rem;color:var(--smoke);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">${label}</span>
+            </div>
+          `;
+        }
+      }).join('');
     }
+
+    window.clickUploadSlot = function(index) {
+      _activeUploadSlotIndex = index;
+      document.getElementById('pot-gallery-input').click();
+    };
+
+    window.removeUploadSlot = function(e, index) {
+      e.stopPropagation();
+      _potGalleryImages[index] = null;
+      renderUploadSlots();
+    };
+
+    document.getElementById('pot-gallery-input').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      try {
+        const base64 = await compressImage(file);
+        _potGalleryImages[_activeUploadSlotIndex] = base64;
+        renderUploadSlots();
+      } catch(err) {
+        console.error('Image compression failed:', err);
+        toast('Failed to process image: ' + err);
+      }
+      e.target.value = '';
+    });
 
     // ── Shop: Save Pot ──
     document.getElementById('pot-save-btn').addEventListener('click', savePot);
@@ -1692,28 +1702,16 @@
       const price  = parseFloat(document.getElementById('pot-price').value);
       const status = document.getElementById('pot-status').value;
       
-      const clay = document.getElementById('pot-clay').value.trim();
-      const glaze = document.getElementById('pot-glaze').value.trim();
-      const firing = document.getElementById('pot-firing').value.trim();
-      const dimensions = document.getElementById('pot-dimensions').value.trim();
+      const imageUrl = _potGalleryImages[0] || '';
+      
+      // Collect alternative angles (slots 1 to 5)
+      const extraAngles = _potGalleryImages.slice(1).filter(Boolean);
+      const galleryUrls = extraAngles.join(',');
 
       if (!title || isNaN(price) || price < 0) { toast('Please add a title and price.'); return; }
+      if (!imageUrl) { toast('Please upload a Main Image first.'); return; }
 
       document.getElementById('pot-save-btn').disabled = true;
-      let imageUrl = '';
-      if (_editingPotId) {
-        const ex = _pots.find(p => p.id === _editingPotId);
-        if (ex) imageUrl = ex.imageUrl || '';
-      }
-      if (_selectedImageFile) {
-        try { imageUrl = await compressImage(_selectedImageFile); }
-        catch(e) {
-          console.error('Image processing failed:', e);
-          toast('Image processing failed: ' + (e.message || e));
-          document.getElementById('pot-save-btn').disabled = false;
-          return;
-        }
-      }
 
       const data = { 
         title, 
@@ -1721,10 +1719,7 @@
         price, 
         status, 
         imageUrl, 
-        clay, 
-        glaze, 
-        firing, 
-        dimensions, 
+        galleryUrls, 
         timestamp: new Date().toISOString() 
       };
 
@@ -1801,15 +1796,15 @@
       document.getElementById('pot-desc').value  = '';
       document.getElementById('pot-price').value = '';
       document.getElementById('pot-status').value = 'available';
-      document.getElementById('pot-clay').value = '';
-      document.getElementById('pot-glaze').value = '';
-      document.getElementById('pot-firing').value = '';
-      document.getElementById('pot-dimensions').value = '';
-      imgPrev.src = ''; imgPrev.style.display = 'none'; imgPh.style.display = 'flex';
+      
+      // Reset upload slots
+      _potGalleryImages = [null, null, null, null, null, null];
+      renderUploadSlots();
+
       document.getElementById('pot-form-title').textContent   = 'Add New Piece';
       document.getElementById('pot-save-btn').textContent     = 'Add Piece →';
       document.getElementById('pot-cancel-btn').style.display = 'none';
-      imgInput.value = '';
+      document.getElementById('pot-gallery-input').value = '';
     }
 
     function editPot(id) {
@@ -1820,11 +1815,18 @@
       document.getElementById('pot-desc').value   = p.description || '';
       document.getElementById('pot-price').value  = p.price || '';
       document.getElementById('pot-status').value = p.status || 'available';
-      document.getElementById('pot-clay').value   = p.clay || '';
-      document.getElementById('pot-glaze').value  = p.glaze || '';
-      document.getElementById('pot-firing').value = p.firing || '';
-      document.getElementById('pot-dimensions').value = p.dimensions || '';
-      if (p.imageUrl) { imgPrev.src = p.imageUrl; imgPrev.style.display='block'; imgPh.style.display='none'; }
+      
+      // Load gallery slots
+      _potGalleryImages = [null, null, null, null, null, null];
+      if (p.imageUrl) _potGalleryImages[0] = p.imageUrl;
+      if (p.galleryUrls) {
+        const extra = p.galleryUrls.split(',').map(s => s.trim()).filter(Boolean);
+        extra.forEach((url, index) => {
+          if (index < 5) _potGalleryImages[index + 1] = url;
+        });
+      }
+      renderUploadSlots();
+
       document.getElementById('pot-form-title').textContent   = 'Edit Piece';
       document.getElementById('pot-save-btn').textContent     = 'Save Changes →';
       document.getElementById('pot-cancel-btn').style.display = '';
@@ -2154,6 +2156,7 @@
       renderMembers();
       renderAdminVideos();
       renderZoomSessions();
+      renderUploadSlots();
     }
   </script>
 </body>
