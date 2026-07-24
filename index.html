@@ -105,12 +105,13 @@
 <body>
 
   <!-- ── NAV ── -->
+  <!-- ── NAV ── -->
   <nav class="nav" id="nav">
     <div class="nav__inner">
-      <a href="#about" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
+      <a href="#shop" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
       <ul class="nav__links">
-        <li><a href="#about">About John</a></li>
         <li><a href="#shop">Shop</a></li>
+        <li><a href="#about">About John</a></li>
         <li><a href="#memberships">Memberships</a></li>
         <li><a href="#videos">Video Library</a></li>
         <li><a href="#how">How It Works</a></li>
@@ -122,8 +123,8 @@
       </button>
     </div>
     <div class="nav__mobile" id="mobile-menu">
-      <a href="#about">About John</a>
       <a href="#shop">Shop</a>
+      <a href="#about">About John</a>
       <a href="#memberships">Memberships</a>
       <a href="#videos">Video Library</a>
       <a href="#how">How It Works</a>
@@ -131,6 +132,19 @@
       <a href="#memberships" class="btn btn--accent" id="mobile-book-btn" style="text-align:center;">Join the Club</a>
     </div>
   </nav>
+
+  <!-- ── SHOP (LANDING SCREEN) ── -->
+  <section class="section section--void" id="shop">
+    <div class="container">
+      <div class="section__header" style="margin-bottom: 40px;">
+        <p class="section__eyebrow section__eyebrow--light">Dallas Studio Gallery</p>
+        <h1 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);">Handthrown Ceramics</h1>
+        <p class="section__sub">One-of-a-kind, handmade stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries.</p>
+      </div>
+      <div class="shop-grid" id="shop-grid"></div>
+      <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0">Nothing listed right now — check back soon.</p>
+    </div>
+  </section>
 
   <!-- ── ABOUT ── -->
   <section class="about section" id="about">
@@ -171,19 +185,6 @@
           </li>
         </ul>
       </div>
-    </div>
-  </section>
-
-  <!-- ── SHOP ── -->
-  <section class="section section--void" id="shop">
-    <div class="container">
-      <div class="section__header">
-        <p class="section__eyebrow section__eyebrow--light">From the Wheel</p>
-        <h2 class="section__title">Available Pieces</h2>
-        <p class="section__sub">Each piece is handthrown by John — one of a kind. Click any piece to inquire about purchasing.</p>
-      </div>
-      <div class="shop-grid" id="shop-grid"></div>
-      <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0">Nothing listed right now — check back soon.</p>
     </div>
   </section>
 
