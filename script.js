@@ -60,6 +60,7 @@
 
   function generateParticles() {
     const container = document.getElementById('particles');
+    if (!container) return;
     for (let i = 0; i < 18; i++) {
       const p = document.createElement('div');
       p.className = 'particle';
