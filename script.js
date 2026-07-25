@@ -746,11 +746,12 @@ var _shopPotsMap = {};
         var key = p.id || p._docId;
         return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
           + (p.imageUrl
-              ? '<img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" />'
+              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
               : '<div class="shop-card__img-ph">🏺</div>')
           + '<div class="shop-card__body">'
-          + '<div class="shop-card__title">' + p.title + '</div>'
+          + '<div><div class="shop-card__title">' + p.title + '</div>'
           + (p.description ? '<div class="shop-card__desc">' + p.description + '</div>' : '')
+          + '</div>'
           + '<div class="shop-card__footer">'
           + '<div class="shop-card__price">$' + Number(p.price).toFixed(0) + '</div>'
           + '<button class="shop-card__cta" onclick="event.stopPropagation();openPurchaseModal(\'' + key + '\')">Inquire \u2192</button>'
