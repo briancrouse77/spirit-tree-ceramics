@@ -833,9 +833,69 @@
       background: var(--deep); border: 1px solid rgba(193,84,10,0.12);
       border-radius: var(--r-lg); overflow: hidden;
       display: grid; grid-template-columns: 120px 1fr;
-      transition: border-color var(--tr);
+      transition: border-color var(--tr), transform 0.2s, box-shadow 0.2s;
+    }
+    .pot-card.draggable-card {
+      grid-template-columns: 45px 120px 1fr;
     }
     .pot-card:hover { border-color: rgba(193,84,10,0.3); }
+    .pot-card.dragging {
+      opacity: 0.4;
+      border: 1px dashed var(--burnt) !important;
+    }
+    .pot-card.drag-over-top {
+      border-top: 3px solid var(--burnt) !important;
+    }
+    .pot-card.drag-over-bottom {
+      border-bottom: 3px solid var(--burnt) !important;
+    }
+    .pot-card__sort-controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.02);
+      border-right: 1px solid rgba(193,84,10,0.08);
+      gap: 12px;
+      padding: 8px 0;
+    }
+    .sort-drag-handle {
+      cursor: grab;
+      color: var(--smoke);
+      font-size: 1.2rem;
+      user-select: none;
+      transition: color 0.2s;
+    }
+    .sort-drag-handle:hover {
+      color: var(--pearl);
+    }
+    .sort-drag-handle:active {
+      cursor: grabbing;
+    }
+    .sort-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sort-arrow-btn {
+      background: none;
+      border: none;
+      color: var(--smoke);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .sort-arrow-btn:hover:not(:disabled) {
+      color: var(--pearl);
+      background: rgba(255,255,255,0.05);
+    }
+    .sort-arrow-btn:disabled {
+      opacity: 0.2;
+      cursor: not-allowed;
+    }
     .pot-card__img { width: 120px; height: 120px; object-fit: cover; display: block; }
     .pot-card__img-ph { width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; background: rgba(255,255,255,0.03); color: var(--smoke); }
     .pot-card__body { padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; }
@@ -1250,7 +1310,18 @@
         if (currentPanel === 'messages') renderMessages();
       });
       db.collection('pots').orderBy('timestamp','desc').onSnapshot(snap => {
-        _pots = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        let pots = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+        pots.sort((a, b) => {
+          const orderA = a.sortOrder !== undefined ? a.sortOrder : Number.MAX_SAFE_INTEGER;
+          const orderB = b.sortOrder !== undefined ? b.sortOrder : Number.MAX_SAFE_INTEGER;
+          if (orderA !== orderB) {
+            return orderA - orderB;
+          }
+          const timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+          const timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+          return timeB - timeA;
+        });
+        _pots = pots;
         updateStats();
         if (currentPanel === 'shop') renderPots();
       });
@@ -1729,6 +1800,12 @@
         toast('Piece updated.');
       } else {
         data.id = 'POT-' + Math.random().toString(36).substr(2,6).toUpperCase();
+        // Default new pots to the top of the sorted list
+        let minOrder = 0;
+        if (_pots.length > 0) {
+          minOrder = _pots.reduce((min, p) => (p.sortOrder !== undefined && p.sortOrder < min) ? p.sortOrder : min, 0);
+        }
+        data.sortOrder = minOrder - 1;
         await db.collection('pots').add(data);
         toast('Piece added!');
       }
@@ -1858,6 +1935,105 @@
       );
     }
 
+    let _draggedIdx = null;
+
+    window.handleDragStart = function(e, index) {
+      _draggedIdx = index;
+      e.dataTransfer.effectAllowed = 'move';
+      e.currentTarget.classList.add('dragging');
+    };
+
+    window.handleDragOver = function(e, index) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      const card = e.currentTarget;
+      
+      if (index < _draggedIdx) {
+        card.classList.add('drag-over-top');
+        card.classList.remove('drag-over-bottom');
+      } else if (index > _draggedIdx) {
+        card.classList.add('drag-over-bottom');
+        card.classList.remove('drag-over-top');
+      }
+    };
+
+    window.handleDragLeave = function(e) {
+      e.currentTarget.classList.remove('drag-over-top', 'drag-over-bottom');
+    };
+
+    window.handleDrop = async function(e, index) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('drag-over-top', 'drag-over-bottom');
+
+      if (_draggedIdx === null || _draggedIdx === index) return;
+
+      const draggedPot = _pots[_draggedIdx];
+      _pots.splice(_draggedIdx, 1);
+      _pots.splice(index, 0, draggedPot);
+
+      _pots.forEach((p, idx) => {
+        p.sortOrder = idx;
+      });
+
+      _draggedIdx = null;
+      renderPots();
+      await savePotsOrder();
+    };
+
+    window.handleDragEnd = function(e) {
+      e.currentTarget.classList.remove('dragging');
+      document.querySelectorAll('.pot-card').forEach(c => {
+        c.classList.remove('drag-over-top', 'drag-over-bottom');
+      });
+      _draggedIdx = null;
+    };
+
+    window.movePotUp = async function(e, index) {
+      e.stopPropagation();
+      if (index === 0) return;
+      
+      const temp = _pots[index];
+      _pots[index] = _pots[index - 1];
+      _pots[index - 1] = temp;
+      
+      _pots.forEach((p, idx) => p.sortOrder = idx);
+      
+      renderPots();
+      await savePotsOrder();
+    };
+
+    window.movePotDown = async function(e, index) {
+      e.stopPropagation();
+      if (index === _pots.length - 1) return;
+      
+      const temp = _pots[index];
+      _pots[index] = _pots[index + 1];
+      _pots[index + 1] = temp;
+      
+      _pots.forEach((p, idx) => p.sortOrder = idx);
+      
+      renderPots();
+      await savePotsOrder();
+    };
+
+    async function savePotsOrder() {
+      try {
+        const batch = db.batch();
+        _pots.forEach((p, idx) => {
+          const docId = p._docId || p.id;
+          if (docId) {
+            const ref = db.collection('pots').doc(docId);
+            batch.update(ref, { sortOrder: idx });
+          }
+        });
+        await batch.commit();
+        toast('List order saved.');
+      } catch (err) {
+        console.error('Error saving order:', err);
+        toast('Failed to save order: ' + err);
+      }
+    }
+
     // ── Shop: Filter buttons ──
     document.querySelectorAll('[data-shop-filter]').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1877,9 +2053,23 @@
         list.innerHTML = `<div class="empty-state"><div class="empty-state__icon">🏺</div><h3>No pieces yet</h3><p>Add your first piece using the form.</p></div>`;
         return;
       }
-      list.innerHTML = pots.map(p => `
-        <div class="pot-card">
-          ${p.imageUrl ? `<img src="${p.imageUrl}" class="pot-card__img" alt="${p.title}" />` : `<div class="pot-card__img-ph">🏺</div>`}
+      list.innerHTML = pots.map((p, index) => {
+        const isAll = _shopFilter === 'all';
+        const dragAttr = isAll ? `draggable="true" ondragstart="handleDragStart(event, ${index})" ondragover="handleDragOver(event, ${index})" ondragleave="handleDragLeave(event)" ondragend="handleDragEnd(event)" ondrop="handleDrop(event, ${index})"` : '';
+        const sortControls = isAll ? `
+          <div class="pot-card__sort-controls">
+            <div class="sort-drag-handle" title="Drag to reorder">☰</div>
+            <div class="sort-btn-group">
+              <button class="sort-arrow-btn" onclick="movePotUp(event, ${index})" ${index === 0 ? 'disabled' : ''} title="Move Up">▲</button>
+              <button class="sort-arrow-btn" onclick="movePotDown(event, ${index})" ${index === pots.length - 1 ? 'disabled' : ''} title="Move Down">▼</button>
+            </div>
+          </div>
+        ` : '';
+
+        return `
+        <div class="pot-card ${isAll ? 'draggable-card' : ''}" ${dragAttr}>
+          ${sortControls}
+          ${p.imageUrl ? `<img src="${p.imageUrl}" class="pot-card__img" alt="${p.title}" draggable="false" />` : `<div class="pot-card__img-ph">🏺</div>`}
           <div class="pot-card__body">
             <div class="pot-card__title">${p.title}</div>
             <div class="pot-card__price">$${Number(p.price).toFixed(0)}</div>
@@ -1897,7 +2087,8 @@
               <button class="action-btn action-btn--delete" onclick="deletePot('${p.id}')">🗑</button>
             </div>
           </div>
-        </div>`).join('');
+        </div>`;
+      }).join('');
     }
 
     // ── Members / Subscribers Mockup Logic ──

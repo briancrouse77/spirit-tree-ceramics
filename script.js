@@ -719,6 +719,18 @@ var _shopPotsMap = {};
         .map(function(d) { return Object.assign({}, d.data(), { _docId: d.id }); })
         .filter(function(p) { return p.status === 'available'; });
 
+      // Sort pots by sortOrder ascending, falling back to timestamp desc
+      pots.sort(function(a, b) {
+        var orderA = a.sortOrder !== undefined ? a.sortOrder : Number.MAX_SAFE_INTEGER;
+        var orderB = b.sortOrder !== undefined ? b.sortOrder : Number.MAX_SAFE_INTEGER;
+        if (orderA !== orderB) {
+          return orderA - orderB;
+        }
+        var timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+        var timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+        return timeB - timeA;
+      });
+
       // Update the global registry
       _shopPotsMap = {};
       pots.forEach(function(p) { _shopPotsMap[p.id || p._docId] = p; });
