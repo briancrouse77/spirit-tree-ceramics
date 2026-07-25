@@ -772,26 +772,11 @@ function openPurchaseModal(potId) {
       ? pot.galleryUrls
       : pot.galleryUrls.split(',').map(s => s.trim()).filter(Boolean);
     extra.forEach(url => { if (gallery.length < 6 && !gallery.includes(url)) gallery.push(url); });
-  } else {
-    // Staging Demo/Validation: auto-seed mock alternative images so we can test the 6-thumbnail click interaction
-    var mockAngles = [
-      'images/gallery1.png',
-      'images/gallery2.png',
-      'images/gallery3.png',
-      'images/shop_bowl.jpg',
-      'images/shop_mugs.jpg',
-      'images/shop_platter.jpg',
-      'images/shop_vase.jpg'
-    ];
-    mockAngles = mockAngles.filter(m => m !== pot.imageUrl);
-    while (gallery.length < 6 && mockAngles.length > 0) {
-      gallery.push(mockAngles.shift());
-    }
   }
 
   const thumbsGrid = document.getElementById('showcase-thumbs');
   if (thumbsGrid) {
-    if (gallery.length > 0) {
+    if (gallery.length > 1) {
       thumbsGrid.parentElement.style.display = 'block';
       thumbsGrid.innerHTML = gallery.map((url, idx) => {
         const activeClass = idx === 0 ? 'active' : '';
