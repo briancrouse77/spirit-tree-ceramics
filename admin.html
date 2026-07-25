@@ -1077,6 +1077,18 @@
                   </select>
                 </div>
               </div>
+              <div class="field-group">
+                <label>Type</label>
+                <select id="pot-type" class="field-select">
+                  <option value="">Select Type...</option>
+                  <option value="mug">Mug</option>
+                  <option value="vase">Vase</option>
+                  <option value="bowl">Bowl</option>
+                  <option value="plate">Plate</option>
+                  <option value="platter">Platter</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
               <div id="upload-progress" style="display:none">
                 <div class="upload-bar"><div class="upload-fill" id="upload-fill"></div></div>
                 <p class="upload-pct" id="upload-pct">Uploading…</p>
@@ -1772,6 +1784,7 @@
       const desc   = document.getElementById('pot-desc').value.trim();
       const price  = parseFloat(document.getElementById('pot-price').value);
       const status = document.getElementById('pot-status').value;
+      const type   = document.getElementById('pot-type').value;
       
       const imageUrl = _potGalleryImages[0] || '';
       
@@ -1789,8 +1802,9 @@
         description: desc, 
         price, 
         status, 
+        type,
         imageUrl, 
-        galleryUrls, 
+        galleryUrls,  
         timestamp: new Date().toISOString() 
       };
 
@@ -1873,6 +1887,7 @@
       document.getElementById('pot-desc').value  = '';
       document.getElementById('pot-price').value = '';
       document.getElementById('pot-status').value = 'available';
+      document.getElementById('pot-type').value   = '';
       
       // Reset upload slots
       _potGalleryImages = [null, null, null, null, null, null];
@@ -1892,6 +1907,7 @@
       document.getElementById('pot-desc').value   = p.description || '';
       document.getElementById('pot-price').value  = p.price || '';
       document.getElementById('pot-status').value = p.status || 'available';
+      document.getElementById('pot-type').value   = p.type || '';
       
       // Load gallery slots
       _potGalleryImages = [null, null, null, null, null, null];
@@ -2073,6 +2089,7 @@
           <div class="pot-card__body">
             <div class="pot-card__title">${p.title}</div>
             <div class="pot-card__price">$${Number(p.price).toFixed(0)}</div>
+            ${p.type ? `<div style="font-size:0.68rem;text-transform:uppercase;color:var(--smoke);letter-spacing:0.06em;font-weight:600;margin-top:2px;">🏷 ${p.type}</div>` : ''}
             ${p.description ? `<div class="pot-card__desc">${p.description}</div>` : ''}
             <div style="margin-top:6px">
               ${p.status === 'sold'
