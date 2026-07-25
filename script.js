@@ -768,9 +768,23 @@ function openPurchaseModal(potId) {
   if (pot.imageUrl) gallery.push(pot.imageUrl);
   
   if (pot.galleryUrls) {
-    var extra = Array.isArray(pot.galleryUrls)
-      ? pot.galleryUrls
-      : pot.galleryUrls.split(',').map(s => s.trim()).filter(Boolean);
+    var extra = [];
+    if (Array.isArray(pot.galleryUrls)) {
+      extra = pot.galleryUrls;
+    } else {
+      var raw = pot.galleryUrls.split(',');
+      for (var i = 0; i < raw.length; i++) {
+        var item = raw[i].trim();
+        if (item.indexOf('data:') === 0 && item.indexOf('base64') !== -1) {
+          if (i + 1 < raw.length) {
+            extra.push(item + ',' + raw[i+1].trim());
+            i++;
+          }
+        } else if (item) {
+          extra.push(item);
+        }
+      }
+    }
     extra.forEach(url => { if (gallery.length < 6 && !gallery.includes(url)) gallery.push(url); });
   }
 
