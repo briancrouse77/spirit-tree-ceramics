@@ -911,9 +911,10 @@
     <div class="login-box">
       <div class="login-box__logo">Spirit Tree <span>Ceramics</span></div>
       <div class="login-box__sub">Admin Dashboard</div>
-      <input type="password" id="login-pw" placeholder="Enter password" autocomplete="current-password" />
+      <input type="email" id="login-email" placeholder="Enter email" />
+      <input type="password" id="login-pw" placeholder="Enter password" autocomplete="current-password" style="margin-bottom: 20px;" />
       <button class="login-btn" id="login-btn">Enter →</button>
-      <p class="login-error" id="login-error">Incorrect password. Try again.</p>
+      <p class="login-error" id="login-error">Incorrect email or password. Try again.</p>
       <p class="login-hint">Contact John Ruiz for access.</p>
     </div>
   </div>
@@ -1240,6 +1241,7 @@
   <div id="toast"></div>
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
   <script src="firebase-config.js"></script>
@@ -1273,34 +1275,85 @@
     const loginError  = document.getElementById('login-error');
 
     function checkSession() {
-      if (sessionStorage.getItem(SESSION_KEY) === '1') {
-        loginScreen.style.display = 'none';
-        app.style.display = 'block';
-        init();
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+        firebase.auth().onAuthStateChanged(user => {
+          if (user) {
+            loginScreen.style.display = 'none';
+            app.style.display = 'block';
+            init();
+          } else {
+            loginScreen.style.display = 'flex';
+            app.style.display = 'none';
+          }
+        });
+      } else {
+        if (sessionStorage.getItem(SESSION_KEY) === '1') {
+          loginScreen.style.display = 'none';
+          app.style.display = 'block';
+          init();
+        } else {
+          loginScreen.style.display = 'flex';
+          app.style.display = 'none';
+        }
       }
     }
 
     function doLogin() {
-      if (loginPw.value === PASSWORD) {
-        sessionStorage.setItem(SESSION_KEY, '1');
-        loginScreen.style.display = 'none';
-        app.style.display = 'block';
-        loginError.style.display = 'none';
-        init();
+      const email = document.getElementById('login-email').value.trim();
+      const pw    = loginPw.value.trim();
+
+      if (typeof firebase !== 'undefined' && firebase.auth) {
+        if (!email || !pw) {
+          toast('Please enter both email and password.');
+          return;
+        }
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Signing in...';
+        firebase.auth().signInWithEmailAndPassword(email, pw)
+          .then(() => {
+            loginError.style.display = 'none';
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Enter →';
+          })
+          .catch(err => {
+            console.error('Login failed:', err);
+            loginPw.classList.add('error');
+            loginError.style.display = 'block';
+            loginPw.value = '';
+            loginBtn.disabled = false;
+            loginBtn.textContent = 'Enter →';
+            loginPw.addEventListener('input', () => loginPw.classList.remove('error'), { once: true });
+          });
       } else {
-        loginPw.classList.add('error');
-        loginError.style.display = 'block';
-        loginPw.value = '';
-        loginPw.addEventListener('input', () => loginPw.classList.remove('error'), { once: true });
+        if (pw === PASSWORD) {
+          sessionStorage.setItem(SESSION_KEY, '1');
+          loginScreen.style.display = 'none';
+          app.style.display = 'block';
+          loginError.style.display = 'none';
+          init();
+        } else {
+          loginPw.classList.add('error');
+          loginError.style.display = 'block';
+          loginPw.value = '';
+          loginPw.addEventListener('input', () => loginPw.classList.remove('error'), { once: true });
+        }
       }
     }
 
     loginBtn.addEventListener('click', doLogin);
     loginPw.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    // Support enter key on email input as well
+    document.getElementById('login-email').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
     document.getElementById('logout-btn').addEventListener('click', () => {
-      sessionStorage.removeItem(SESSION_KEY);
-      location.reload();
+      if (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) {
+        firebase.auth().signOut().then(() => {
+          location.reload();
+        });
+      } else {
+        sessionStorage.removeItem(SESSION_KEY);
+        location.reload();
+      }
     });
 
     checkSession();

@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Pots collection: read public, write admin
+    match /pots/{pot} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Bookings collection: create public, read/write/delete admin
+    match /bookings/{booking} {
+      allow create: if true;
+      allow read, write: if request.auth != null;
+    }
+    
+    // Messages collection: create public, read/write/delete admin
+    match /messages/{message} {
+      allow create: if true;
+      allow read, write: if request.auth != null;
+    }
+    
+    // Members / Subscribers collection: create public, read/write/delete admin
+    match /members/{member} {
+      allow create: if true;
+      allow read, write: if request.auth != null;
+    }
+  }
+}
