@@ -2004,6 +2004,34 @@
       );
     }
 
+    window.copyShareLink = function(potId) {
+      const link = 'https://www.spirittreeceramics.com/#inquire-' + potId;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link)
+          .then(() => toast('Share link copied!'))
+          .catch(err => {
+            console.error('Copy failed:', err);
+            promptUserToCopy(link);
+          });
+      } else {
+        promptUserToCopy(link);
+      }
+    };
+    
+    function promptUserToCopy(text) {
+      const input = document.createElement('input');
+      input.value = text;
+      document.body.appendChild(input);
+      input.select();
+      try {
+        document.execCommand('copy');
+        toast('Share link copied!');
+      } catch (err) {
+        window.prompt('Copy this link:', text);
+      }
+      document.body.removeChild(input);
+    }
+
     let _draggedIdx = null;
 
     window.handleDragStart = function(e, index) {
@@ -2151,6 +2179,7 @@
             </div>
             <div class="booking-card__actions" style="margin-top:8px;border:none;padding:0">
               <button class="action-btn action-btn--done" onclick="editPot('${p.id}')">✏ Edit</button>
+              <button class="action-btn action-btn--confirm" onclick="copyShareLink('${p.id}')">🔗 Link</button>
               ${p.status !== 'sold'
                 ? `<button class="action-btn action-btn--cancel" onclick="setPotStatus('${p.id}','sold')">Mark Sold</button>`
                 : `<button class="action-btn action-btn--confirm" onclick="setPotStatus('${p.id}','available')">Re-list</button>`}
