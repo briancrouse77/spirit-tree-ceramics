@@ -1862,7 +1862,7 @@
       };
 
       if (_editingPotId) {
-        const pot = _pots.find(p => p.id === _editingPotId);
+        const pot = _pots.find(p => (p.id || p._docId) === _editingPotId);
         if (pot) await db.collection('pots').doc(pot._docId).update(data);
         toast('Piece updated.');
       } else {
@@ -1952,10 +1952,10 @@
       document.getElementById('pot-gallery-input').value = '';
     }
 
-    function editPot(id) {
-      const p = _pots.find(x => x.id === id);
+    function editPot(key) {
+      const p = _pots.find(x => (x.id || x._docId) === key);
       if (!p) return;
-      _editingPotId = id;
+      _editingPotId = key;
       document.getElementById('pot-title').value  = p.title || '';
       document.getElementById('pot-desc').value   = p.description || '';
       document.getElementById('pot-price').value  = p.price || '';
@@ -1991,14 +1991,14 @@
       document.querySelector('.shop-form-col').scrollIntoView({ behavior: 'smooth' });
     }
 
-    function deletePot(id) {
+    function deletePot(key) {
       if (!confirm('Delete this listing permanently?')) return;
-      const p = _pots.find(x => x.id === id);
+      const p = _pots.find(x => (x.id || x._docId) === key);
       if (p) db.collection('pots').doc(p._docId).delete().then(() => toast('Listing deleted.'));
     }
 
-    function setPotStatus(id, status) {
-      const p = _pots.find(x => x.id === id);
+    function setPotStatus(key, status) {
+      const p = _pots.find(x => (x.id || x._docId) === key);
       if (p) db.collection('pots').doc(p._docId).update({ status }).then(() =>
         toast(status === 'sold' ? 'Marked as sold.' : 'Re-listed as available.')
       );
@@ -2151,6 +2151,7 @@
         return;
       }
       list.innerHTML = pots.map((p, index) => {
+        const key = p.id || p._docId;
         const isAll = _shopFilter === 'all';
         const dragAttr = isAll ? `draggable="true" ondragstart="handleDragStart(event, ${index})" ondragover="handleDragOver(event, ${index})" ondragleave="handleDragLeave(event)" ondragend="handleDragEnd(event)" ondrop="handleDrop(event, ${index})"` : '';
         const sortControls = isAll ? `
@@ -2178,12 +2179,12 @@
                 : '<span class="status-badge status-badge--confirmed">✓ Available</span>'}
             </div>
             <div class="booking-card__actions" style="margin-top:8px;border:none;padding:0">
-              <button class="action-btn action-btn--done" onclick="editPot('${p.id}')">✏ Edit</button>
-              <button class="action-btn action-btn--confirm" onclick="copyShareLink('${p.id}')">🔗 Link</button>
+              <button class="action-btn action-btn--done" onclick="editPot('${key}')">✏ Edit</button>
+              <button class="action-btn action-btn--confirm" onclick="copyShareLink('${key}')">🔗 Link</button>
               ${p.status !== 'sold'
-                ? `<button class="action-btn action-btn--cancel" onclick="setPotStatus('${p.id}','sold')">Mark Sold</button>`
-                : `<button class="action-btn action-btn--confirm" onclick="setPotStatus('${p.id}','available')">Re-list</button>`}
-              <button class="action-btn action-btn--delete" onclick="deletePot('${p.id}')">🗑</button>
+                ? `<button class="action-btn action-btn--cancel" onclick="setPotStatus('${key}','sold')">Mark Sold</button>`
+                : `<button class="action-btn action-btn--confirm" onclick="setPotStatus('${key}','available')">Re-list</button>`}
+              <button class="action-btn action-btn--delete" onclick="deletePot('${key}')">🗑</button>
             </div>
           </div>
         </div>`;
