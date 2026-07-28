@@ -735,6 +735,11 @@ var _shopPotsMap = {};
       _shopPotsMap = {};
       pots.forEach(function(p) { _shopPotsMap[p.id || p._docId] = p; });
 
+      // Check deep link on load once registry is populated
+      if (typeof checkHashAndOpenModal === 'function') {
+        checkHashAndOpenModal();
+      }
+
       if (pots.length === 0) {
         shopGrid.innerHTML = '';
         shopEmpty.style.display = '';
@@ -763,7 +768,7 @@ var _shopPotsMap = {};
 // ── Purchase Modal ───────────────────────────────────────────────────────────
 var _purchasePot = null;
 
-function openPurchaseModal(potId) {
+function openPurchaseModal(potId, preventHashUpdate) {
   var pot = _shopPotsMap[potId];
   if (!pot) return;
   _purchasePot = pot;
@@ -847,12 +852,37 @@ function openPurchaseModal(potId) {
   var overlay = document.getElementById('purchase-overlay');
   overlay.classList.add('open');
   document.body.classList.add('modal-open');
+
+  if (!preventHashUpdate) {
+    window.location.hash = 'inquire-' + potId;
+  }
 }
 
-function closePurchaseModal() {
+function closePurchaseModal(preventHashUpdate) {
   document.getElementById('purchase-overlay').classList.remove('open');
   document.body.classList.remove('modal-open');
+  _purchasePot = null;
+  if (!preventHashUpdate && window.location.hash) {
+    history.pushState("", document.title, window.location.pathname + window.location.search);
+  }
 }
+
+function checkHashAndOpenModal() {
+  var hash = window.location.hash;
+  if (hash && hash.indexOf('#inquire-') === 0) {
+    var potId = hash.substring(9);
+    if (_shopPotsMap && _shopPotsMap[potId]) {
+      openPurchaseModal(potId, true);
+    }
+  } else {
+    var overlay = document.getElementById('purchase-overlay');
+    if (overlay && overlay.classList.contains('open')) {
+      closePurchaseModal(true);
+    }
+  }
+}
+
+window.addEventListener('hashchange', checkHashAndOpenModal);
 
 function goPurchaseStep(n) {
   [1,2,3,4].forEach(i => {
