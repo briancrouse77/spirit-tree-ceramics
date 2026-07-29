@@ -947,6 +947,10 @@
           <span class="icon">🚀</span>
           <span>SEO Hero</span>
         </div>
+        <div class="nav-item" data-panel="stats" id="nav-stats">
+          <span class="icon">📊</span>
+          <span>Traffic &amp; Stats</span>
+        </div>
         <div class="nav-item" data-panel="purchases" id="nav-purchases">
           <span class="icon">💳</span>
           <span>Purchases</span>
@@ -1287,7 +1291,69 @@
         </div>
       </div>
 
+      <!-- Stats Panel -->
+      <div class="panel" id="panel-stats">
+        <div class="section-hdr" style="margin-bottom: 24px;">
+          <div>
+            <h2>Traffic &amp; Site Statistics</h2>
+            <p style="font-size: 0.85rem; color: var(--smoke); margin-top: 4px;">Real-time page views and external link clicks tracked via Firebase.</p>
+          </div>
+          <button class="btn-sm btn-ghost" onclick="resetAnalyticsData()" style="padding: 8px 16px; font-size: 0.8rem; border-color: rgba(239, 68, 68, 0.3); color: #f87171; cursor: pointer; border-radius: 6px; background: none;">🗑️ Reset Stats</button>
+        </div>
 
+        <!-- Metric Grid -->
+        <div class="stats-row" style="margin-bottom: 30px;">
+          <div class="stat-card" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 20px; position: relative;">
+            <div class="stat-card__title" style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px;">Total Page Views</div>
+            <div class="stat-card__num" id="analytics-total-views" style="font-size: 2.2rem; font-family: var(--font-h); font-weight: 600; color: var(--pearl);">0</div>
+            <div class="stat-card__icon" style="position: absolute; bottom: 16px; right: 16px; font-size: 1.8rem; opacity: 0.15; pointer-events: none;">📈</div>
+          </div>
+          <div class="stat-card" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 20px; position: relative;">
+            <div class="stat-card__title" style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px;">External Links Clicks</div>
+            <div class="stat-card__num" id="analytics-total-clicks" style="font-size: 2.2rem; font-family: var(--font-h); font-weight: 600; color: var(--pearl);">0</div>
+            <div class="stat-card__icon" style="position: absolute; bottom: 16px; right: 16px; font-size: 1.8rem; opacity: 0.15; pointer-events: none;">🔗</div>
+          </div>
+          <div class="stat-card" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 20px; position: relative;">
+            <div class="stat-card__title" style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px;">Inquiries Started</div>
+            <div class="stat-card__num" id="analytics-inquiries-start" style="font-size: 2.2rem; font-family: var(--font-h); font-weight: 600; color: var(--pearl);">0</div>
+            <div class="stat-card__icon" style="position: absolute; bottom: 16px; right: 16px; font-size: 1.8rem; opacity: 0.15; pointer-events: none;">🏺</div>
+          </div>
+          <div class="stat-card" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 20px; position: relative;">
+            <div class="stat-card__title" style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px;">Inquiry Conv. Rate</div>
+            <div class="stat-card__num" id="analytics-conversion" style="font-size: 2.2rem; font-family: var(--font-h); font-weight: 600; color: var(--gold);">0.0%</div>
+            <div class="stat-card__icon" style="position: absolute; bottom: 16px; right: 16px; font-size: 1.8rem; opacity: 0.15; pointer-events: none;">🔥</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px;">
+          <!-- Left Sub-card: Page Views Breakdown -->
+          <div class="form-card" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 24px;">
+            <h3 style="font-size: 0.95rem; font-family: var(--font-h); margin-bottom: 18px; color: var(--pearl); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">Page Views by Section</h3>
+            <div id="analytics-views-breakdown" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Dynamically rendered page view stats -->
+            </div>
+          </div>
+
+          <!-- Right Sub-card: Click Events Breakdown -->
+          <div class="form-card" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 24px;">
+            <h3 style="font-size: 0.95rem; font-family: var(--font-h); margin-bottom: 18px; color: var(--pearl); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">External Click Events</h3>
+            <div id="analytics-clicks-breakdown" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- Dynamically rendered click stats -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Daily Trend Graph Block -->
+        <div class="form-card" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 24px;">
+          <h3 style="font-size: 0.95rem; font-family: var(--font-h); margin-bottom: 18px; color: var(--pearl); border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">Daily Traffic Trend (Last 14 Days)</h3>
+          <div id="analytics-trend-chart" style="display: flex; align-items: flex-end; height: 180px; gap: 16px; padding-top: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <!-- Trend bars go here -->
+          </div>
+          <div id="analytics-trend-labels" style="display: flex; gap: 16px; margin-top: 8px; justify-content: space-between;">
+            <!-- Trend labels go here -->
+          </div>
+        </div>
+      </div>
 
     </main>
   </div>
@@ -1349,6 +1415,7 @@
     let _aboutBioData = null;
     let _seoHerosData = null;
     let _faqHeadersData = null;
+    let _analyticsData = null;
 
     const loginScreen = document.getElementById('login-screen');
     const app         = document.getElementById('app');
@@ -1558,6 +1625,14 @@
           db.collection('faq').doc('faq_headers').set(defaults).catch(err => console.error("FAQ headers migration error:", err));
         }
       });
+
+      db.collection('stats').doc('analytics').onSnapshot(doc => {
+        if (doc.exists) {
+          _analyticsData = doc.data();
+          if (currentPanel === 'stats') renderAnalytics();
+        }
+      });
+
       startFaqListener();
     }
 
@@ -1605,6 +1680,10 @@
           document.getElementById('page-sub').textContent = 'Manage category landing page titles and banner photos';
           const sel = document.getElementById('seo-category-select');
           if (sel) loadSeoHeroCategory(sel.value);
+        } else if (panel === 'stats') {
+          document.getElementById('page-title').textContent = 'Traffic & Stats';
+          document.getElementById('page-sub').textContent = 'Site traffic and conversion statistics';
+          renderAnalytics();
         } else {
           document.getElementById('page-title').textContent = 'Messages';
           document.getElementById('page-sub').textContent = 'Customer inquiries';
@@ -1655,6 +1734,135 @@
         msgBadge.style.display = unread.length ? '' : 'none';
       }
     }
+
+    function renderAnalytics() {
+      if (!_analyticsData) return;
+
+      const pageviews = _analyticsData.pageviews || {};
+      const clicks = _analyticsData.clicks || {};
+      const daily = _analyticsData.daily || {};
+
+      // 1. Calculate Page Views
+      let totalViews = 0;
+      let viewsBreakdownHtml = '';
+      const viewKeys = Object.keys(pageviews).sort((a,b) => pageviews[b] - pageviews[a]);
+      viewKeys.forEach(k => {
+        const val = pageviews[k] || 0;
+        totalViews += val;
+        let displayName = k;
+        if (k === 'homepage') displayName = 'Homepage';
+        else if (k.indexOf('category_') === 0) displayName = 'Category: ' + k.substring(9).toUpperCase() + 's';
+        
+        viewsBreakdownHtml += `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03);">
+            <span style="font-size: 0.88rem; color: var(--smoke);">${displayName}</span>
+            <span style="font-size: 0.88rem; font-weight: 600; color: var(--pearl);">${val}</span>
+          </div>
+        `;
+      });
+      if (!viewsBreakdownHtml) viewsBreakdownHtml = '<p style="font-size: 0.85rem; color: var(--smoke);">No page views recorded yet.</p>';
+      document.getElementById('analytics-total-views').textContent = totalViews;
+      document.getElementById('analytics-views-breakdown').innerHTML = viewsBreakdownHtml;
+
+      // 2. Calculate Click Events
+      let totalClicks = 0;
+      let clicksBreakdownHtml = '';
+      const clickKeys = Object.keys(clicks).sort((a,b) => clicks[b] - clicks[a]);
+      clickKeys.forEach(k => {
+        if (k === 'inquire_start' || k === 'inquire_submit') return;
+        const val = clicks[k] || 0;
+        totalClicks += val;
+        let displayName = k;
+        if (k === 'instagram') displayName = 'Instagram Profile';
+        else if (k === 'etsy') displayName = 'Etsy Shop';
+        else if (k === 'facebook') displayName = 'Facebook Profile';
+
+        clicksBreakdownHtml += `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03);">
+            <span style="font-size: 0.88rem; color: var(--smoke);">${displayName}</span>
+            <span style="font-size: 0.88rem; font-weight: 600; color: var(--pearl);">${val}</span>
+          </div>
+        `;
+      });
+      if (!clicksBreakdownHtml) clicksBreakdownHtml = '<p style="font-size: 0.85rem; color: var(--smoke);">No clicks recorded yet.</p>';
+      document.getElementById('analytics-total-clicks').textContent = totalClicks;
+      document.getElementById('analytics-clicks-breakdown').innerHTML = clicksBreakdownHtml;
+
+      // 3. Inquiries & Conversion Rate
+      const inquireStart = clicks['inquire_start'] || 0;
+      const inquireSubmit = clicks['inquire_submit'] || 0;
+      document.getElementById('analytics-inquiries-start').textContent = inquireStart;
+      
+      let conversionRate = 0;
+      if (inquireStart > 0) {
+        conversionRate = (inquireSubmit / inquireStart) * 100;
+      }
+      document.getElementById('analytics-conversion').textContent = conversionRate.toFixed(1) + '%';
+
+      // 4. Render Daily Trend Chart (Last 14 days)
+      const trendChart = document.getElementById('analytics-trend-chart');
+      const trendLabels = document.getElementById('analytics-trend-labels');
+      if (trendChart && trendLabels) {
+        trendChart.innerHTML = '';
+        trendLabels.innerHTML = '';
+
+        const days = [];
+        for (let i = 13; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+          days.push(dateStr);
+        }
+
+        let maxVal = 10;
+        days.forEach(day => {
+          if (daily[day] && daily[day] > maxVal) maxVal = daily[day];
+        });
+
+        days.forEach(day => {
+          const val = daily[day] || 0;
+          const pctHeight = (val / maxVal) * 100;
+          const displayDate = day.substring(5); // MM-DD
+
+          const bar = document.createElement('div');
+          bar.style.flex = '1';
+          bar.style.display = 'flex';
+          bar.style.flexDirection = 'column';
+          bar.style.alignItems = 'center';
+          bar.style.position = 'relative';
+          bar.style.height = '100%';
+          bar.style.justifyContent = 'flex-end';
+          bar.title = `${day}: ${val} views`;
+
+          bar.innerHTML = `
+            <span style="font-size: 0.72rem; color: var(--gold); margin-bottom: 4px; font-weight: 600;">${val > 0 ? val : ''}</span>
+            <div style="width: 100%; height: ${pctHeight}%; background: ${val > 0 ? 'linear-gradient(to top, var(--amethyst), var(--am-lt))' : 'rgba(255,255,255,0.03)'}; border-radius: 4px 4px 0 0; transition: height 0.5s;"></div>
+          `;
+          trendChart.appendChild(bar);
+
+          const label = document.createElement('span');
+          label.style.flex = '1';
+          label.style.textAlign = 'center';
+          label.style.fontSize = '0.7rem';
+          label.style.color = 'var(--smoke)';
+          label.textContent = displayDate;
+          trendLabels.appendChild(label);
+        });
+      }
+    }
+
+    window.resetAnalyticsData = async function() {
+      if (!confirm('Are you sure you want to reset all analytics and traffic stats? This cannot be undone.')) return;
+      if (typeof db === 'undefined') return;
+
+      try {
+        await db.collection('stats').doc('analytics').delete();
+        toast('Analytics stats reset.');
+      } catch (err) {
+        console.error('Reset stats error:', err);
+        alert('Failed to reset stats: ' + err.message);
+      }
+    };
 
     // ── Render Messages ──
     function renderMessages() {

@@ -850,6 +850,7 @@ function openPurchaseModal(potId, preventHashUpdate) {
   var pot = _shopPotsMap[potId];
   if (!pot) return;
   _purchasePot = pot;
+  if (typeof window.trackClick === 'function') window.trackClick('inquire_start');
 
   // Update page title & description for SEO
   document.title = `${pot.title || 'Handcrafted Pottery'} | Spirit Tree Ceramics`;
@@ -1258,6 +1259,7 @@ async function submitPurchase() {
     if (typeof db !== 'undefined') {
       await db.collection('purchases').add(record);
     }
+    if (typeof window.trackClick === 'function') window.trackClick('inquire_submit');
     goPurchaseStep(4);
   } catch(err) {
     console.error(err);
@@ -1740,3 +1742,55 @@ window.toggleFaq = function(el) {
     }
   }
 };
+
+// ── Analytics & Traffic Tracking ──
+window.trackClick = function(clickKey) {
+  if (typeof db === 'undefined') return;
+  const updateData = {};
+  updateData['clicks.' + clickKey] = firebase.firestore.FieldValue.increment(1);
+  db.collection('stats').doc('analytics').update(updateData).catch(() => {
+    const setData = { clicks: {} };
+    setData.clicks[clickKey] = 1;
+    db.collection('stats').doc('analytics').set(setData, { merge: true }).catch(err => console.error('Stats set error:', err));
+  });
+};
+
+(function trackAnalytics() {
+  if (typeof db === 'undefined') return;
+  
+  const d = new Date();
+  const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  
+  let pageKey = 'homepage';
+  const path = window.location.pathname;
+  if (path.indexOf('category.html') !== -1) {
+    const params = new URLSearchParams(window.location.search);
+    const cat = params.get('type') || 'other';
+    pageKey = 'category_' + cat;
+  }
+  
+  const updateData = {};
+  updateData['pageviews.' + pageKey] = firebase.firestore.FieldValue.increment(1);
+  updateData['daily.' + dateStr] = firebase.firestore.FieldValue.increment(1);
+  
+  db.collection('stats').doc('analytics').update(updateData).catch(() => {
+    const setData = { pageviews: {}, daily: {}, clicks: {} };
+    setData.pageviews[pageKey] = 1;
+    setData.daily[dateStr] = 1;
+    db.collection('stats').doc('analytics').set(setData, { merge: true }).catch(err => console.error('Stats error:', err));
+  });
+
+  // Delegate link clicks
+  document.addEventListener('click', function(e) {
+    const a = e.target.closest('a');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    if (href.indexOf('instagram.com') !== -1) {
+      window.trackClick('instagram');
+    } else if (href.indexOf('etsy.com') !== -1) {
+      window.trackClick('etsy');
+    } else if (href.indexOf('facebook.com') !== -1) {
+      window.trackClick('facebook');
+    }
+  });
+})();
