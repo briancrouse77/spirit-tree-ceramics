@@ -1388,7 +1388,17 @@ function initAboutListener() {
       if (eyebrow && eyebrowEl) eyebrowEl.textContent = eyebrow;
       if (title && titleEl) titleEl.textContent = title;
       if (years && yearsEl) yearsEl.textContent = years;
-      if (imgUrl && imgEl) imgEl.src = imgUrl;
+      if (imgUrl && imgEl) {
+        if (imgEl.src !== imgUrl) {
+          imgEl.classList.remove('loaded');
+          imgEl.onload = function() {
+            imgEl.classList.add('loaded');
+          };
+          imgEl.src = imgUrl;
+        } else {
+          imgEl.classList.add('loaded');
+        }
+      }
 
       var paragraphs = data.paragraphs || [];
       if (!Array.isArray(paragraphs)) {

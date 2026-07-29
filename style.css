@@ -483,6 +483,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   box-shadow: var(--shadow-lg), var(--glow-v);
   object-fit: cover;
   height: 540px;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.about__img.loaded {
+  opacity: 1;
 }
 .about__badge {
   position: absolute;
