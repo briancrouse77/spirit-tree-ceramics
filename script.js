@@ -1342,7 +1342,13 @@ function initFaqListener() {
         return;
       }
 
-      faqList.innerHTML = snap.docs.map(function(d) {
+      var filteredDocs = snap.docs.filter(function(d) { return d.id !== 'about_john'; });
+      if (filteredDocs.length === 0) {
+        faqList.innerHTML = '<p style="text-align:center;color:var(--smoke);padding:24px 0;">No FAQs found.</p>';
+        return;
+      }
+
+      faqList.innerHTML = filteredDocs.map(function(d) {
         var faq = d.data();
         var q = faq.question || '';
         var a = faq.answer || '';
@@ -1367,8 +1373,8 @@ function initFaqListener() {
 function initAboutListener() {
   if (typeof db === 'undefined') return;
 
-  db.collection('about')
-    .doc('john')
+  db.collection('faq')
+    .doc('about_john')
     .onSnapshot(function(doc) {
       if (!doc.exists) return;
       var data = doc.data();

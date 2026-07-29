@@ -1346,7 +1346,7 @@
         updateStats();
         if (currentPanel === 'purchases') renderPurchases();
       });
-      db.collection('about').doc('john').onSnapshot(doc => {
+      db.collection('faq').doc('about_john').onSnapshot(doc => {
         if (doc.exists) {
           _aboutBioData = doc.data();
           if (currentPanel === 'about') populateAboutForm();
@@ -1364,7 +1364,7 @@
           };
           _aboutBioData = defaults;
           if (currentPanel === 'about') populateAboutForm();
-          db.collection('about').doc('john').set(defaults).catch(err => console.error("Bio migration error:", err));
+          db.collection('faq').doc('about_john').set(defaults).catch(err => console.error("Bio migration error:", err));
         }
       });
       startFaqListener();
@@ -2063,11 +2063,13 @@
             return;
           }
 
-          _faqs = snap.docs.map(doc => {
-            const data = doc.data();
-            data.id = doc.id;
-            return data;
-          });
+          _faqs = snap.docs
+            .filter(doc => doc.id !== 'about_john')
+            .map(doc => {
+              const data = doc.data();
+              data.id = doc.id;
+              return data;
+            });
           if (currentPanel === 'faq') {
             renderFaqs();
           }
@@ -2280,7 +2282,7 @@
       };
 
       try {
-        await db.collection('about').doc('john').set(data, { merge: true });
+        await db.collection('faq').doc('about_john').set(data, { merge: true });
         toast('Biography updated successfully!');
       } catch(err) {
         console.error('Error saving about bio:', err);
