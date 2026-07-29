@@ -711,9 +711,8 @@ var _shopPotsMap = {};
   db.collection('pots')
     .orderBy('timestamp', 'desc')
     .onSnapshot(function(snap) {
-      var pots = snap.docs
-        .map(function(d) { return Object.assign({}, d.data(), { _docId: d.id }); })
-        .filter(function(p) { return p.status === 'available'; });
+      var allPots = snap.docs.map(function(d) { return Object.assign({}, d.data(), { _docId: d.id }); });
+      var pots = allPots.filter(function(p) { return p.status === 'available'; });
 
       // Sort pots by sortOrder ascending, falling back to timestamp desc
       pots.sort(function(a, b) {
@@ -740,7 +739,7 @@ var _shopPotsMap = {};
         shopGrid.innerHTML = '';
         shopEmpty.style.display = '';
         updateProductSchema([]);
-        updateFooterCategories([]);
+        updateFooterCategories(allPots);
         return;
       }
 
@@ -762,7 +761,7 @@ var _shopPotsMap = {};
       }).join('');
 
       updateProductSchema(pots);
-      updateFooterCategories(pots);
+      updateFooterCategories(allPots);
     });
 
     function updateProductSchema(potsList) {
