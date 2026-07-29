@@ -2516,6 +2516,38 @@
     function startFaqListener() {
       if (typeof db !== 'undefined') {
         db.collection('faq').orderBy('sortOrder', 'asc').onSnapshot(snap => {
+          if (snap.empty) {
+            const defaults = [
+              {
+                question: "Who is the artist behind Spirit Tree Ceramics?",
+                answer: "Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas. With over four years of experience at the pottery wheel, John crafts one-of-a-kind functional art and fine stoneware in his Dallas studio.",
+                sortOrder: 10
+              },
+              {
+                question: "Where can I buy John Ruiz pottery?",
+                answer: "You can browse and purchase John Ruiz's handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/. Each piece is unique and available for local DFW pickup, local delivery, or shipping nationwide.",
+                sortOrder: 20
+              },
+              {
+                question: "Are the ceramic pieces food and microwave safe?",
+                answer: "Yes, all functional pottery pieces—such as mugs, bowls, cups, and platters—are high-fired to stoneware durability. They are food-safe, microwave-safe, and dishwasher-safe.",
+                sortOrder: 30
+              },
+              {
+                question: "Does John Ruiz accept custom pottery commissions?",
+                answer: "Yes! John Ruiz collaborates with restaurants, interior designers, and individual collectors on custom stoneware orders, dinnerware collections, and fine art installations. Inquire directly via the contact form below with details of your vision.",
+                sortOrder: 40
+              }
+            ];
+            defaults.forEach(faq => {
+              db.collection('faq').add({
+                ...faq,
+                timestamp: new Date().toISOString()
+              });
+            });
+            return;
+          }
+
           _faqs = snap.docs.map(doc => {
             const data = doc.data();
             data.id = doc.id;
