@@ -1138,14 +1138,12 @@
               <input type="text" id="about-form-eyebrow" class="field-input" placeholder="e.g. The Maker Behind the Clay" required style="width:100%; box-sizing:border-box;" />
             </div>
 
-            <div class="field-group" style="margin-bottom: 20px;">
-              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Biography Paragraph 1</label>
-              <textarea id="about-form-para1" class="field-textarea" style="height: 100px; width:100%; box-sizing:border-box; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: var(--pearl); font-size: 0.95rem; padding: 10px 12px; font-family: inherit; resize: vertical;" placeholder="Details about how you started..." required></textarea>
-            </div>
-
-            <div class="field-group" style="margin-bottom: 20px;">
-              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Biography Paragraph 2</label>
-              <textarea id="about-form-para2" class="field-textarea" style="height: 100px; width:100%; box-sizing:border-box; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: var(--pearl); font-size: 0.95rem; padding: 10px 12px; font-family: inherit; resize: vertical;" placeholder="Details about the brand philosophy..." required></textarea>
+            <div class="field-group" style="margin-bottom: 24px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Biography Paragraphs</label>
+              <div id="about-paragraphs-editor" style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Dynamically generated textareas go here -->
+              </div>
+              <button type="button" class="btn-sm btn-ghost" onclick="window.addAboutParagraphField('')" style="margin-top: 12px; padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; border: 1px dashed rgba(255,255,255,0.25); background: none; color: var(--pearl); display: block; width: fit-content;">➕ Add Paragraph</button>
             </div>
 
             <div class="field-group" style="margin-bottom: 28px;">
@@ -1349,12 +1347,16 @@
           const defaults = {
             title: "Hi, I'm John Ruiz — Dallas Pottery Artist",
             eyebrow: "The Maker Behind the Clay",
-            para1: "Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
-            para2: "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life.",
+            paragraphs: [
+              "Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
+              "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life."
+            ],
             years: "4+",
             imgUrl: "images/about.png",
             lastUpdated: new Date().toISOString()
           };
+          _aboutBioData = defaults;
+          if (currentPanel === 'about') populateAboutForm();
           db.collection('about').doc('john').set(defaults).catch(err => console.error("Bio migration error:", err));
         }
       });
@@ -2195,23 +2197,65 @@
       }
     };
 
+    window.addAboutParagraphField = function(text) {
+      const container = document.getElementById('about-paragraphs-editor');
+      if (!container) return;
+
+      const item = document.createElement('div');
+      item.style.display = 'flex';
+      item.style.gap = '12px';
+      item.style.alignItems = 'flex-start';
+
+      item.innerHTML = `
+        <textarea class="field-textarea about-para-input" style="height: 100px; flex: 1; box-sizing: border-box; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: var(--pearl); font-size: 0.95rem; padding: 10px 12px; font-family: inherit; resize: vertical;" placeholder="Biography paragraph text..." required>${escapeHtml(text)}</textarea>
+        <button type="button" class="action-btn action-btn--delete" style="margin-top: 4px; padding: 6px 12px; white-space: nowrap; height: 36px; display: flex; align-items: center; justify-content: center; gap: 4px;" onclick="this.parentElement.remove()">🗑️ Remove</button>
+      `;
+      container.appendChild(item);
+    };
+
     function populateAboutForm() {
       if (!_aboutBioData) return;
       document.getElementById('about-form-title').value = _aboutBioData.title || '';
       document.getElementById('about-form-eyebrow').value = _aboutBioData.eyebrow || '';
-      document.getElementById('about-form-para1').value = _aboutBioData.para1 || '';
-      document.getElementById('about-form-para2').value = _aboutBioData.para2 || '';
       document.getElementById('about-form-years').value = _aboutBioData.years || '';
       document.getElementById('about-form-img-url').value = _aboutBioData.imgUrl || '';
+
+      const editor = document.getElementById('about-paragraphs-editor');
+      if (editor) {
+        editor.innerHTML = '';
+        let paragraphs = _aboutBioData.paragraphs || [];
+        if (!Array.isArray(paragraphs)) {
+          paragraphs = [];
+        }
+        if (paragraphs.length === 0) {
+          if (_aboutBioData.para1) paragraphs.push(_aboutBioData.para1);
+          if (_aboutBioData.para2) paragraphs.push(_aboutBioData.para2);
+        }
+        if (paragraphs.length === 0) {
+          window.addAboutParagraphField('');
+        } else {
+          paragraphs.forEach(text => window.addAboutParagraphField(text));
+        }
+      }
     }
 
     window.saveAboutBio = async function() {
       const title = document.getElementById('about-form-title').value.trim();
       const eyebrow = document.getElementById('about-form-eyebrow').value.trim();
-      const para1 = document.getElementById('about-form-para1').value.trim();
-      const para2 = document.getElementById('about-form-para2').value.trim();
       const years = document.getElementById('about-form-years').value.trim();
       const imgUrl = document.getElementById('about-form-img-url').value.trim();
+
+      const textareas = document.querySelectorAll('#about-paragraphs-editor .about-para-input');
+      const paragraphs = [];
+      textareas.forEach(ta => {
+        const val = ta.value.trim();
+        if (val) paragraphs.push(val);
+      });
+
+      if (paragraphs.length === 0) {
+        toast('Please enter at least one biography paragraph.');
+        return;
+      }
 
       const btn = document.getElementById('btn-save-about-bio');
       btn.disabled = true;
@@ -2220,8 +2264,7 @@
       const data = {
         title,
         eyebrow,
-        para1,
-        para2,
+        paragraphs,
         years,
         imgUrl,
         lastUpdated: new Date().toISOString()
@@ -2253,8 +2296,10 @@
         _aboutBioData = {
           title: "Hi, I'm John Ruiz — Dallas Pottery Artist",
           eyebrow: "The Maker Behind the Clay",
-          para1: "Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
-          para2: "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life.",
+          paragraphs: [
+            "Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
+            "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life."
+          ],
           years: "4+",
           imgUrl: "images/about.png"
         };

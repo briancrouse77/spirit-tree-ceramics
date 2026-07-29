@@ -1375,28 +1375,36 @@ function initAboutListener() {
 
       var eyebrow = data.eyebrow || '';
       var title = data.title || '';
-      var para1 = data.para1 || '';
-      var para2 = data.para2 || '';
       var years = data.years || '';
       var imgUrl = data.imgUrl || '';
 
       var eyebrowEl = document.getElementById('about-eyebrow');
       var titleEl = document.getElementById('about-title');
-      var para1El = document.getElementById('about-para1');
-      var para2El = document.getElementById('about-para2');
       var yearsEl = document.getElementById('about-years');
       var imgEl = document.getElementById('about-img');
 
       if (eyebrow && eyebrowEl) eyebrowEl.textContent = eyebrow;
       if (title && titleEl) titleEl.textContent = title;
-      if (para1 && para1El) para1El.textContent = para1;
-      if (para2 && para2El) {
-        var cleanPara2 = para2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        cleanPara2 = cleanPara2.replace(/&lt;strong&gt;/g, "<strong>").replace(/&lt;\/strong&gt;/g, "</strong>");
-        para2El.innerHTML = cleanPara2;
-      }
       if (years && yearsEl) yearsEl.textContent = years;
       if (imgUrl && imgEl) imgEl.src = imgUrl;
+
+      var paragraphs = data.paragraphs || [];
+      if (!Array.isArray(paragraphs)) {
+        paragraphs = [];
+      }
+      if (paragraphs.length === 0) {
+        if (data.para1) paragraphs.push(data.para1);
+        if (data.para2) paragraphs.push(data.para2);
+      }
+
+      var paraContainer = document.getElementById('about-paragraphs-container');
+      if (paraContainer && paragraphs.length > 0) {
+        paraContainer.innerHTML = paragraphs.map(function(pText) {
+          var cleanText = pText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          cleanText = cleanText.replace(/&lt;strong&gt;/g, "<strong>").replace(/&lt;\/strong&gt;/g, "</strong>");
+          return '<p class="about__body">' + cleanText + '</p>';
+        }).join('');
+      }
     }, function(err) {
       console.error('Error fetching About John data:', err);
     });
