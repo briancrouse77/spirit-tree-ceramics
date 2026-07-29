@@ -1138,6 +1138,31 @@
             <span class="icon">➕</span> Add New FAQ
           </button>
         </div>
+        
+        <!-- FAQ Headers Settings -->
+        <div class="form-card" style="max-width: 900px; margin-bottom: 32px; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--radius); padding: 20px; box-sizing: border-box;">
+          <h3 style="font-family:var(--font-head); font-size: 1.15rem; color: var(--pearl); margin-bottom: 16px; border-bottom: 1px dashed rgba(255,255,255,0.06); padding-bottom: 10px; margin-top: 0;">FAQ Section Header Copy</h3>
+          <form id="faq-headers-form" onsubmit="event.preventDefault(); saveFaqHeaders();" style="display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; gap:16px; flex-wrap:wrap;">
+              <div class="field-group" style="flex:1; min-width: 240px;">
+                <label style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 6px; display: block;">Section Eyebrow</label>
+                <input type="text" id="faq-header-eyebrow" class="field-input" placeholder="e.g. Common Inquiries" required style="width:100%; box-sizing:border-box;" />
+              </div>
+              <div class="field-group" style="flex:2; min-width: 280px;">
+                <label style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 6px; display: block;">Section Title</label>
+                <input type="text" id="faq-header-title" class="field-input" placeholder="e.g. Frequently Asked Questions" required style="width:100%; box-sizing:border-box;" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label style="font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 6px; display: block;">Section Description</label>
+              <textarea id="faq-header-desc" class="field-textarea" placeholder="e.g. Direct answers about the craft, orders..." required style="width:100%; box-sizing:border-box; height:60px;"></textarea>
+            </div>
+            <div style="display:flex; justify-content:flex-end;">
+              <button type="submit" class="btn-sm btn-primary" id="faq-headers-save-btn" style="padding: 10px 24px;">Save FAQ Headers</button>
+            </div>
+          </form>
+        </div>
+
         <div class="bookings-list" id="faq-list-admin" style="max-width: 900px; display: flex; flex-direction: column; gap: 16px;">
           <p style="color:var(--smoke);text-align:center;padding:24px 0;">Loading FAQs...</p>
         </div>
@@ -1336,6 +1361,7 @@
     let _shopFilter = 'all';
     let _aboutBioData = null;
     let _seoHerosData = null;
+    let _faqHeadersData = null;
 
     const loginScreen = document.getElementById('login-screen');
     const app         = document.getElementById('app');
@@ -1527,6 +1553,22 @@
           const sel = document.getElementById('seo-category-select');
           if (sel) loadSeoHeroCategory(sel.value);
           db.collection('faq').doc('seo_heros').set(defaults).catch(err => console.error("SEO migration error:", err));
+        }
+      });
+
+      db.collection('faq').doc('faq_headers').onSnapshot(doc => {
+        if (doc.exists) {
+          _faqHeadersData = doc.data();
+          populateFaqHeadersForm();
+        } else {
+          const defaults = {
+            eyebrow: "Common Inquiries",
+            title: "Frequently Asked Questions",
+            desc: "Direct answers about the craft, orders, and custom stoneware commissions."
+          };
+          _faqHeadersData = defaults;
+          populateFaqHeadersForm();
+          db.collection('faq').doc('faq_headers').set(defaults).catch(err => console.error("FAQ headers migration error:", err));
         }
       });
       startFaqListener();
@@ -2254,7 +2296,7 @@
           }
 
           _faqs = snap.docs
-            .filter(doc => doc.id !== 'about_john')
+            .filter(doc => doc.id !== 'about_john' && doc.id !== 'seo_heros' && doc.id !== 'faq_headers')
             .map(doc => {
               const data = doc.data();
               data.id = doc.id;
@@ -2581,6 +2623,39 @@
         btn.textContent = 'Save Category Hero →';
       }
     };
+
+    function populateFaqHeadersForm() {
+      if (!_faqHeadersData) return;
+      document.getElementById('faq-header-eyebrow').value = _faqHeadersData.eyebrow || '';
+      document.getElementById('faq-header-title').value = _faqHeadersData.title || '';
+      document.getElementById('faq-header-desc').value = _faqHeadersData.desc || '';
+    }
+
+    async function saveFaqHeaders() {
+      const btn = document.getElementById('faq-headers-save-btn');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+      }
+      const data = {
+        eyebrow: document.getElementById('faq-header-eyebrow').value.trim(),
+        title: document.getElementById('faq-header-title').value.trim(),
+        desc: document.getElementById('faq-header-desc').value.trim()
+      };
+      try {
+        await db.collection('faq').doc('faq_headers').set(data, { merge: true });
+        toast('FAQ headers updated successfully!');
+      } catch (err) {
+        console.error('FAQ headers save error:', err);
+        toast('Failed to save FAQ headers: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Save FAQ Headers';
+        }
+      }
+    }
+    window.saveFaqHeaders = saveFaqHeaders;
 
     // ── Init ──
     function init() {

@@ -1555,6 +1555,20 @@ function initFaqListener() {
   }
 
   db.collection('faq')
+    .doc('faq_headers')
+    .onSnapshot(function(doc) {
+      if (doc.exists) {
+        var data = doc.data();
+        var eyebrowEl = document.getElementById('faq-section-eyebrow');
+        var titleEl = document.getElementById('faq-section-title');
+        var descEl = document.getElementById('faq-section-desc');
+        if (eyebrowEl && data.eyebrow) eyebrowEl.textContent = data.eyebrow;
+        if (titleEl && data.title) titleEl.textContent = data.title;
+        if (descEl && data.desc) descEl.textContent = data.desc;
+      }
+    });
+
+  db.collection('faq')
     .orderBy('sortOrder', 'asc')
     .onSnapshot(function(snap) {
       if (snap.empty) {
@@ -1562,7 +1576,9 @@ function initFaqListener() {
         return;
       }
 
-      var filteredDocs = snap.docs.filter(function(d) { return d.id !== 'about_john'; });
+      var filteredDocs = snap.docs.filter(function(d) {
+        return d.id !== 'about_john' && d.id !== 'seo_heros' && d.id !== 'faq_headers';
+      });
       if (filteredDocs.length === 0) {
         faqList.innerHTML = '<p style="text-align:center;color:var(--smoke);padding:24px 0;">No FAQs found.</p>';
         return;
