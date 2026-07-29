@@ -22,7 +22,7 @@
 
   // ── Booking trigger buttons ──
   const openButtons = document.querySelectorAll(
-    '#hero-book-btn, #nav-book-btn, #mobile-book-btn, #contact-book-btn, .class-card__btn'
+    '#hero-book-btn, #contact-book-btn, .class-card__btn'
   );
 
   openButtons.forEach(btn => {
