@@ -823,10 +823,7 @@ var _shopPotsMap = {};
       typesOrder.forEach(function(t) {
         if (activeTypes[t]) {
           const name = displayNames[t] || t;
-          let href = '/' + t;
-          if (window.location.hostname.indexOf('github.io') !== -1 || window.location.pathname.indexOf('category.html') !== -1) {
-            href = 'category.html?type=' + t;
-          }
+          let href = 'category.html?type=' + t;
           links.push(`<a href="${href}" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--smoke); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--pearl)'" onmouseout="this.style.color='var(--smoke)'">${name}</a>`);
         }
       });
