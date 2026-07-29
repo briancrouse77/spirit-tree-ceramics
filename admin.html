@@ -1133,41 +1133,17 @@
 
       <!-- FAQs Panel -->
       <div class="panel" id="panel-faq">
-        <div class="shop-layout">
-          <!-- Left: Add/Edit FAQ Form -->
-          <div class="shop-form-col">
-            <div class="section-hdr" style="margin-bottom:16px">
-              <h2 id="faq-form-title">Add New FAQ</h2>
-              <button class="btn-sm btn-ghost" id="faq-cancel-btn" style="display:none" onclick="clearFaqForm()">✕ Cancel</button>
-            </div>
-            
-            <div class="pot-form-fields">
-              <input type="hidden" id="faq-id" />
-              <div class="field-group">
-                <label>Question</label>
-                <input type="text" id="faq-question" class="field-input" placeholder="e.g. Do you ship pottery?" />
-              </div>
-              <div class="field-group">
-                <label>Answer</label>
-                <textarea id="faq-answer" class="field-textarea" style="height: 120px;" placeholder="Details about shipping rates, packing, etc..."></textarea>
-              </div>
-              <div class="field-group">
-                <label>Sort Order (Lower numbers show first)</label>
-                <input type="number" id="faq-sort" class="field-input" placeholder="e.g. 10" min="0" step="1" />
-              </div>
-              <button class="btn btn--primary" style="width:100%;margin-top:10px;" id="faq-save-btn" onclick="saveFaq()">Save FAQ →</button>
-            </div>
+        <div class="section-hdr" style="margin-bottom: 28px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+          <div>
+            <h2>Frequently Asked Questions</h2>
+            <p style="font-size: 0.85rem; color: var(--smoke); margin-top: 4px;">Manage dynamic Q&A accordion listings on the homepage.</p>
           </div>
-
-          <!-- Right: FAQ List -->
-          <div class="shop-list-col">
-            <div class="section-hdr" style="margin-bottom:16px">
-              <h2>Frequently Asked Questions</h2>
-            </div>
-            <div class="bookings-list" id="faq-list-admin">
-              <p style="color:var(--smoke);text-align:center;padding:24px 0;">Loading FAQs...</p>
-            </div>
-          </div>
+          <button class="btn btn--primary" id="btn-add-faq" onclick="window.openFaqModal(null)">
+            <span class="icon">➕</span> Add New FAQ
+          </button>
+        </div>
+        <div class="bookings-list" id="faq-list-admin" style="max-width: 900px; display: flex; flex-direction: column; gap: 16px;">
+          <p style="color:var(--smoke);text-align:center;padding:24px 0;">Loading FAQs...</p>
         </div>
       </div>
 
@@ -1284,6 +1260,35 @@
   </div>
 
   <div id="toast"></div>
+
+  <!-- FAQ Editor Modal Overlay -->
+  <div id="faq-modal-overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 10, 7, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 10000; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #2E1A0C; border: 1px solid rgba(193,84,10,0.2); border-radius: 12px; width: 100%; max-width: 560px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); overflow: hidden;">
+      <div style="padding: 20px 24px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; justify-content: space-between; align-items: center;">
+        <h3 id="faq-modal-title" style="margin: 0; font-family: var(--font-h); font-size: 1.25rem; font-weight: 600; color: var(--pearl);">Add New FAQ</h3>
+        <button onclick="closeFaqModal()" style="background: none; border: none; font-size: 1.6rem; color: var(--smoke); cursor: pointer; line-height: 1; transition: color 0.2s;" onmouseover="this.style.color='var(--pearl)'" onmouseout="this.style.color='var(--smoke)'">&times;</button>
+      </div>
+      <div style="padding: 24px;">
+        <input type="hidden" id="faq-modal-id" />
+        <div class="field-group" style="margin-bottom: 18px;">
+          <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Question</label>
+          <input type="text" id="faq-modal-question" class="field-input" placeholder="e.g. Do you ship pottery?" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); width: 100%; padding: 10px 12px; border-radius: 6px; color: var(--pearl); font-size: 0.95rem; box-sizing: border-box;" />
+        </div>
+        <div class="field-group" style="margin-bottom: 18px;">
+          <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Answer</label>
+          <textarea id="faq-modal-answer" class="field-textarea" style="height: 140px; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); font-family: inherit; width: 100%; padding: 10px 12px; border-radius: 6px; color: var(--pearl); font-size: 0.95rem; box-sizing: border-box; resize: vertical;" placeholder="Details about shipping rates, packaging..."></textarea>
+        </div>
+        <div class="field-group" style="margin-bottom: 24px;">
+          <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Sort Order (Lower numbers show first)</label>
+          <input type="number" id="faq-modal-sort" class="field-input" placeholder="e.g. 10" min="0" step="1" style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); width: 100%; padding: 10px 12px; border-radius: 6px; color: var(--pearl); font-size: 0.95rem; box-sizing: border-box;" />
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button class="btn-sm btn-ghost" onclick="closeFaqModal()" style="border: 1px solid rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; color: var(--pearl); background: none;">Cancel</button>
+          <button class="btn btn--primary" id="faq-modal-save-btn" onclick="saveFaqModal()" style="padding: 8px 20px; border-radius: 6px; font-weight: 600; cursor: pointer;">Save FAQ →</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -2574,7 +2579,7 @@
       if (!container) return;
 
       if (_faqs.length === 0) {
-        container.innerHTML = '<p style="color:var(--smoke);text-align:center;padding:24px 0;">No FAQs found. Create one using the form on the left.</p>';
+        container.innerHTML = '<p style="color:var(--smoke);text-align:center;padding:24px 0;">No FAQs found. Click "Add New FAQ" to create one.</p>';
         return;
       }
 
@@ -2585,58 +2590,64 @@
         const sort = faq.sortOrder || 0;
 
         return `
-          <div class="booking-card" id="faq-card-${id}">
-            <div class="booking-card__top">
-              <div>
-                <div class="booking-card__id">FAQ Item</div>
-                <div class="booking-card__name">${escapeHtml(q)}</div>
+          <div class="booking-card" style="display: flex; flex-direction: column; justify-content: space-between; gap: 16px; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 250px;">
+                <div style="font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amethyst); margin-bottom: 6px;">Question</div>
+                <h3 style="font-family: var(--font-h); font-size: 1.15rem; font-weight: 600; color: var(--pearl); margin: 0; line-height: 1.4;">${escapeHtml(q)}</h3>
               </div>
-              <div class="booking-card__datetime">
-                <span class="booking-card__date">Order: ${sort}</span>
+              <div style="background: rgba(193,84,10,0.1); border: 1px solid rgba(193,84,10,0.2); padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; color: var(--am-lt); font-weight: 600; white-space: nowrap;">
+                Order: ${sort}
               </div>
             </div>
-            <div class="booking-card__notes" style="margin-top: 10px; margin-bottom: 14px; white-space: pre-wrap;">
-              ${escapeHtml(a)}
-            </div>
-            <div class="booking-card__actions">
-              <button class="action-btn" onclick="window.editFaq('${id}')">✏️ Edit</button>
-              <button class="action-btn delete-btn" onclick="window.deleteFaq('${id}')">🗑️ Delete</button>
+            <div style="font-size: 0.88rem; color: var(--smoke); line-height: 1.6; background: rgba(0,0,0,0.15); padding: 14px 16px; border-radius: 8px; border-left: 3px solid var(--amethyst); white-space: pre-wrap; margin: 0;">${escapeHtml(a)}</div>
+            <div style="display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px;">
+              <button class="action-btn" onclick="window.openFaqModal('${id}')">✏️ Edit FAQ</button>
+              <button class="action-btn action-btn--delete" onclick="window.deleteFaq('${id}')">🗑️ Delete</button>
             </div>
           </div>
         `;
       }).join('');
     }
 
-    window.editFaq = function(id) {
-      const faq = _faqs.find(f => f.id === id);
-      if (!faq) return;
+    window.openFaqModal = function(id) {
+      if (id) {
+        // Edit mode
+        const faq = _faqs.find(f => f.id === id);
+        if (!faq) return;
+        _editingFaqId = id;
+        document.getElementById('faq-modal-id').value = id;
+        document.getElementById('faq-modal-question').value = faq.question || '';
+        document.getElementById('faq-modal-answer').value = faq.answer || '';
+        document.getElementById('faq-modal-sort').value = faq.sortOrder || 0;
+        document.getElementById('faq-modal-title').textContent = 'Edit FAQ';
+      } else {
+        // Create mode
+        _editingFaqId = null;
+        document.getElementById('faq-modal-id').value = '';
+        document.getElementById('faq-modal-question').value = '';
+        document.getElementById('faq-modal-answer').value = '';
+        document.getElementById('faq-modal-sort').value = '';
+        document.getElementById('faq-modal-title').textContent = 'Add New FAQ';
+      }
 
-      _editingFaqId = id;
-      document.getElementById('faq-id').value = id;
-      document.getElementById('faq-question').value = faq.question || '';
-      document.getElementById('faq-answer').value = faq.answer || '';
-      document.getElementById('faq-sort').value = faq.sortOrder || 0;
-
-      document.getElementById('faq-form-title').textContent = 'Edit FAQ';
-      document.getElementById('faq-cancel-btn').style.display = '';
-      document.getElementById('panel-faq').scrollIntoView({ behavior: 'smooth' });
+      const overlay = document.getElementById('faq-modal-overlay');
+      if (overlay) {
+        overlay.style.display = 'flex';
+      }
     };
 
-    window.clearFaqForm = function() {
-      _editingFaqId = null;
-      document.getElementById('faq-id').value = '';
-      document.getElementById('faq-question').value = '';
-      document.getElementById('faq-answer').value = '';
-      document.getElementById('faq-sort').value = '';
-
-      document.getElementById('faq-form-title').textContent = 'Add New FAQ';
-      document.getElementById('faq-cancel-btn').style.display = 'none';
+    window.closeFaqModal = function() {
+      const overlay = document.getElementById('faq-modal-overlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+      }
     };
 
-    window.saveFaq = async function() {
-      const q = document.getElementById('faq-question').value.trim();
-      const a = document.getElementById('faq-answer').value.trim();
-      const sortVal = document.getElementById('faq-sort').value;
+    window.saveFaqModal = async function() {
+      const q = document.getElementById('faq-modal-question').value.trim();
+      const a = document.getElementById('faq-modal-answer').value.trim();
+      const sortVal = document.getElementById('faq-modal-sort').value;
       const sort = sortVal !== '' ? parseInt(sortVal, 10) : 0;
 
       if (!q || !a) {
@@ -2644,7 +2655,7 @@
         return;
       }
 
-      const saveBtn = document.getElementById('faq-save-btn');
+      const saveBtn = document.getElementById('faq-modal-save-btn');
       saveBtn.disabled = true;
 
       const data = {
@@ -2662,7 +2673,7 @@
           await db.collection('faq').add(data);
           toast('FAQ added successfully!');
         }
-        window.clearFaqForm();
+        window.closeFaqModal();
       } catch (err) {
         console.error('Error saving FAQ:', err);
         toast('Failed to save FAQ: ' + err.message);
@@ -2677,9 +2688,6 @@
       try {
         await db.collection('faq').doc(id).delete();
         toast('FAQ deleted successfully!');
-        if (_editingFaqId === id) {
-          window.clearFaqForm();
-        }
       } catch (err) {
         console.error('Error deleting FAQ:', err);
         toast('Failed to delete FAQ: ' + err.message);
