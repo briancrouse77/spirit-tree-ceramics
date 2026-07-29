@@ -1698,10 +1698,11 @@ function initAboutListener() {
 }
 
 // Hook up the Zoom coaching call scheduler inside dashboard
+renderVideos();
+initFaqListener();
+initAboutListener();
+
 document.addEventListener('DOMContentLoaded', () => {
-  renderVideos();
-  initFaqListener();
-  initAboutListener();
   
   document.getElementById('dash-schedule-btn')?.addEventListener('click', () => {
     // Open existing scheduling modal
