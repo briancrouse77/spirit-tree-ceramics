@@ -428,11 +428,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ══════════════════════════════════════════ */
 .about.section { background: var(--deep); }
 
-#shop {
+#about {
   padding-top: 140px;
 }
 @media (max-width: 768px) {
-  #shop {
+  #about {
     padding-top: 110px;
   }
 }
