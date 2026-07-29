@@ -1146,6 +1146,14 @@
               <button type="button" class="btn-sm btn-ghost" onclick="window.addAboutParagraphField('')" style="margin-top: 12px; padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; border: 1px dashed rgba(255,255,255,0.25); background: none; color: var(--pearl); display: block; width: fit-content;">➕ Add Paragraph</button>
             </div>
 
+            <div class="field-group" style="margin-bottom: 24px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Biography Bullets / Features</label>
+              <div id="about-features-editor" style="display: flex; flex-direction: column; gap: 14px;">
+                <!-- Dynamically generated features go here -->
+              </div>
+              <button type="button" class="btn-sm btn-ghost" onclick="window.addAboutFeatureField('', '', '')" style="margin-top: 12px; padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; border: 1px dashed rgba(255,255,255,0.25); background: none; color: var(--pearl); display: block; width: fit-content;">➕ Add Bullet</button>
+            </div>
+
             <div class="field-group" style="margin-bottom: 28px;">
               <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Profile Image</label>
               <div style="display: flex; gap: 16px; align-items: center;">
@@ -1357,6 +1365,11 @@
             paragraphs: [
               "Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
               "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life."
+            ],
+            features: [
+              { icon: "🏺", title: "One-of-a-Kind Pieces", text: "Every pot in the shop is handthrown and glazed individually in my studio. Own a piece of the slow craft." },
+              { icon: "🔥", title: "Stoneware & Porcelain", text: "Clays are formulated for high-fire durability, ensuring each vase, bowl, and mug is fully functional." },
+              { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Dallas, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
             ],
             years: "4+",
             imgUrl: "images/about.png",
@@ -2222,6 +2235,29 @@
       container.appendChild(item);
     };
 
+    window.addAboutFeatureField = function(icon, title, text) {
+      const container = document.getElementById('about-features-editor');
+      if (!container) return;
+
+      const item = document.createElement('div');
+      item.className = 'about-feature-row';
+      item.style.display = 'flex';
+      item.style.gap = '10px';
+      item.style.alignItems = 'center';
+      item.style.background = 'rgba(0,0,0,0.15)';
+      item.style.padding = '12px';
+      item.style.borderRadius = '8px';
+      item.style.border = '1px solid rgba(255,255,255,0.04)';
+
+      item.innerHTML = `
+        <input type="text" class="field-input feat-icon-input" value="${escapeHtml(icon)}" placeholder="Emoji" style="width: 60px; text-align: center; flex-shrink: 0; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: var(--pearl); font-size: 0.95rem; padding: 10px 12px; font-family: inherit;" required />
+        <input type="text" class="field-input feat-title-input" value="${escapeHtml(title)}" placeholder="Bullet Title" style="flex: 1; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: var(--pearl); font-size: 0.95rem; padding: 10px 12px; font-family: inherit;" required />
+        <input type="text" class="field-input feat-text-input" value="${escapeHtml(text)}" placeholder="Description text..." style="flex: 2; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; color: var(--pearl); font-size: 0.95rem; padding: 10px 12px; font-family: inherit;" required />
+        <button type="button" class="action-btn action-btn--delete" style="padding: 6px 12px; height: 36px; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 4px;" onclick="this.parentElement.remove()">🗑️</button>
+      `;
+      container.appendChild(item);
+    };
+
     function populateAboutForm() {
       if (!_aboutBioData) return;
       document.getElementById('about-form-title').value = _aboutBioData.title || '';
@@ -2248,6 +2284,23 @@
           paragraphs.forEach(text => window.addAboutParagraphField(text));
         }
       }
+
+      const fEditor = document.getElementById('about-features-editor');
+      if (fEditor) {
+        fEditor.innerHTML = '';
+        let features = _aboutBioData.features || [];
+        if (!Array.isArray(features)) {
+          features = [];
+        }
+        if (features.length === 0) {
+          features = [
+            { icon: "🏺", title: "One-of-a-Kind Pieces", text: "Every pot in the shop is handthrown and glazed individually in my studio. Own a piece of the slow craft." },
+            { icon: "🔥", title: "Stoneware & Porcelain", text: "Clays are formulated for high-fire durability, ensuring each vase, bowl, and mug is fully functional." },
+            { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Dallas, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
+          ];
+        }
+        features.forEach(f => window.addAboutFeatureField(f.icon, f.title, f.text));
+      }
     }
 
     window.saveAboutBio = async function() {
@@ -2268,6 +2321,17 @@
         return;
       }
 
+      const featRows = document.querySelectorAll('#about-features-editor .about-feature-row');
+      const features = [];
+      featRows.forEach(row => {
+        const icon = row.querySelector('.feat-icon-input').value.trim();
+        const title = row.querySelector('.feat-title-input').value.trim();
+        const text = row.querySelector('.feat-text-input').value.trim();
+        if (icon || title || text) {
+          features.push({ icon, title, text });
+        }
+      });
+
       const btn = document.getElementById('btn-save-about-bio');
       btn.disabled = true;
       btn.textContent = 'Saving...';
@@ -2276,6 +2340,7 @@
         title,
         eyebrow,
         paragraphs,
+        features,
         years,
         imgUrl,
         lastUpdated: new Date().toISOString()
@@ -2310,6 +2375,11 @@
           paragraphs: [
             "Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
             "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life."
+          ],
+          features: [
+            { icon: "🏺", title: "One-of-a-Kind Pieces", text: "Every pot in the shop is handthrown and glazed individually in my studio. Own a piece of the slow craft." },
+            { icon: "🔥", title: "Stoneware & Porcelain", text: "Clays are formulated for high-fire durability, ensuring each vase, bowl, and mug is fully functional." },
+            { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Dallas, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
           ],
           years: "4+",
           imgUrl: "images/about.png"

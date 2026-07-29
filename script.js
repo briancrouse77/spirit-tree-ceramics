@@ -1407,6 +1407,41 @@ function initAboutListener() {
           return '<p class="about__body">' + cleanText + '</p>';
         }).join('');
       }
+
+      var features = data.features || [];
+      if (!Array.isArray(features)) {
+        features = [];
+      }
+      if (features.length === 0) {
+        features = [
+          { icon: "🏺", title: "One-of-a-Kind Pieces", text: "Every pot in the shop is handthrown and glazed individually in my studio. Own a piece of the slow craft." },
+          { icon: "🔥", title: "Stoneware & Porcelain", text: "Clays are formulated for high-fire durability, ensuring each vase, bowl, and mug is fully functional." },
+          { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Dallas, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
+        ];
+      }
+
+      var featuresEl = document.getElementById('about-features-container');
+      if (featuresEl) {
+        featuresEl.innerHTML = features.map(function(f) {
+          var icon = f.icon || '🏺';
+          var title = f.title || '';
+          var text = f.text || '';
+          
+          var cleanTitle = title.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          cleanTitle = cleanTitle.replace(/&lt;strong&gt;/g, "<strong>").replace(/&lt;\/strong&gt;/g, "</strong>");
+
+          var cleanText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+          cleanText = cleanText.replace(/&lt;strong&gt;/g, "<strong>").replace(/&lt;\/strong&gt;/g, "</strong>");
+
+          return '<li>'
+            + '<div class="about__feat-icon">' + icon + '</div>'
+            + '<div>'
+            + '<strong>' + cleanTitle + '</strong>'
+            + '<span>' + cleanText + '</span>'
+            + '</div>'
+            + '</li>';
+        }).join('');
+      }
     }, function(err) {
       console.error('Error fetching About John data:', err);
     });
