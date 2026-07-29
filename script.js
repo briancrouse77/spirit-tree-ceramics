@@ -1362,14 +1362,20 @@ window.toggleFaq = function(el) {
   document.querySelectorAll('.faq__item').forEach(function(item) {
     item.classList.remove('open');
     item.style.borderColor = 'rgba(193,84,10,0.12)';
-    item.querySelector('.faq__answer').style.maxHeight = '0';
-    item.querySelector('.faq__icon').style.transform = '';
+    var ans = item.querySelector('.faq__answer');
+    if (ans) ans.style.maxHeight = '0';
+    var ico = item.querySelector('.faq__icon');
+    if (ico) ico.style.transform = '';
   });
   
   if (!isOpen) {
     el.classList.add('open');
     el.style.borderColor = 'var(--am-lt)';
-    answer.style.maxHeight = answer.scrollHeight + 'px';
-    icon.style.transform = 'rotate(180deg)';
+    if (answer) {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+    if (icon) {
+      icon.style.transform = 'rotate(180deg)';
+    }
   }
 };
