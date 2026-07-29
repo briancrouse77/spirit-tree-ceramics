@@ -1479,6 +1479,11 @@ body.modal-open { overflow: hidden; }
   color: var(--mist);
   margin-bottom: 20px;
 }
+.gallery-thumbs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .gallery-thumb {
   width: 62px;
   height: 62px;
@@ -1568,3 +1573,93 @@ body.modal-open { overflow: hidden; }
     font-size: 2.4rem;
   }
 }
+
+@media (max-width: 768px) {
+  /* Prevent iOS Form Auto-Zoom (Font-Size 16px) */
+  .form__group input,
+  .form__group select,
+  .form__group textarea,
+  .form__input,
+  .contact__form .form__group input,
+  .contact__form .form__group textarea {
+    font-size: 16px !important;
+  }
+
+  /* Details Modal Mobile Above-the-Fold (Sizing max-height: 38vh) */
+  .showcase-media {
+    max-height: 38vh;
+    aspect-ratio: 4/3;
+  }
+
+  /* Sticky Action Buttons Footer inside Details Modal */
+  .showcase-details {
+    padding-bottom: 90px;
+  }
+  .showcase-actions {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 10, 7, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(193, 84, 10, 0.2);
+    padding: 16px 24px;
+    z-index: 100;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.5);
+    margin: 0;
+    border-radius: 0;
+  }
+
+  /* Horizontal Touch Scroll Swipe for Gallery Thumbnails */
+  .gallery-thumbs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    margin-bottom: 8px;
+  }
+  .gallery-thumb {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    width: 58px;
+    height: 58px;
+  }
+
+  /* Enlarged Touch Target Areas for Close Buttons */
+  .modal__close {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    top: 8px;
+    right: 8px;
+    border-radius: 50%;
+  }
+
+  /* Smooth Slide-down/Fade Transition for Hamburger Dropdown */
+  .nav__mobile {
+    display: flex !important;
+    flex-direction: column;
+    max-height: 0;
+    padding: 0 24px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.25s ease, transform 0.25s ease;
+    border-top: none;
+  }
+  .nav__mobile.open {
+    max-height: 300px;
+    padding: 20px 24px;
+    opacity: 1;
+    transform: translateY(0);
+    border-top: 1px solid rgba(193, 84, 10, 0.2);
+  }
+}
+
