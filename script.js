@@ -740,6 +740,7 @@ var _shopPotsMap = {};
         shopGrid.innerHTML = '';
         shopEmpty.style.display = '';
         updateProductSchema([]);
+        updateFooterCategories([]);
         return;
       }
 
@@ -761,6 +762,7 @@ var _shopPotsMap = {};
       }).join('');
 
       updateProductSchema(pots);
+      updateFooterCategories(pots);
     });
 
     function updateProductSchema(potsList) {
@@ -795,6 +797,47 @@ var _shopPotsMap = {};
         script.text = JSON.stringify(schema);
         document.head.appendChild(script);
       });
+    }
+
+    function updateFooterCategories(potsList) {
+      const footerCats = document.getElementById('footer-categories');
+      if (!footerCats) return;
+      
+      const activeTypes = {};
+      potsList.forEach(function(pot) {
+        if (pot.type) {
+          activeTypes[pot.type.trim().toLowerCase()] = true;
+        }
+      });
+
+      const typesOrder = ['mug', 'vase', 'bowl', 'plate', 'platter', 'other'];
+      const displayNames = {
+        'mug': 'Mugs',
+        'vase': 'Vases',
+        'bowl': 'Bowls',
+        'plate': 'Plates',
+        'platter': 'Platters',
+        'other': 'Studio Pieces'
+      };
+
+      const links = [];
+      typesOrder.forEach(function(t) {
+        if (activeTypes[t]) {
+          const name = displayNames[t] || t;
+          let href = '/' + t;
+          if (window.location.hostname.indexOf('github.io') !== -1 || window.location.pathname.indexOf('category.html') !== -1) {
+            href = 'category.html?type=' + t;
+          }
+          links.push(`<a href="${href}" class="footer__admin-link" style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">${name}</a>`);
+        }
+      });
+
+      if (links.length > 0) {
+        footerCats.innerHTML = links.join('<span style="color:rgba(255,255,255,0.15); margin: 0 4px;">•</span>');
+        footerCats.style.display = 'flex';
+      } else {
+        footerCats.style.display = 'none';
+      }
     }
 })();
 
