@@ -1166,6 +1166,21 @@
               </div>
             </div>
 
+            <div class="field-group" style="margin-bottom: 28px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Category Pages Hero Banner</label>
+              <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                <div style="width: 220px; height: 100px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.25); border: 2px solid rgba(193,84,10,0.2); display: flex; align-items: center; justify-content: center;">
+                  <img id="about-form-banner-preview" src="images/hero.png" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <div>
+                  <button type="button" class="btn-sm btn-ghost" onclick="document.getElementById('about-bio-banner-input').click()" style="padding: 8px 16px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: none; color: var(--pearl); display: block; margin-bottom: 8px;">Upload Banner</button>
+                  <p style="font-size: 0.72rem; color: var(--smoke); margin: 0;">Recommended aspect ratio: 16:9. Fades as hero background.</p>
+                </div>
+                <input type="file" id="about-bio-banner-input" accept="image/*" style="display:none;" />
+                <input type="hidden" id="about-form-banner-url" />
+              </div>
+            </div>
+
             <div style="display: flex; justify-content: flex-end; gap: 12px;">
               <button type="submit" class="btn-sm btn-primary" id="btn-save-about-bio" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">Save Biography →</button>
             </div>
@@ -2267,6 +2282,10 @@
       document.getElementById('about-form-img-url').value = imgUrl;
       document.getElementById('about-form-img-preview').src = imgUrl;
 
+      const bannerUrl = _aboutBioData.categoryBannerUrl || 'images/hero.png';
+      document.getElementById('about-form-banner-url').value = bannerUrl;
+      document.getElementById('about-form-banner-preview').src = bannerUrl;
+
       const editor = document.getElementById('about-paragraphs-editor');
       if (editor) {
         editor.innerHTML = '';
@@ -2308,6 +2327,7 @@
       const eyebrow = document.getElementById('about-form-eyebrow').value.trim();
       const years = document.getElementById('about-form-years').value.trim();
       const imgUrl = document.getElementById('about-form-img-url').value.trim();
+      const categoryBannerUrl = document.getElementById('about-form-banner-url').value.trim();
 
       const textareas = document.querySelectorAll('#about-paragraphs-editor .about-para-input');
       const paragraphs = [];
@@ -2343,6 +2363,7 @@
         features,
         years,
         imgUrl,
+        categoryBannerUrl,
         lastUpdated: new Date().toISOString()
       };
 
@@ -2400,6 +2421,22 @@
         } catch(err) {
           console.error('Image compression failed:', err);
           toast('Failed to process image: ' + err);
+        }
+        e.target.value = '';
+      });
+
+      document.getElementById('about-bio-banner-input').addEventListener('change', async e => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+          const base64 = await compressImage(file);
+          document.getElementById('about-form-banner-url').value = base64;
+          document.getElementById('about-form-banner-preview').src = base64;
+          toast('Banner loaded. Click "Save Biography" to apply changes.');
+        } catch(err) {
+          console.error('Image compression failed:', err);
+          toast('Failed to process banner: ' + err);
         }
         e.target.value = '';
       });
