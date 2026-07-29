@@ -233,9 +233,19 @@
       <div class="purchase-step" id="pstep-1">
         <div class="showcase-grid">
           <!-- Left Column: Media -->
-          <div class="showcase-media" onclick="openLightbox()">
-            <img id="purchase-pot-img" src="" alt="Selected Ceramic Piece" class="showcase-img" />
-            <span style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);color:var(--pearl);font-size:0.68rem;padding:4px 8px;border-radius:4px;pointer-events:none;font-weight:600;letter-spacing:0.04em;">🔍 Tap to Expand</span>
+          <div class="showcase-media-col" style="display:flex; flex-direction:column; gap:20px;">
+            <div class="showcase-media" onclick="openLightbox()">
+              <img id="purchase-pot-img" src="" alt="Selected Ceramic Piece" class="showcase-img" />
+              <span style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);color:var(--pearl);font-size:0.68rem;padding:4px 8px;border-radius:4px;pointer-events:none;font-weight:600;letter-spacing:0.04em;">🔍 Tap to Expand</span>
+            </div>
+            
+            <!-- Related Pieces Section -->
+            <div id="purchase-related-section" style="display:none; border-top:1px solid rgba(255,255,255,0.08); padding-top:18px;">
+              <h4 style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px;">Similar Pieces</h4>
+              <div id="purchase-related-list" style="display:flex; gap:12px; flex-wrap:wrap;">
+                <!-- Dynamically populated related items -->
+              </div>
+            </div>
           </div>
           <!-- Right Column: Details -->
           <div class="showcase-details">
@@ -269,14 +279,6 @@
               <h4 style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px;">Angle Gallery</h4>
               <div class="gallery-thumbs" id="showcase-thumbs" style="display:flex;gap:10px;flex-wrap:wrap;">
                 <!-- Thumbnails populated dynamically -->
-              </div>
-            </div>
-
-            <!-- Related Pieces Section -->
-            <div id="purchase-related-section" style="display:none; border-top:1px solid rgba(255,255,255,0.08); padding-top:18px; margin-bottom:24px;">
-              <h4 style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px;">Similar Pieces</h4>
-              <div id="purchase-related-list" style="display:flex; gap:12px; flex-wrap:wrap;">
-                <!-- Dynamically populated related items -->
               </div>
             </div>
 
