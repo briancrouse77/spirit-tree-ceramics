@@ -852,6 +852,9 @@ function openPurchaseModal(potId, preventHashUpdate) {
   _purchasePot = pot;
   if (typeof window.trackClick === 'function') window.trackClick('inquire_start');
 
+  const modalEl = document.getElementById('purchase-modal');
+  if (modalEl) modalEl.scrollTop = 0;
+
   // Update page title & description for SEO
   document.title = `${pot.title || 'Handcrafted Pottery'} | Spirit Tree Ceramics`;
   const descMeta = document.querySelector('meta[name="description"]');
