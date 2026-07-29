@@ -929,17 +929,12 @@
         <span class="sidebar__badge">Admin</span>
       </div>
       <nav class="sidebar__nav">
-        <div class="nav-item active" data-panel="bookings" id="nav-bookings">
-          <span class="icon">🗓️</span>
-          <span>Bookings</span>
-          <span class="badge" id="badge-bookings">0</span>
-        </div>
         <div class="nav-item" data-panel="messages" id="nav-messages">
           <span class="icon">💬</span>
           <span>Messages</span>
           <span class="badge" id="badge-messages" style="display:none;">0</span>
         </div>
-        <div class="nav-item" data-panel="shop" id="nav-shop">
+        <div class="nav-item active" data-panel="shop" id="nav-shop">
           <span class="icon">🏺</span>
           <span>Shop</span>
           <span class="badge" id="badge-shop" style="display:none;">0</span>
@@ -971,52 +966,31 @@
     <main class="main">
       <div class="topbar">
         <div>
-          <div class="topbar__title" id="page-title">Bookings</div>
-          <div class="topbar__sub" id="page-sub">All scheduled sessions</div>
+          <div class="topbar__title" id="page-title">Shop</div>
+          <div class="topbar__sub" id="page-sub">Manage pieces for sale</div>
         </div>
         <div class="topbar__actions">
-          <button class="btn-sm btn-danger" id="clear-btn" style="display:none;">Clear All</button>
           <button class="btn-sm btn-ghost" id="refresh-btn">↻ Refresh</button>
         </div>
       </div>
 
       <!-- Stats -->
       <div class="stats-row" id="stats-row">
-        <div class="stat-card stat-card--violet">
-          <div class="stat-card__label">Total Bookings</div>
-          <div class="stat-card__value" id="stat-total">0</div>
-          <div class="stat-card__sub">All time</div>
-        </div>
-        <div class="stat-card stat-card--teal">
-          <div class="stat-card__label">Upcoming</div>
-          <div class="stat-card__value" id="stat-upcoming">0</div>
-          <div class="stat-card__sub">Confirmed or new</div>
-        </div>
         <div class="stat-card stat-card--gold">
           <div class="stat-card__label">Shop Listings</div>
           <div class="stat-card__value" id="stat-pots">0</div>
           <div class="stat-card__sub" id="stat-pots-sub">Available pieces</div>
+        </div>
+        <div class="stat-card stat-card--teal">
+          <div class="stat-card__label">Purchase Inquiries</div>
+          <div class="stat-card__value" id="stat-purchases">0</div>
+          <div class="stat-card__sub">From shop checkout</div>
         </div>
         <div class="stat-card">
           <div class="stat-card__label">Unread Messages</div>
           <div class="stat-card__value" id="stat-unread">0</div>
           <div class="stat-card__sub">Awaiting reply</div>
         </div>
-      </div>
-
-      <!-- Bookings Panel -->
-      <div class="panel active" id="panel-bookings">
-        <div class="section-hdr">
-          <h2>Sessions</h2>
-          <div class="section-hdr__filters">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="new">New</button>
-            <button class="filter-btn" data-filter="confirmed">Confirmed</button>
-            <button class="filter-btn" data-filter="completed">Completed</button>
-            <button class="filter-btn" data-filter="cancelled">Cancelled</button>
-          </div>
-        </div>
-        <div class="bookings-list" id="bookings-list"></div>
       </div>
 
       <!-- Messages Panel -->
@@ -1032,7 +1006,7 @@
       </div>
 
       <!-- Shop Panel -->
-      <div class="panel" id="panel-shop">
+      <div class="panel active" id="panel-shop">
         <div class="shop-layout">
 
           <!-- Left: Add/Edit Form -->
@@ -1181,14 +1155,10 @@
     const SESSION_KEY = 'stc_admin_session';
     const USE_FIREBASE = typeof db !== 'undefined';
 
-    // ── LocalStorage fallbacks ──
-    function lsGetBookings() { return JSON.parse(localStorage.getItem('stc_bookings') || '[]'); }
-    function lsSaveBookings(arr) { localStorage.setItem('stc_bookings', JSON.stringify(arr)); }
     function lsGetMessages() { return JSON.parse(localStorage.getItem('stc_messages') || '[]'); }
     function lsSaveMessages(arr) { localStorage.setItem('stc_messages', JSON.stringify(arr)); }
 
     // In-memory cache (populated by Firestore listeners)
-    let _bookings = [];
     let _messages = [];
     let _pots     = [];
     let _purchases = [];
@@ -1289,16 +1259,10 @@
     checkSession();
 
     // ── Data helpers (Firestore + localStorage fallback) ──
-    function getBookings() { return USE_FIREBASE ? _bookings : lsGetBookings(); }
     function getMessages() { return USE_FIREBASE ? _messages : lsGetMessages(); }
 
     function startListeners() {
       if (!USE_FIREBASE) return;
-      db.collection('bookings').orderBy('timestamp','desc').onSnapshot(snap => {
-        _bookings = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
-        updateStats();
-        if (currentPanel === 'bookings') renderBookings();
-      });
       db.collection('messages').orderBy('timestamp','desc').onSnapshot(snap => {
         _messages = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
         updateStats();
@@ -1339,8 +1303,7 @@
     }
 
     // ── Navigation ──
-    let currentPanel = 'bookings';
-    let bookingFilter = 'all';
+    let currentPanel = 'shop';
     let messageFilter = 'all';
 
     document.querySelectorAll('.nav-item[data-panel]').forEach(item => {
@@ -1351,12 +1314,7 @@
         currentPanel = panel;
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         document.getElementById('panel-' + panel).classList.add('active');
-        if (panel === 'bookings') {
-          document.getElementById('page-title').textContent = 'Bookings';
-          document.getElementById('page-sub').textContent = 'All scheduled sessions';
-          document.getElementById('clear-btn').style.display = '';
-          renderBookings();
-        } else if (panel === 'shop') {
+        if (panel === 'shop') {
           document.getElementById('page-title').textContent = 'Shop';
           document.getElementById('page-sub').textContent = 'Manage pieces for sale';
           document.getElementById('clear-btn').style.display = 'none';
@@ -1380,16 +1338,6 @@
       });
     });
 
-    // ── Booking Filters ──
-    document.querySelectorAll('#panel-bookings .filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#panel-bookings .filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        bookingFilter = btn.dataset.filter;
-        renderBookings();
-      });
-    });
-
     // ── Message Filters ──
     document.querySelectorAll('#panel-messages .filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -1404,154 +1352,32 @@
     document.getElementById('refresh-btn').addEventListener('click', () => {
       if (!USE_FIREBASE) {
         updateStats();
-        if (currentPanel === 'bookings') renderBookings();
-        else renderMessages();
+        renderMessages();
       }
       toast('Refreshed ↻');
     });
 
-    // ── Clear All ──
-    document.getElementById('clear-btn').addEventListener('click', () => {
-      if (!confirm('Delete ALL bookings? This cannot be undone.')) return;
-      if (USE_FIREBASE) {
-        const batch = db.batch();
-        _bookings.forEach(b => batch.delete(db.collection('bookings').doc(b._docId)));
-        batch.commit().then(() => toast('All bookings cleared.'));
-      } else {
-        lsSaveBookings([]);
-        renderBookings();
-        updateStats();
-        toast('All bookings cleared.');
-      }
-    });
-
     // ── Stats ──
     function updateStats() {
-      const bookings = getBookings();
       const messages = getMessages();
-      const now = new Date();
-      const thisMonth = now.getMonth();
-      const thisYear  = now.getFullYear();
-
-      const upcoming = bookings.filter(b => {
-        const d = new Date(b.date);
-        return d >= now && (b.status !== 'cancelled');
-      });
-      const monthBk = bookings.filter(b => {
-        const d = new Date(b.date);
-        return d.getMonth() === thisMonth && d.getFullYear() === thisYear;
-      });
       const unread = messages.filter(m => !m.read);
 
-      document.getElementById('stat-total').textContent    = bookings.length;
-      document.getElementById('stat-upcoming').textContent  = upcoming.length;
       const availPots = (typeof _pots !== 'undefined' ? _pots.filter(p => p.status === 'available').length : 0);
-      document.getElementById('stat-pots').textContent     = availPots;
-      document.getElementById('stat-unread').textContent   = unread.length;
+      const totalPurchases = (typeof _purchases !== 'undefined' ? _purchases.length : 0);
+
+      const statPotsEl = document.getElementById('stat-pots');
+      const statPurchasesEl = document.getElementById('stat-purchases');
+      const statUnreadEl = document.getElementById('stat-unread');
+
+      if (statPotsEl) statPotsEl.textContent = availPots;
+      if (statPurchasesEl) statPurchasesEl.textContent = totalPurchases;
+      if (statUnreadEl) statUnreadEl.textContent = unread.length;
 
       // Nav badges
-      const newBk = bookings.filter(b => !b.status || b.status === 'new');
-      const bkBadge = document.getElementById('badge-bookings');
-      bkBadge.textContent = newBk.length;
-      bkBadge.style.display = newBk.length ? '' : 'none';
-
       const msgBadge = document.getElementById('badge-messages');
-      msgBadge.textContent = unread.length;
-      msgBadge.style.display = unread.length ? '' : 'none';
-
-      const subBadge = document.getElementById('badge-members');
-      if (subBadge) {
-        subBadge.textContent = _members.length;
-        subBadge.style.display = _members.length ? '' : 'none';
-      }
-    }
-
-    // ── Render Bookings ──
-    function renderBookings() {
-      let bookings = getBookings().slice().reverse();
-      if (bookingFilter !== 'all') {
-        bookings = bookings.filter(b => (b.status || 'new') === bookingFilter);
-      }
-      const list = document.getElementById('bookings-list');
-
-      if (bookings.length === 0) {
-        list.innerHTML = `
-          <div class="empty-state">
-            <div class="empty-state__icon">🏺</div>
-            <h3>No sessions yet</h3>
-            <p>Bookings made on the site will appear here.</p>
-          </div>`;
-        return;
-      }
-
-      list.innerHTML = bookings.map(b => {
-        const d = new Date(b.date);
-        const dateStr = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-        const ts = new Date(b.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        const status = b.status || 'new';
-
-        const badgeMap = {
-          new:       '<span class="status-badge status-badge--new">● New</span>',
-          confirmed: '<span class="status-badge status-badge--confirmed">✓ Confirmed</span>',
-          cancelled: '<span class="status-badge status-badge--cancelled">✕ Cancelled</span>',
-          completed: '<span class="status-badge status-badge--completed">★ Completed</span>',
-        };
-
-        return `
-          <div class="booking-card" id="bk-${b.id}">
-            <div class="booking-card__top">
-              <div>
-                <div class="booking-card__id">${b.id} · Booked ${ts}</div>
-                <div class="booking-card__name">${b.details.firstName} ${b.details.lastName}</div>
-                <div class="booking-card__session">${b.class}</div>
-              </div>
-              <div class="booking-card__datetime">
-                <div class="booking-card__date">📅 ${dateStr}</div>
-                <div class="booking-card__time">🕐 ${b.time}</div>
-                <div style="margin-top:6px;">${badgeMap[status] || badgeMap.new}</div>
-              </div>
-            </div>
-            <div class="booking-card__meta">
-              <span>📧 <a href="mailto:${b.details.email}" style="color:var(--teal-lt)">${b.details.email}</a></span>
-              <span>📱 <a href="tel:${b.details.phone}" style="color:var(--teal-lt)">${b.details.phone}</a></span>
-              <span>📍 ${b.details.address}${b.details.city ? `, ${b.details.city}` : ''}${b.details.state ? `, ${b.details.state}` : ''}</span>
-              <span>👥 ${b.details.guests} guest${b.details.guests > 1 ? 's' : ''} · ${b.details.experience}</span>
-            </div>
-            ${b.details.notes ? `<div class="booking-card__notes">💬 "${b.details.notes}"</div>` : ''}
-            <div class="booking-card__actions">
-              ${status !== 'confirmed'  && status !== 'cancelled' && status !== 'completed' ? `<button class="action-btn action-btn--confirm" onclick="setStatus('${b.id}','confirmed')">✓ Confirm</button>` : ''}
-              ${status !== 'completed'  && status !== 'cancelled' ? `<button class="action-btn action-btn--done" onclick="setStatus('${b.id}','completed')">★ Mark Done</button>` : ''}
-              ${status !== 'cancelled' ? `<button class="action-btn action-btn--cancel" onclick="setStatus('${b.id}','cancelled')">✕ Cancel</button>` : ''}
-              ${status === 'cancelled' ? `<button class="action-btn action-btn--confirm" onclick="setStatus('${b.id}','new')">↺ Restore</button>` : ''}
-              <button class="action-btn action-btn--delete" onclick="deleteBooking('${b.id}')">🗑 Delete</button>
-            </div>
-          </div>`;
-      }).join('');
-    }
-
-    function setStatus(id, status) {
-      const labels = { confirmed: 'Confirmed ✓', cancelled: 'Cancelled', completed: 'Marked complete ★', new: 'Restored' };
-      if (USE_FIREBASE) {
-        const b = _bookings.find(x => x.id === id);
-        if (b) db.collection('bookings').doc(b._docId).update({ status }).then(() => toast(labels[status] || 'Updated'));
-      } else {
-        const bookings = lsGetBookings();
-        const b = bookings.find(x => x.id === id);
-        if (b) { b.status = status; lsSaveBookings(bookings); }
-        renderBookings(); updateStats();
-        toast(labels[status] || 'Updated');
-      }
-    }
-
-    function deleteBooking(id) {
-      if (!confirm('Delete this booking permanently?')) return;
-      if (USE_FIREBASE) {
-        const b = _bookings.find(x => x.id === id);
-        if (b) db.collection('bookings').doc(b._docId).delete().then(() => toast('Booking deleted.'));
-      } else {
-        lsSaveBookings(lsGetBookings().filter(x => x.id !== id));
-        renderBookings(); updateStats();
-        toast('Booking deleted.');
+      if (msgBadge) {
+        msgBadge.textContent = unread.length;
+        msgBadge.style.display = unread.length ? '' : 'none';
       }
     }
 
@@ -2306,7 +2132,6 @@
         startListeners();
       } else {
         updateStats();
-        renderBookings();
         _faqs = [
           { id: 'faq-1', question: 'Who is the artist behind Spirit Tree Ceramics?', answer: 'Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas.', sortOrder: 10 },
           { id: 'faq-2', question: 'Where can I buy John Ruiz pottery?', answer: 'You can browse and purchase John Ruiz\'s handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/.', sortOrder: 20 }
