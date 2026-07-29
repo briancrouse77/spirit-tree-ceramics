@@ -739,6 +739,7 @@ var _shopPotsMap = {};
       if (pots.length === 0) {
         shopGrid.innerHTML = '';
         shopEmpty.style.display = '';
+        updateProductSchema([]);
         return;
       }
 
@@ -747,7 +748,7 @@ var _shopPotsMap = {};
         var key = p.id || p._docId;
         return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
           + (p.imageUrl
-              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
+              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + ' - Handcrafted Pottery" width="400" height="400" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
               : '<div class="shop-card__img-ph">🏺</div>')
           + '<div class="shop-card__body">'
           + '<div><div class="shop-card__title">' + p.title + '</div>'
@@ -758,16 +759,72 @@ var _shopPotsMap = {};
           + '<button class="shop-card__cta" onclick="event.stopPropagation();openPurchaseModal(\'' + key + '\')">Inquire \u2192</button>'
           + '</div></div></div>';
       }).join('');
+
+      updateProductSchema(pots);
     });
+
+    function updateProductSchema(potsList) {
+      // Remove any existing dynamic product schemas
+      const existing = document.querySelectorAll('script.dynamic-product-schema');
+      existing.forEach(function(el) { el.remove(); });
+
+      // Generate new Product schemas
+      potsList.forEach(function(pot) {
+        const id = pot.id || pot._docId;
+        const mainImage = pot.imageUrl || '';
+        const schema = {
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": pot.title,
+          "image": mainImage,
+          "description": pot.description || '',
+          "sku": id,
+          "offers": {
+            "@type": "Offer",
+            "url": "https://www.spirittreeceramics.com/#inquire-" + id,
+            "priceCurrency": "USD",
+            "price": pot.price || 0,
+            "itemCondition": "https://schema.org/NewCondition",
+            "availability": pot.status === 'sold' ? "https://schema.org/OutOfStock" : "https://schema.org/InStock"
+          }
+        };
+
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.className = 'dynamic-product-schema';
+        script.text = JSON.stringify(schema);
+        document.head.appendChild(script);
+      });
+    }
 })();
 
 // ── Purchase Modal ───────────────────────────────────────────────────────────
 var _purchasePot = null;
+var _originalPageTitle = document.title;
+var _originalMetaDescription = "";
+(function() {
+  const descMeta = document.querySelector('meta[name="description"]');
+  if (descMeta) _originalMetaDescription = descMeta.getAttribute('content') || "";
+})();
 
 function openPurchaseModal(potId, preventHashUpdate) {
   var pot = _shopPotsMap[potId];
   if (!pot) return;
   _purchasePot = pot;
+
+  // Update page title & description for SEO
+  document.title = `${pot.title || 'Handcrafted Pottery'} | Spirit Tree Ceramics`;
+  const descMeta = document.querySelector('meta[name="description"]');
+  if (descMeta) descMeta.setAttribute('content', pot.description || _originalMetaDescription);
+  
+  // Set canonical link
+  let canonicalEl = document.querySelector('link[rel="canonical"]');
+  if (!canonicalEl) {
+    canonicalEl = document.createElement('link');
+    canonicalEl.setAttribute('rel', 'canonical');
+    document.head.appendChild(canonicalEl);
+  }
+  canonicalEl.setAttribute('href', 'https://www.spirittreeceramics.com/#inquire-' + potId);
 
   // Populate step 1
   const img = document.getElementById('purchase-pot-img');
@@ -868,6 +925,123 @@ function openPurchaseModal(potId, preventHashUpdate) {
     });
   }
 
+  // Populate Specs Grid
+  const clayEl = document.getElementById('spec-clay');
+  const glazeEl = document.getElementById('spec-glaze');
+  const dimsEl = document.getElementById('spec-dimensions');
+  const careEl = document.getElementById('spec-care');
+  const specsContainer = document.getElementById('purchase-pot-specs');
+  const inspEl = document.getElementById('purchase-pot-inspiration');
+
+  let hasSpecs = false;
+  if (specsContainer) {
+    if (pot.clay) {
+      if (clayEl) clayEl.textContent = pot.clay;
+      const clayItem = document.getElementById('spec-item-clay');
+      if (clayItem) clayItem.style.display = 'block';
+      hasSpecs = true;
+    } else {
+      const clayItem = document.getElementById('spec-item-clay');
+      if (clayItem) clayItem.style.display = 'none';
+    }
+
+    if (pot.glaze) {
+      if (glazeEl) glazeEl.textContent = pot.glaze;
+      const glazeItem = document.getElementById('spec-item-glaze');
+      if (glazeItem) glazeItem.style.display = 'block';
+      hasSpecs = true;
+    } else {
+      const glazeItem = document.getElementById('spec-item-glaze');
+      if (glazeItem) glazeItem.style.display = 'none';
+    }
+
+    if (pot.dimensions) {
+      if (dimsEl) dimsEl.textContent = pot.dimensions;
+      const dimsItem = document.getElementById('spec-item-dimensions');
+      if (dimsItem) dimsItem.style.display = 'block';
+      hasSpecs = true;
+    } else {
+      const dimsItem = document.getElementById('spec-item-dimensions');
+      if (dimsItem) dimsItem.style.display = 'none';
+    }
+
+    if (pot.care) {
+      if (careEl) careEl.textContent = pot.care;
+      const careItem = document.getElementById('spec-item-care');
+      if (careItem) careItem.style.display = 'block';
+      hasSpecs = true;
+    } else {
+      const careItem = document.getElementById('spec-item-care');
+      if (careItem) careItem.style.display = 'none';
+    }
+
+    specsContainer.style.display = hasSpecs ? 'grid' : 'none';
+  }
+
+  if (inspEl) {
+    if (pot.inspiration) {
+      inspEl.textContent = `“${pot.inspiration}”`;
+      inspEl.style.display = 'block';
+    } else {
+      inspEl.style.display = 'none';
+    }
+  }
+
+  // Populate Similar Pieces
+  const relatedSection = document.getElementById('purchase-related-section');
+  const relatedList = document.getElementById('purchase-related-list');
+  if (relatedSection && relatedList) {
+    relatedList.innerHTML = '';
+    
+    // Get related available pieces (same type, max 3)
+    const related = Object.keys(_shopPotsMap)
+      .map(function(id) { return _shopPotsMap[id]; })
+      .filter(function(p) { return (p.id || p._docId) !== potId && p.status === 'available'; })
+      .sort(function(a, b) {
+        const aType = (a.type || '').trim().toLowerCase();
+        const bType = (b.type || '').trim().toLowerCase();
+        const curType = (pot.type || '').trim().toLowerCase();
+        if (aType === curType && bType !== curType) return -1;
+        if (bType === curType && aType !== curType) return 1;
+        return 0;
+      })
+      .slice(0, 3);
+
+    if (related.length > 0) {
+      related.forEach(function(rp) {
+        const rpId = rp.id || rp._docId;
+        const rpImg = rp.imageUrl || 'images/hero.png';
+        const item = document.createElement('div');
+        item.style.display = 'flex';
+        item.style.alignItems = 'center';
+        item.style.gap = '10px';
+        item.style.background = 'rgba(255,255,255,0.03)';
+        item.style.padding = '8px 12px';
+        item.style.borderRadius = '6px';
+        item.style.border = '1px solid rgba(255,255,255,0.06)';
+        item.style.cursor = 'pointer';
+        item.style.transition = 'background 0.2s';
+        
+        item.innerHTML = `
+          <img src="${rpImg}" alt="${rp.title}" style="width:36px; height:36px; object-fit:cover; border-radius:4px;" />
+          <div>
+            <div style="font-size:0.8rem; font-weight:600; color:var(--pearl);">${rp.title}</div>
+            <div style="font-size:0.7rem; color:var(--smoke);">$${Number(rp.price || 0).toFixed(0)}</div>
+          </div>
+        `;
+        item.addEventListener('mouseenter', function() { item.style.background = 'rgba(255,255,255,0.08)'; });
+        item.addEventListener('mouseleave', function() { item.style.background = 'rgba(255,255,255,0.03)'; });
+        item.addEventListener('click', function() {
+          openPurchaseModal(rpId);
+        });
+        relatedList.appendChild(item);
+      });
+      relatedSection.style.display = 'block';
+    } else {
+      relatedSection.style.display = 'none';
+    }
+  }
+
   var overlay = document.getElementById('purchase-overlay');
   overlay.classList.add('open');
   document.body.classList.add('modal-open');
@@ -881,6 +1055,14 @@ function closePurchaseModal(preventHashUpdate) {
   document.getElementById('purchase-overlay').classList.remove('open');
   document.body.classList.remove('modal-open');
   _purchasePot = null;
+
+  // Restore original headers for SEO
+  document.title = _originalPageTitle;
+  const descMeta = document.querySelector('meta[name="description"]');
+  if (descMeta) descMeta.setAttribute('content', _originalMetaDescription);
+  const canonicalEl = document.querySelector('link[rel="canonical"]');
+  if (canonicalEl) canonicalEl.setAttribute('href', 'https://www.spirittreeceramics.com/');
+
   if (!preventHashUpdate && window.location.hash) {
     history.pushState("", document.title, window.location.pathname + window.location.search);
   }

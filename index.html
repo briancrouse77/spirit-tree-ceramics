@@ -245,10 +245,38 @@
             
             <p id="purchase-pot-desc" class="showcase-desc"></p>
             
+            <!-- Specs Grid (SEO & details) -->
+            <div id="purchase-pot-specs" class="showcase-specs" style="display:none; grid-template-columns: repeat(2, 1fr); gap: 12px 20px; margin: 18px 0; border-top: 1px dashed rgba(255,255,255,0.06); padding-top: 16px;">
+              <div class="spec-item" id="spec-item-clay">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Clay Body</span>
+                <span class="spec-value" id="spec-clay" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+              <div class="spec-item" id="spec-item-glaze">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Glaze</span>
+                <span class="spec-value" id="spec-glaze" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+              <div class="spec-item" id="spec-item-dimensions">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Dimensions</span>
+                <span class="spec-value" id="spec-dimensions" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+              <div class="spec-item" id="spec-item-care">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Care & Safety</span>
+                <span class="spec-value" id="spec-care" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+            </div>
+            <p id="purchase-pot-inspiration" class="showcase-inspiration" style="display:none; font-style: italic; font-size: 0.84rem; color: var(--smoke); margin: 18px 0; line-height: 1.5; border-left: 2px solid var(--gold); padding-left: 10px; font-family: var(--font-head);"></p>
             <div class="showcase-gallery" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:18px;margin-bottom:24px;">
               <h4 style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px;">Angle Gallery</h4>
               <div class="gallery-thumbs" id="showcase-thumbs" style="display:flex;gap:10px;flex-wrap:wrap;">
                 <!-- Thumbnails populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Related Pieces Section -->
+            <div id="purchase-related-section" style="display:none; border-top:1px solid rgba(255,255,255,0.08); padding-top:18px; margin-bottom:24px;">
+              <h4 style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px;">Similar Pieces</h4>
+              <div id="purchase-related-list" style="display:flex; gap:12px; flex-wrap:wrap;">
+                <!-- Dynamically populated related items -->
               </div>
             </div>
 
@@ -667,6 +695,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
   <script src="firebase-config.js"></script>
-  <script src="script.js?v=2.5"></script>
+  <script src="script.js?v=2.6"></script>
 </body>
 </html>
