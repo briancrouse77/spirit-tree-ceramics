@@ -781,6 +781,19 @@ function openPurchaseModal(potId, preventHashUpdate) {
   document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
   document.getElementById('purchase-pot-desc').textContent  = pot.description || '';
 
+  // Populate mock like count
+  var count = getMockLikeCount(potId);
+  var likeCountEl = document.getElementById('modal-like-count');
+  if (likeCountEl) {
+    likeCountEl.textContent = count;
+    var likeBtn = document.getElementById('modal-like-btn');
+    if (likeBtn) {
+      likeBtn.classList.remove('liked');
+      likeBtn.style.background = '';
+    }
+  }
+  window._activePotId = potId;
+
   // Populate alternative angle gallery thumbnails (max 6)
   var gallery = [];
   if (pot.imageUrl) gallery.push(pot.imageUrl);
@@ -889,6 +902,55 @@ function checkHashAndOpenModal() {
 }
 
 window.addEventListener('hashchange', checkHashAndOpenModal);
+
+function getMockLikeCount(potId) {
+  if (!potId) return 42;
+  var hash = 0;
+  for (var i = 0; i < potId.length; i++) {
+    hash = potId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return 20 + Math.abs(hash % 131);
+}
+
+function toggleMockLike() {
+  var likeBtn = document.getElementById('modal-like-btn');
+  var likeCountEl = document.getElementById('modal-like-count');
+  if (!likeBtn || !likeCountEl) return;
+  
+  var count = parseInt(likeCountEl.textContent, 10) || 0;
+  if (likeBtn.classList.contains('liked')) {
+    likeBtn.classList.remove('liked');
+    likeBtn.style.background = '';
+    likeCountEl.textContent = count - 1;
+  } else {
+    likeBtn.classList.add('liked');
+    likeBtn.style.background = 'rgba(193,84,10,0.35)';
+    likeCountEl.textContent = count + 1;
+  }
+}
+
+function copyModalLink() {
+  var potId = window._activePotId;
+  if (!potId) return;
+  
+  var shareUrl = window.location.origin + window.location.pathname + '#inquire-' + potId;
+  navigator.clipboard.writeText(shareUrl).then(function() {
+    var shareBtn = document.getElementById('modal-share-btn');
+    if (shareBtn) {
+      var originalHtml = shareBtn.innerHTML;
+      shareBtn.innerHTML = '✓ Copied!';
+      shareBtn.style.borderColor = 'var(--teal-lt)';
+      shareBtn.style.color = 'var(--teal-lt)';
+      setTimeout(function() {
+        shareBtn.innerHTML = originalHtml;
+        shareBtn.style.borderColor = '';
+        shareBtn.style.color = '';
+      }, 1500);
+    }
+  }).catch(function(err) {
+    console.error('Failed to copy share link: ', err);
+  });
+}
 
 function goPurchaseStep(n) {
   [1,2,3,4].forEach(i => {
