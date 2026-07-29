@@ -957,6 +957,11 @@
           <span>Shop</span>
           <span class="badge" id="badge-shop" style="display:none;">0</span>
         </div>
+        <div class="nav-item" data-panel="faq" id="nav-faq">
+          <span class="icon">❓</span>
+          <span>FAQs</span>
+          <span class="badge" id="badge-faq" style="display:none;">0</span>
+        </div>
         <div class="nav-item" data-panel="purchases" id="nav-purchases">
           <span class="icon">💳</span>
           <span>Purchases</span>
@@ -1124,6 +1129,46 @@
           </div>
         </div>
         <div class="bookings-list" id="purchases-list"></div>
+      </div>
+
+      <!-- FAQs Panel -->
+      <div class="panel" id="panel-faq">
+        <div class="shop-layout">
+          <!-- Left: Add/Edit FAQ Form -->
+          <div class="shop-form-col">
+            <div class="section-hdr" style="margin-bottom:16px">
+              <h2 id="faq-form-title">Add New FAQ</h2>
+              <button class="btn-sm btn-ghost" id="faq-cancel-btn" style="display:none" onclick="clearFaqForm()">✕ Cancel</button>
+            </div>
+            
+            <div class="pot-form-fields">
+              <input type="hidden" id="faq-id" />
+              <div class="field-group">
+                <label>Question</label>
+                <input type="text" id="faq-question" class="field-input" placeholder="e.g. Do you ship pottery?" />
+              </div>
+              <div class="field-group">
+                <label>Answer</label>
+                <textarea id="faq-answer" class="field-textarea" style="height: 120px;" placeholder="Details about shipping rates, packing, etc..."></textarea>
+              </div>
+              <div class="field-group">
+                <label>Sort Order (Lower numbers show first)</label>
+                <input type="number" id="faq-sort" class="field-input" placeholder="e.g. 10" min="0" step="1" />
+              </div>
+              <button class="btn btn--primary" style="width:100%;margin-top:10px;" id="faq-save-btn" onclick="saveFaq()">Save FAQ →</button>
+            </div>
+          </div>
+
+          <!-- Right: FAQ List -->
+          <div class="shop-list-col">
+            <div class="section-hdr" style="margin-bottom:16px">
+              <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="bookings-list" id="faq-list-admin">
+              <p style="color:var(--smoke);text-align:center;padding:24px 0;">Loading FAQs...</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Members Panel -->
@@ -1400,6 +1445,7 @@
         updateStats();
         if (currentPanel === 'members') renderMembers();
       });
+      startFaqListener();
     }
 
     // ── Toast ──
@@ -1435,6 +1481,11 @@
           document.getElementById('page-sub').textContent = 'Manage pieces for sale';
           document.getElementById('clear-btn').style.display = 'none';
           renderPots();
+        } else if (panel === 'faq') {
+          document.getElementById('page-title').textContent = 'FAQs';
+          document.getElementById('page-sub').textContent = 'Manage homepage frequently asked questions';
+          document.getElementById('clear-btn').style.display = 'none';
+          renderFaqs();
         } else if (panel === 'purchases') {
           document.getElementById('page-title').textContent = 'Purchases';
           document.getElementById('page-sub').textContent = 'Customer purchase inquiries';
@@ -2447,6 +2498,162 @@
       toast('Zoom session cancelled.');
     };
 
+    // ── FAQs: Management & Firestore Sync ──
+    let _editingFaqId = null;
+    let _faqs = [];
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Real-time listener for FAQs to keep the UI in sync
+    function startFaqListener() {
+      if (typeof db !== 'undefined') {
+        db.collection('faq').orderBy('sortOrder', 'asc').onSnapshot(snap => {
+          _faqs = snap.docs.map(doc => {
+            const data = doc.data();
+            data.id = doc.id;
+            return data;
+          });
+          if (currentPanel === 'faq') {
+            renderFaqs();
+          }
+          
+          // Update FAQ badge count in sidebar
+          const badge = document.getElementById('badge-faq');
+          if (badge) {
+            badge.textContent = _faqs.length;
+            badge.style.display = _faqs.length > 0 ? '' : 'none';
+          }
+        }, err => {
+          console.error('FAQ snapshot error:', err);
+        });
+      }
+    }
+
+    function renderFaqs() {
+      const container = document.getElementById('faq-list-admin');
+      if (!container) return;
+
+      if (_faqs.length === 0) {
+        container.innerHTML = '<p style="color:var(--smoke);text-align:center;padding:24px 0;">No FAQs found. Create one using the form on the left.</p>';
+        return;
+      }
+
+      container.innerHTML = _faqs.map(faq => {
+        const id = faq.id;
+        const q = faq.question || '';
+        const a = faq.answer || '';
+        const sort = faq.sortOrder || 0;
+
+        return `
+          <div class="booking-card" id="faq-card-${id}">
+            <div class="booking-card__top">
+              <div>
+                <div class="booking-card__id">FAQ Item</div>
+                <div class="booking-card__name">${escapeHtml(q)}</div>
+              </div>
+              <div class="booking-card__datetime">
+                <span class="booking-card__date">Order: ${sort}</span>
+              </div>
+            </div>
+            <div class="booking-card__notes" style="margin-top: 10px; margin-bottom: 14px; white-space: pre-wrap;">
+              ${escapeHtml(a)}
+            </div>
+            <div class="booking-card__actions">
+              <button class="action-btn" onclick="window.editFaq('${id}')">✏️ Edit</button>
+              <button class="action-btn delete-btn" onclick="window.deleteFaq('${id}')">🗑️ Delete</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.editFaq = function(id) {
+      const faq = _faqs.find(f => f.id === id);
+      if (!faq) return;
+
+      _editingFaqId = id;
+      document.getElementById('faq-id').value = id;
+      document.getElementById('faq-question').value = faq.question || '';
+      document.getElementById('faq-answer').value = faq.answer || '';
+      document.getElementById('faq-sort').value = faq.sortOrder || 0;
+
+      document.getElementById('faq-form-title').textContent = 'Edit FAQ';
+      document.getElementById('faq-cancel-btn').style.display = '';
+      document.getElementById('panel-faq').scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.clearFaqForm = function() {
+      _editingFaqId = null;
+      document.getElementById('faq-id').value = '';
+      document.getElementById('faq-question').value = '';
+      document.getElementById('faq-answer').value = '';
+      document.getElementById('faq-sort').value = '';
+
+      document.getElementById('faq-form-title').textContent = 'Add New FAQ';
+      document.getElementById('faq-cancel-btn').style.display = 'none';
+    };
+
+    window.saveFaq = async function() {
+      const q = document.getElementById('faq-question').value.trim();
+      const a = document.getElementById('faq-answer').value.trim();
+      const sortVal = document.getElementById('faq-sort').value;
+      const sort = sortVal !== '' ? parseInt(sortVal, 10) : 0;
+
+      if (!q || !a) {
+        toast('Please enter a question and answer.');
+        return;
+      }
+
+      const saveBtn = document.getElementById('faq-save-btn');
+      saveBtn.disabled = true;
+
+      const data = {
+        question: q,
+        answer: a,
+        sortOrder: sort,
+        timestamp: new Date().toISOString()
+      };
+
+      try {
+        if (_editingFaqId) {
+          await db.collection('faq').doc(_editingFaqId).update(data);
+          toast('FAQ updated successfully!');
+        } else {
+          await db.collection('faq').add(data);
+          toast('FAQ added successfully!');
+        }
+        window.clearFaqForm();
+      } catch (err) {
+        console.error('Error saving FAQ:', err);
+        toast('Failed to save FAQ: ' + err.message);
+      } finally {
+        saveBtn.disabled = false;
+      }
+    };
+
+    window.deleteFaq = async function(id) {
+      if (!confirm('Are you sure you want to delete this FAQ?')) return;
+
+      try {
+        await db.collection('faq').doc(id).delete();
+        toast('FAQ deleted successfully!');
+        if (_editingFaqId === id) {
+          window.clearFaqForm();
+        }
+      } catch (err) {
+        console.error('Error deleting FAQ:', err);
+        toast('Failed to delete FAQ: ' + err.message);
+      }
+    };
+
     // ── Init ──
     function init() {
       if (USE_FIREBASE) {
@@ -2454,6 +2661,11 @@
       } else {
         updateStats();
         renderBookings();
+        _faqs = [
+          { id: 'faq-1', question: 'Who is the artist behind Spirit Tree Ceramics?', answer: 'Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas.', sortOrder: 10 },
+          { id: 'faq-2', question: 'Where can I buy John Ruiz pottery?', answer: 'You can browse and purchase John Ruiz\'s handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/.', sortOrder: 20 }
+        ];
+        renderFaqs();
       }
       // Populate mock tables
       renderMembers();

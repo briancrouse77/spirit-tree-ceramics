@@ -1326,9 +1326,47 @@ window.closeLightbox = function() {
   }
 };
 
+function initFaqListener() {
+  const faqList = document.getElementById('faq-list');
+  if (!faqList) return;
+  if (typeof db === 'undefined') {
+    faqList.innerHTML = '<p style="text-align:center;color:var(--smoke);padding:24px 0;">Database offline.</p>';
+    return;
+  }
+
+  db.collection('faq')
+    .orderBy('sortOrder', 'asc')
+    .onSnapshot(function(snap) {
+      if (snap.empty) {
+        faqList.innerHTML = '<p style="text-align:center;color:var(--smoke);padding:24px 0;">No FAQs found.</p>';
+        return;
+      }
+
+      faqList.innerHTML = snap.docs.map(function(d) {
+        var faq = d.data();
+        var q = faq.question || '';
+        var a = faq.answer || '';
+        
+        return '<div class="faq__item" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--radius); padding: 20px 24px; cursor: pointer; transition: border-color var(--transition);" onclick="toggleFaq(this)">'
+          + '<div class="faq__question" style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-head); font-size: 1.25rem; color: var(--pearl); font-weight: 600;">'
+          + '<span>' + q + '</span>'
+          + '<span class="faq__icon" style="font-size: 1rem; color: var(--am-lt); transition: transform var(--transition);">▼</span>'
+          + '</div>'
+          + '<div class="faq__answer" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin-top 0.3s ease; color: var(--smoke); font-size: 0.95rem; line-height: 1.6;">'
+          + '<p style="padding-top: 12px;">' + a + '</p>'
+          + '</div>'
+          + '</div>';
+      }).join('');
+    }, function(err) {
+      console.error('Error fetching FAQs:', err);
+      faqList.innerHTML = '<p style="text-align:center;color:var(--smoke);padding:24px 0;">Failed to load FAQs.</p>';
+    });
+}
+
 // Hook up the Zoom coaching call scheduler inside dashboard
 document.addEventListener('DOMContentLoaded', () => {
   renderVideos();
+  initFaqListener();
   
   document.getElementById('dash-schedule-btn')?.addEventListener('click', () => {
     // Open existing scheduling modal
