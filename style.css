@@ -211,13 +211,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   top: 0; left: 0; right: 0;
   z-index: 1000;
   transition: background var(--transition), box-shadow var(--transition), padding var(--transition);
-  padding: 22px 0;
-}
-.nav.scrolled {
-  background: rgba(6,1,15,0.88);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 1px 0 rgba(193,84,10,0.2), 0 4px 24px rgba(0,0,0,0.5);
   padding: 14px 0;
+  background: rgba(6,1,15,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(193,84,10,0.18), 0 4px 24px rgba(0,0,0,0.45);
 }
 .nav__inner {
   max-width: 1160px;
