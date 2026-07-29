@@ -751,9 +751,7 @@ var _shopPotsMap = {};
         var key = p.id || p._docId;
         return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
           + (p.imageUrl
-              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" /><div class="shop-card__img-vignette"></div>'
-                + (p.likes ? '<span class="shop-card__likes-badge">❤️ ' + p.likes + '</span>' : '')
-                + '</div>'
+              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
               : '<div class="shop-card__img-ph">🏺</div>')
           + '<div class="shop-card__body">'
           + '<div><div class="shop-card__title">' + p.title + '</div>'
