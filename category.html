@@ -136,6 +136,134 @@
     </div>
   </footer>
 
+  <!-- ── PURCHASE MODAL ── -->
+  <div class="modal-overlay" id="purchase-overlay" role="dialog" aria-modal="true">
+    <div class="modal" id="purchase-modal" style="max-width:840px;width:95%;padding:32px">
+      <button class="modal__close" id="purchase-close" aria-label="Close" onclick="closePurchaseModal()">×</button>
+
+      <!-- Step 1: Piece Review -->
+      <div class="purchase-step" id="pstep-1">
+        <div class="showcase-grid">
+          <!-- Left Column: Media -->
+          <div class="showcase-media" onclick="openLightbox()">
+            <img id="purchase-pot-img" src="" alt="Selected Ceramic Piece" class="showcase-img" />
+            <span style="position:absolute;bottom:12px;right:12px;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);color:var(--pearl);font-size:0.68rem;padding:4px 8px;border-radius:4px;pointer-events:none;font-weight:600;letter-spacing:0.04em;">🔍 Tap to Expand</span>
+          </div>
+          <!-- Right Column: Details -->
+          <div class="showcase-details">
+            <span class="showcase-badge">Dallas Studio Collection</span>
+            <h2 id="purchase-pot-title" class="showcase-title"></h2>
+            <div id="purchase-pot-price" class="showcase-price"></div>
+            
+            <p id="purchase-pot-desc" class="showcase-desc"></p>
+            
+            <!-- Specs Grid (SEO & details) -->
+            <div id="purchase-pot-specs" class="showcase-specs" style="display:none; grid-template-columns: repeat(2, 1fr); gap: 12px 20px; margin: 18px 0; border-top: 1px dashed rgba(255,255,255,0.06); padding-top: 16px;">
+              <div class="spec-item" id="spec-item-clay">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Clay Body</span>
+                <span class="spec-value" id="spec-clay" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+              <div class="spec-item" id="spec-item-glaze">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Glaze</span>
+                <span class="spec-value" id="spec-glaze" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+              <div class="spec-item" id="spec-item-dimensions">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Dimensions</span>
+                <span class="spec-value" id="spec-dimensions" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+              <div class="spec-item" id="spec-item-care">
+                <span class="spec-label" style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; display: block; margin-bottom: 2px; letter-spacing: 0.05em;">Care & Safety</span>
+                <span class="spec-value" id="spec-care" style="font-size: 0.88rem; color: var(--pearl); font-weight: 500;"></span>
+              </div>
+            </div>
+            <p id="purchase-pot-inspiration" class="showcase-inspiration" style="display:none; font-style: italic; font-size: 0.84rem; color: var(--smoke); margin: 18px 0; line-height: 1.5; border-left: 2px solid var(--gold); padding-left: 10px; font-family: var(--font-head);"></p>
+            <div class="showcase-gallery" style="border-top:1px solid rgba(255,255,255,0.08);padding-top:18px;margin-bottom:24px;">
+              <h4 style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px;">Angle Gallery</h4>
+              <div class="gallery-thumbs" id="showcase-thumbs" style="display:flex;gap:10px;flex-wrap:wrap;">
+                <!-- Thumbnails populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Related Pieces Section -->
+            <div id="purchase-related-section" style="display:none; border-top:1px solid rgba(255,255,255,0.08); padding-top:18px; margin-bottom:24px;">
+              <h4 style="font-size:0.78rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--smoke);margin-bottom:12px;">Similar Pieces</h4>
+              <div id="purchase-related-list" style="display:flex; gap:12px; flex-wrap:wrap;">
+                <!-- Dynamically populated related items -->
+              </div>
+            </div>
+
+            <div class="showcase-actions">
+              <div class="showcase-feedback" style="display:flex;gap:12px;margin-bottom:16px;">
+                <button class="btn btn--accent" id="modal-like-btn" style="flex:1;justify-content:center;border-color:rgba(193,84,10,0.3);" onclick="toggleLike()">
+                  <span style="color:var(--am-lt);">❤️</span> <span id="modal-like-count">0</span>
+                </button>
+                <button class="btn btn--ghost" id="modal-share-btn" style="flex:1;justify-content:center;border-color:rgba(255,255,255,0.15);" onclick="copyModalLink()">
+                  <span>🔗</span> Share
+                </button>
+              </div>
+              <button class="btn btn--primary" style="width:100%" onclick="goPurchaseStep(2)">Inquire About This Piece →</button>
+              <p style="font-size:0.75rem;color:var(--smoke);text-align:center;margin-top:12px">No payment is processed now. John will email you to arrange pickup or shipping.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Your Info -->
+      <div class="purchase-step" id="pstep-2" style="display:none">
+        <h3 style="font-family:var(--font-head);font-size:1.5rem;margin-bottom:6px;color:var(--pearl)">Your Info</h3>
+        <p style="font-size:0.82rem;color:var(--smoke);margin-bottom:22px">Step 2 of 3</p>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <input type="text" id="pur-name" class="form__input" placeholder="Full name" />
+          <input type="email" id="pur-email" class="form__input" placeholder="Email address" />
+          <input type="tel" id="pur-phone" class="form__input" placeholder="Phone number" />
+        </div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn--ghost" style="flex:1" onclick="goPurchaseStep(1)">← Back</button>
+          <button class="btn btn--primary" style="flex:2" onclick="goPurchaseStep(3)">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Delivery -->
+      <div class="purchase-step" id="pstep-3" style="display:none">
+        <h3 style="font-family:var(--font-head);font-size:1.5rem;margin-bottom:6px;color:var(--pearl)">Delivery Preference</h3>
+        <p style="font-size:0.82rem;color:var(--smoke);margin-bottom:22px">Step 3 of 3</p>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+          <label class="purchase-delivery-opt">
+            <input type="radio" name="pur-delivery" value="pickup" checked /> Pickup at a wheel session (DFW area)
+          </label>
+          <label class="purchase-delivery-opt">
+            <input type="radio" name="pur-delivery" value="local" /> Local delivery (DFW area)
+          </label>
+          <label class="purchase-delivery-opt">
+            <input type="radio" name="pur-delivery" value="ship" /> Ship to me
+          </label>
+        </div>
+        <div id="pur-address-wrap" style="display:none">
+          <input type="text" id="pur-address" class="form__input" placeholder="Shipping address" style="margin-bottom:10px" />
+        </div>
+        <textarea id="pur-notes" class="form__input" placeholder="Any notes for John… (optional)" style="min-height:72px;resize:vertical"></textarea>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button class="btn btn--ghost" style="flex:1" onclick="goPurchaseStep(2)">← Back</button>
+          <button class="btn btn--primary" style="flex:2" id="pur-submit-btn" onclick="submitPurchase()">Send Inquiry →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Success -->
+      <div class="purchase-step" id="pstep-4" style="display:none;text-align:center;padding:24px 0">
+        <div style="font-size:3rem;margin-bottom:16px">🏺</div>
+        <h3 style="font-family:var(--font-head);font-size:1.8rem;color:var(--pearl);margin-bottom:10px">Inquiry Sent!</h3>
+        <p style="color:var(--smoke);font-size:0.9rem;line-height:1.7">John will be in touch within 24 hours to confirm your piece and arrange payment. Thank you!</p>
+        <button class="btn btn--ghost" style="margin-top:24px" onclick="closePurchaseModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FULL-SCREEN LIGHTBOX OVERLAY ── -->
+  <div id="lightbox-overlay" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()">&times;</button>
+    <img id="lightbox-img" src="" alt="Enlarged Ceramic View" class="lightbox-img" onclick="event.stopPropagation()" />
+  </div>
+
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -237,10 +365,17 @@
       });
 
       // 2. Fetch Pots
+      var _allPots = [];
+      var _potsMap = {};
       db.collection('pots')
         .orderBy('timestamp', 'desc')
         .onSnapshot(snap => {
           const potsList = snap.docs.map(d => ({ ...d.data(), _docId: d.id }));
+          _allPots = potsList;
+          _potsMap = {};
+          potsList.forEach(p => {
+            _potsMap[p.id || p._docId] = p;
+          });
           
           // Filter by category type
           const filtered = potsList.filter(p => {
@@ -297,7 +432,7 @@
             <p style="color:var(--smoke); font-size:0.88rem; line-height:1.5; margin-bottom:16px; flex:1;">${escapeHtml(pot.description || '')}</p>
             <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:12px; border-top:1px solid rgba(255,255,255,0.04);">
               <span style="font-family:var(--font-head); font-size:1.6rem; color:var(--gold); font-weight:600;">$${price}</span>
-              <a href="index.html#inquire-${id}" class="btn btn--accent" style="padding:8px 18px; font-size:0.8rem; border-radius:6px; text-decoration:none; display:inline-block;">View Detail →</a>
+              <button onclick="openPurchaseModal('${id}')" class="btn btn--accent" style="padding:8px 18px; font-size:0.8rem; border-radius:6px; border:none; display:inline-block;">View Detail →</button>
             </div>
           </div>
         `;
@@ -358,6 +493,307 @@
         footerCats.style.display = 'none';
       }
     }
+
+    var _purchasePot = null;
+
+    window.openPurchaseModal = function(potId) {
+      const pot = _potsMap[potId];
+      if (!pot) return;
+      _purchasePot = pot;
+
+      // Update page title & description for SEO
+      document.title = `${pot.title || 'Handcrafted Pottery'} | Spirit Tree Ceramics`;
+
+      // Populate step 1
+      const img = document.getElementById('purchase-pot-img');
+      const mainImage = (pot.images && pot.images[0]) || pot.imageUrl || 'images/hero.png';
+      img.src = mainImage;
+      document.getElementById('purchase-pot-title').textContent = pot.title || '';
+      document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
+      document.getElementById('purchase-pot-desc').textContent = pot.description || '';
+
+      // Likes state
+      const likes = parseInt(pot.likes, 10) || 0;
+      const likeCountEl = document.getElementById('modal-like-count');
+      if (likeCountEl) {
+        likeCountEl.textContent = likes;
+        const likeBtn = document.getElementById('modal-like-btn');
+        if (likeBtn) {
+          let likedList = [];
+          try {
+            const likedListStr = localStorage.getItem('JQPOTS_LIKED_IDS');
+            if (likedListStr) likedList = JSON.parse(likedListStr);
+          } catch(e) {}
+          if (likedList.includes(potId)) {
+            likeBtn.classList.add('liked');
+            likeBtn.style.background = 'rgba(193,84,10,0.35)';
+          } else {
+            likeBtn.classList.remove('liked');
+            likeBtn.style.background = '';
+          }
+        }
+      }
+
+      // Specs
+      const clayEl = document.getElementById('spec-clay');
+      const glazeEl = document.getElementById('spec-glaze');
+      const dimEl = document.getElementById('spec-dimensions');
+      const careEl = document.getElementById('spec-care');
+      const specsGrid = document.getElementById('purchase-pot-specs');
+      
+      let hasSpecs = false;
+      if (pot.clay) { clayEl.textContent = pot.clay; document.getElementById('spec-item-clay').style.display = 'block'; hasSpecs = true; } 
+      else { document.getElementById('spec-item-clay').style.display = 'none'; }
+      
+      if (pot.glaze) { glazeEl.textContent = pot.glaze; document.getElementById('spec-item-glaze').style.display = 'block'; hasSpecs = true; } 
+      else { document.getElementById('spec-item-glaze').style.display = 'none'; }
+      
+      if (pot.dimensions) { dimEl.textContent = pot.dimensions; document.getElementById('spec-item-dimensions').style.display = 'block'; hasSpecs = true; } 
+      else { document.getElementById('spec-item-dimensions').style.display = 'none'; }
+      
+      if (pot.care) { careEl.textContent = pot.care; document.getElementById('spec-item-care').style.display = 'block'; hasSpecs = true; } 
+      else { document.getElementById('spec-item-care').style.display = 'none'; }
+
+      specsGrid.style.display = hasSpecs ? 'grid' : 'none';
+
+      // Inspiration
+      const inspEl = document.getElementById('purchase-pot-inspiration');
+      if (pot.inspiration) {
+        inspEl.textContent = `“${pot.inspiration}”`;
+        inspEl.style.display = 'block';
+      } else {
+        inspEl.style.display = 'none';
+      }
+
+      // Angle Gallery thumbs
+      const gallery = [];
+      const images = pot.images || [];
+      if (mainImage) gallery.push(mainImage);
+      images.forEach(url => { if (gallery.length < 6 && !gallery.includes(url)) gallery.push(url); });
+
+      const thumbsGrid = document.getElementById('showcase-thumbs');
+      if (thumbsGrid) {
+        if (gallery.length > 1) {
+          thumbsGrid.parentElement.style.display = 'block';
+          thumbsGrid.innerHTML = gallery.map((url, idx) => {
+            const activeClass = idx === 0 ? 'active' : '';
+            return `<div class="gallery-thumb ${activeClass}" onclick="selectGalleryImage(this, '${url}')">
+              <img src="${url}" alt="Angle ${idx + 1}" />
+            </div>`;
+          }).join('');
+        } else {
+          thumbsGrid.innerHTML = '';
+          thumbsGrid.parentElement.style.display = 'none';
+        }
+      }
+
+      // Similar Pieces (Related)
+      const relatedSection = document.getElementById('purchase-related-section');
+      const relatedList = document.getElementById('purchase-related-list');
+      if (relatedSection && relatedList) {
+        const related = _allPots.filter(p => {
+          const pId = p.id || p._docId;
+          const targetId = pot.id || pot._docId;
+          return pId !== targetId && p.status === 'available' && p.type === pot.type;
+        }).slice(0, 3);
+
+        if (related.length > 0) {
+          relatedSection.style.display = 'block';
+          relatedList.innerHTML = related.map(rp => {
+            const rpId = rp.id || rp._docId;
+            const rpImg = (rp.images && rp.images[0]) || rp.imageUrl || 'images/hero.png';
+            return `
+              <div style="flex:1; min-width:80px; max-width:110px; cursor:pointer;" onclick="openPurchaseModal('${rpId}')">
+                <div style="aspect-ratio:1/1; border-radius:6px; overflow:hidden; border:1px solid rgba(255,255,255,0.08); margin-bottom:6px;">
+                  <img src="${rpImg}" style="width:100%; height:100%; object-fit:cover;" />
+                </div>
+                <div style="font-size:0.75rem; font-weight:600; color:var(--pearl); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(rp.title)}</div>
+                <div style="font-size:0.7rem; color:var(--smoke);">$${Number(rp.price || 0).toFixed(0)}</div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          relatedSection.style.display = 'none';
+        }
+      }
+
+      // Reset steps and form fields
+      goPurchaseStep(1);
+      ['pur-name','pur-email','pur-phone','pur-address','pur-notes'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      document.querySelector('input[name="pur-delivery"][value="pickup"]').checked = true;
+      document.getElementById('pur-address-wrap').style.display = 'none';
+
+      document.getElementById('purchase-overlay').classList.add('open');
+      document.body.classList.add('modal-open');
+    };
+
+    window.closePurchaseModal = function() {
+      document.getElementById('purchase-overlay').classList.remove('open');
+      document.body.classList.remove('modal-open');
+    };
+
+    window.goPurchaseStep = function(stepNum) {
+      document.querySelectorAll('.purchase-step').forEach(step => step.style.display = 'none');
+      document.getElementById('pstep-' + stepNum).style.display = 'block';
+    };
+
+    window.selectGalleryImage = function(thumb, url) {
+      document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      document.getElementById('purchase-pot-img').src = url;
+    };
+
+    window.openLightbox = function() {
+      const src = document.getElementById('purchase-pot-img').src;
+      if (!src) return;
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-overlay').classList.add('open');
+      document.body.classList.add('modal-open');
+    };
+
+    window.closeLightbox = function() {
+      document.getElementById('lightbox-overlay').classList.remove('open');
+      if (!document.getElementById('purchase-overlay').classList.contains('open')) {
+        document.body.classList.remove('modal-open');
+      }
+    };
+
+    window.toggleLike = async function() {
+      if (!_purchasePot) return;
+      const potId = _purchasePot.id || _purchasePot._docId;
+      const likeBtn = document.getElementById('modal-like-btn');
+      const likeCountEl = document.getElementById('modal-like-count');
+      if (!likeBtn || !likeCountEl) return;
+
+      let likedList = [];
+      try {
+        const likedListStr = localStorage.getItem('JQPOTS_LIKED_IDS');
+        if (likedListStr) likedList = JSON.parse(likedListStr);
+      } catch(e) {}
+
+      let currentLikes = parseInt(_purchasePot.likes, 10) || 0;
+      const isLiked = likedList.includes(potId);
+      let newLikes = isLiked ? Math.max(0, currentLikes - 1) : currentLikes + 1;
+
+      likeCountEl.textContent = newLikes;
+      if (isLiked) {
+        likeBtn.classList.remove('liked');
+        likeBtn.style.background = '';
+        likedList = likedList.filter(id => id !== potId);
+      } else {
+        likeBtn.classList.add('liked');
+        likeBtn.style.background = 'rgba(193,84,10,0.35)';
+        likedList.push(potId);
+      }
+      localStorage.setItem('JQPOTS_LIKED_IDS', JSON.stringify(likedList));
+
+      try {
+        const increment = isLiked ? -1 : 1;
+        await db.collection('pots').doc(potId).update({
+          likes: firebase.firestore.FieldValue.increment(increment)
+        });
+      } catch (err) {
+        console.error('Like error:', err);
+      }
+    };
+
+    window.copyModalLink = function() {
+      if (!_purchasePot) return;
+      const potId = _purchasePot.id || _purchasePot._docId;
+      const shareUrl = window.location.origin + '/#inquire-' + potId;
+      
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        const shareBtn = document.getElementById('modal-share-btn');
+        const oldHtml = shareBtn.innerHTML;
+        shareBtn.innerHTML = '<span>✓</span> Copied!';
+        setTimeout(() => { shareBtn.innerHTML = oldHtml; }, 2000);
+      }).catch(err => {
+        console.error('Clipboard copy failed:', err);
+      });
+    };
+
+    window.submitPurchase = async function() {
+      if (!_purchasePot) return;
+      const name = document.getElementById('pur-name').value.trim();
+      const email = document.getElementById('pur-email').value.trim();
+      const phone = document.getElementById('pur-phone').value.trim();
+      const notes = document.getElementById('pur-notes').value.trim();
+      const delivery = document.querySelector('input[name="pur-delivery"]:checked').value;
+      const address = document.getElementById('pur-address').value.trim();
+
+      if (!name || !email || !phone) {
+        alert('Please fill out your Name, Email, and Phone number.');
+        return;
+      }
+
+      if (delivery === 'ship' && !address) {
+        alert('Please enter your shipping address.');
+        return;
+      }
+
+      const submitBtn = document.getElementById('pur-submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
+
+      const bookingData = {
+        potId: _purchasePot.id || _purchasePot._docId,
+        potTitle: _purchasePot.title || '',
+        price: _purchasePot.price || 0,
+        imageUrl: _purchasePot.imageUrl || '',
+        name,
+        email,
+        phone,
+        notes,
+        delivery,
+        address: delivery === 'ship' ? address : '',
+        timestamp: new Date().toISOString(),
+        status: 'pending'
+      };
+
+      try {
+        await db.collection('bookings').add(bookingData);
+        try {
+          await db.collection('pots').doc(bookingData.potId).update({
+            status: 'sold'
+          });
+        } catch (e) {
+          console.error('Failed to mark pot as sold:', e);
+        }
+        goPurchaseStep(4);
+      } catch (err) {
+        console.error('Booking submit error:', err);
+        alert('Failed to send inquiry: ' + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send Inquiry →';
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('input[name="pur-delivery"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          const addressWrap = document.getElementById('pur-address-wrap');
+          if (addressWrap) {
+            addressWrap.style.display = e.target.value === 'ship' ? 'block' : 'none';
+          }
+        });
+      });
+
+      ['purchase-overlay', 'lightbox-overlay'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('click', e => {
+            if (e.target === el) {
+              if (id === 'purchase-overlay') window.closePurchaseModal();
+              if (id === 'lightbox-overlay') window.closeLightbox();
+            }
+          });
+        }
+      });
+    });
   </script>
 </body>
 </html>
