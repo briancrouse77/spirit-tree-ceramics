@@ -3,6 +3,10 @@
     {
       "source": "/pot/:id",
       "destination": "/api/share?id=:id"
+    },
+    {
+      "source": "/:type(mug|vase|bowl|plate|platter|other)",
+      "destination": "/category.html?type=:type"
     }
   ]
 }

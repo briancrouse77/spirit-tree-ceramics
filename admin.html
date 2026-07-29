@@ -943,6 +943,10 @@
           <span>FAQs</span>
           <span class="badge" id="badge-faq" style="display:none;">0</span>
         </div>
+        <div class="nav-item" data-panel="seo" id="nav-seo">
+          <span class="icon">🚀</span>
+          <span>SEO Hero</span>
+        </div>
         <div class="nav-item" data-panel="purchases" id="nav-purchases">
           <span class="icon">💳</span>
           <span>Purchases</span>
@@ -1186,6 +1190,63 @@
             </div>
           </form>
         </div>
+      </div>
+
+      <!-- SEO Hero Panel -->
+      <div class="panel" id="panel-seo">
+        <div class="section-hdr" style="margin-bottom: 24px;">
+          <div>
+            <h2>SEO Hero Settings</h2>
+            <p style="font-size: 0.85rem; color: var(--smoke); margin-top: 4px;">Customize the title, description, and hero banner for each category page.</p>
+          </div>
+        </div>
+
+        <div class="form-card" style="max-width: 800px; margin: 0 auto; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 28px;">
+          <form id="seo-hero-form" onsubmit="event.preventDefault(); saveSeoHero();">
+            
+            <div class="field-group" style="margin-bottom: 24px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Select Category Type</label>
+              <select id="seo-category-select" class="field-select" style="width: 100%;" onchange="loadSeoHeroCategory(this.value)">
+                <option value="mug">Mug</option>
+                <option value="vase">Vase</option>
+                <option value="bowl">Bowl</option>
+                <option value="plate">Plate</option>
+                <option value="platter">Platter</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Hero Title / Heading</label>
+              <input type="text" id="seo-form-title" class="field-input" placeholder="e.g. Dallas Handthrown Ceramic Mugs by John Ruiz" required style="width:100%; box-sizing:border-box;" />
+            </div>
+
+            <div class="field-group" style="margin-bottom: 24px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Hero Description / Paragraph</label>
+              <textarea id="seo-form-desc" class="field-textarea" style="height: 120px; width: 100%; box-sizing: border-box;" placeholder="Enter a rich, keyword-optimized description..." required></textarea>
+            </div>
+
+            <div class="field-group" style="margin-bottom: 28px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Category Hero Banner Image</label>
+              <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                <div style="width: 220px; height: 100px; border-radius: 8px; overflow: hidden; background: rgba(0,0,0,0.25); border: 2px solid rgba(193,84,10,0.2); display: flex; align-items: center; justify-content: center;">
+                  <img id="seo-form-banner-preview" src="images/hero.png" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <div>
+                  <button type="button" class="btn-sm btn-ghost" onclick="document.getElementById('seo-bio-banner-input').click()" style="padding: 8px 16px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: none; color: var(--pearl); display: block; margin-bottom: 8px;">Upload Banner</button>
+                  <p style="font-size: 0.72rem; color: var(--smoke); margin: 0;">Recommended aspect ratio: 16:9. Fades as hero background.</p>
+                </div>
+                <input type="file" id="seo-bio-banner-input" accept="image/*" style="display:none;" />
+                <input type="hidden" id="seo-form-banner-url" />
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+              <button type="submit" class="btn-sm btn-primary" id="btn-save-seo-hero" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">Save Category Hero →</button>
+            </div>
+          </form>
+        </div>
+      </div>
 
 
 
@@ -1247,6 +1308,7 @@
     let _potGalleryImages = [null, null, null, null, null, null];
     let _shopFilter = 'all';
     let _aboutBioData = null;
+    let _seoHerosData = null;
 
     const loginScreen = document.getElementById('login-screen');
     const app         = document.getElementById('app');
@@ -1395,6 +1457,51 @@
           db.collection('faq').doc('about_john').set(defaults).catch(err => console.error("Bio migration error:", err));
         }
       });
+
+      db.collection('faq').doc('seo_heros').onSnapshot(doc => {
+        if (doc.exists) {
+          _seoHerosData = doc.data();
+          const sel = document.getElementById('seo-category-select');
+          if (sel) loadSeoHeroCategory(sel.value);
+        } else {
+          const defaults = {
+            mug: {
+              title: "Dallas Handthrown Ceramic Mugs",
+              desc: "Each stoneware mug is handthrown on the wheel by John Ruiz in Dallas, TX. Built for tactile warmth, comforting weight, and everyday durability.",
+              bannerUrl: "images/hero.png"
+            },
+            vase: {
+              title: "Fine Art Stoneware & Porcelain Vases",
+              desc: "Stunning handthrown ceramic vases and bottles. Features unique organic glazes, textured raw clay surfaces, and elegant silhouettes.",
+              bannerUrl: "images/hero.png"
+            },
+            bowl: {
+              title: "Handmade Functional Clay Bowls",
+              desc: "Curated collection of functional stoneware bowls. Individually glazed and high-fired for functional durability on your dining table.",
+              bannerUrl: "images/hero.png"
+            },
+            plate: {
+              title: "Dallas Artisanal Ceramic Plates",
+              desc: "Handcrafted clay plates designed for daily service and rustic table presentation. Glazed with high-fire food-safe finishes.",
+              bannerUrl: "images/hero.png"
+            },
+            platter: {
+              title: "Artisanal Ceramic Serving Platters",
+              desc: "Large hand-built and wheel-thrown clay platters and trays. Grounded, functional stoneware designed for family gatherings.",
+              bannerUrl: "images/hero.png"
+            },
+            other: {
+              title: "Spirit Tree Ceramics Studio Pieces",
+              desc: "Explore unique, experimental, and one-of-a-kind art pieces created at the wheel by Dallas artist John Ruiz.",
+              bannerUrl: "images/hero.png"
+            }
+          };
+          _seoHerosData = defaults;
+          const sel = document.getElementById('seo-category-select');
+          if (sel) loadSeoHeroCategory(sel.value);
+          db.collection('faq').doc('seo_heros').set(defaults).catch(err => console.error("SEO migration error:", err));
+        }
+      });
       startFaqListener();
     }
 
@@ -1436,6 +1543,11 @@
           document.getElementById('page-title').textContent = 'Biography';
           document.getElementById('page-sub').textContent = 'Manage homepage profile details';
           populateAboutForm();
+        } else if (panel === 'seo') {
+          document.getElementById('page-title').textContent = 'SEO Hero';
+          document.getElementById('page-sub').textContent = 'Manage category landing page titles and banner photos';
+          const sel = document.getElementById('seo-category-select');
+          if (sel) loadSeoHeroCategory(sel.value);
         } else {
           document.getElementById('page-title').textContent = 'Messages';
           document.getElementById('page-sub').textContent = 'Customer inquiries';
@@ -2379,6 +2491,47 @@
       }
     };
 
+    window.loadSeoHeroCategory = function(type) {
+      if (!_seoHerosData) return;
+      const catData = _seoHerosData[type] || {
+        title: "",
+        desc: "",
+        bannerUrl: "images/hero.png"
+      };
+
+      document.getElementById('seo-form-title').value = catData.title || '';
+      document.getElementById('seo-form-desc').value = catData.desc || '';
+      
+      const bannerUrl = catData.bannerUrl || 'images/hero.png';
+      document.getElementById('seo-form-banner-url').value = bannerUrl;
+      document.getElementById('seo-form-banner-preview').src = bannerUrl;
+    };
+
+    window.saveSeoHero = async function() {
+      const type = document.getElementById('seo-category-select').value;
+      const title = document.getElementById('seo-form-title').value.trim();
+      const desc = document.getElementById('seo-form-desc').value.trim();
+      const bannerUrl = document.getElementById('seo-form-banner-url').value.trim();
+
+      if (!_seoHerosData) _seoHerosData = {};
+      _seoHerosData[type] = { title, desc, bannerUrl };
+
+      const btn = document.getElementById('btn-save-seo-hero');
+      btn.disabled = true;
+      btn.textContent = 'Saving...';
+
+      try {
+        await db.collection('faq').doc('seo_heros').set(_seoHerosData);
+        toast(`SEO Hero settings for ${type} updated successfully!`);
+      } catch(err) {
+        console.error('Error saving SEO Hero data:', err);
+        toast('Error saving: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Save Category Hero →';
+      }
+    };
+
     // ── Init ──
     function init() {
       if (USE_FIREBASE) {
@@ -2434,6 +2587,22 @@
           document.getElementById('about-form-banner-url').value = base64;
           document.getElementById('about-form-banner-preview').src = base64;
           toast('Banner loaded. Click "Save Biography" to apply changes.');
+        } catch(err) {
+          console.error('Image compression failed:', err);
+          toast('Failed to process banner: ' + err);
+        }
+        e.target.value = '';
+      });
+
+      document.getElementById('seo-bio-banner-input').addEventListener('change', async e => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+          const base64 = await compressImage(file);
+          document.getElementById('seo-form-banner-url').value = base64;
+          document.getElementById('seo-form-banner-preview').src = base64;
+          toast('Banner loaded. Click "Save Category Hero" to apply changes.');
         } catch(err) {
           console.error('Image compression failed:', err);
           toast('Failed to process banner: ' + err);

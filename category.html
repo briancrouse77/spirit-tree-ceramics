@@ -149,79 +149,84 @@
       a.addEventListener('click', () => mobileMenu.classList.remove('open'));
     });
 
-    // Read Type from URL parameters (e.g. ?type=mug)
+    // Determine category type from URL path or parameters
     const urlParams = new URLSearchParams(window.location.search);
-    const categoryType = (urlParams.get('type') || 'mug').trim().toLowerCase();
+    let categoryType = (urlParams.get('type') || '').trim().toLowerCase();
 
-    // Map types to display titles & descriptions
-    const typeMeta = {
+    if (!categoryType) {
+      // Check window.location.pathname (e.g. /mug or /bowl)
+      const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
+      if (['mug', 'vase', 'bowl', 'plate', 'platter', 'other'].includes(path)) {
+        categoryType = path;
+      }
+    }
+    if (!categoryType) categoryType = 'mug'; // default fallback
+
+    // Static fallback defaults
+    const typeMetaDefaults = {
       mug: {
         title: "Dallas Handthrown Ceramic Mugs",
         eyebrow: "Artisanal Coffee Mugs & Tumblers",
-        desc: "Each stoneware mug is handthrown on the wheel by John Ruiz in Dallas, TX. Built for tactile warmth, comforting weight, and everyday durability."
-      },
-      bowl: {
-        title: "Handmade Functional Clay Bowls",
-        eyebrow: "Artisanal Serving & Prep Bowls",
-        desc: "Curated collection of functional stoneware bowls. Individually glazed and high-fired for functional durability on your dining table."
+        desc: "Each stoneware mug is handthrown on the wheel by John Ruiz in Dallas, TX. Built for tactile warmth, comforting weight, and everyday durability.",
+        bannerUrl: "images/hero.png"
       },
       vase: {
         title: "Fine Art Stoneware & Porcelain Vases",
         eyebrow: "Decorative Stoneware Vases",
-        desc: "Stunning handthrown ceramic vases and bottles. Features unique organic glazes, textured raw clay surfaces, and elegant silhouettes."
+        desc: "Stunning handthrown ceramic vases and bottles. Features unique organic glazes, textured raw clay surfaces, and elegant silhouettes.",
+        bannerUrl: "images/hero.png"
+      },
+      bowl: {
+        title: "Handmade Functional Clay Bowls",
+        eyebrow: "Artisanal Serving & Prep Bowls",
+        desc: "Curated collection of functional stoneware bowls. Individually glazed and high-fired for functional durability on your dining table.",
+        bannerUrl: "images/hero.png"
+      },
+      plate: {
+        title: "Dallas Handcrafted Ceramic Plates",
+        eyebrow: "Handthrown Stoneware Plates",
+        desc: "Handcrafted clay plates designed for daily service and rustic table presentation. Glazed with high-fire food-safe finishes.",
+        bannerUrl: "images/hero.png"
       },
       platter: {
         title: "Artisanal Ceramic Serving Platters",
         eyebrow: "Stoneware Serving Dishes",
-        desc: "Large hand-built and wheel-thrown clay platters and trays. Grounded, functional stoneware designed for family gatherings."
-      },
-      planter: {
-        title: "Grounded Stoneware Planters",
-        eyebrow: "Dallas Handthrown Plant Pots",
-        desc: "Clay planters and plant pots designed with organic textures and natural earth tones, creating the perfect home for your greenery."
-      },
-      jar: {
-        title: "Handmade Ceramic Jars & Lidded Canisters",
-        eyebrow: "Stoneware Canisters",
-        desc: "Lidded ceramic canisters and storage jars hand-crafted for functional storage and decorative appeal."
-      },
-      teapot: {
-        title: "Dallas Artisanal Ceramic Teapots",
-        eyebrow: "Handmade Stoneware Teaware",
-        desc: "Intricately designed teapots and matching teacups, thrown and assembled by hand to elevate your slow tea rituals."
-      },
-      cup: {
-        title: "Clay Drinking Cups & Tumblers",
-        eyebrow: "Handthrown Ceramic Tumblers",
-        desc: "Handle-free clay cups, tumblers, and espresso cups. Glazed in natural tones with exposed raw clay bases."
-      },
-      tumbler: {
-        title: "Dallas Handthrown Ceramic Tumblers",
-        eyebrow: "Handmade Stoneware Tumblers",
-        desc: "Tactile clay tumblers and cups, individually crafted for comforting hold and daily function."
+        desc: "Large hand-built and wheel-thrown clay platters and trays. Grounded, functional stoneware designed for family gatherings.",
+        bannerUrl: "images/hero.png"
       },
       other: {
         title: "Spirit Tree Ceramics Studio Pieces",
         eyebrow: "Artisanal Clay Work",
-        desc: "Explore unique, experimental, and one-of-a-kind art pieces created at the wheel by Dallas artist John Ruiz."
+        desc: "Explore unique, experimental, and one-of-a-kind art pieces created at the wheel by Dallas artist John Ruiz.",
+        bannerUrl: "images/hero.png"
       }
     };
 
-    // Apply meta text on load
-    const meta = typeMeta[categoryType] || typeMeta['other'];
-    document.getElementById('cat-title').textContent = meta.title;
-    document.getElementById('cat-eyebrow').textContent = meta.eyebrow;
-    document.getElementById('cat-desc').textContent = meta.desc;
-    document.title = `${meta.title} | Spirit Tree Ceramics`;
+    // Apply initial static defaults before database loads
+    const initialMeta = typeMetaDefaults[categoryType] || typeMetaDefaults['other'];
+    document.getElementById('cat-title').textContent = initialMeta.title;
+    document.getElementById('cat-eyebrow').textContent = initialMeta.eyebrow;
+    document.getElementById('cat-desc').textContent = initialMeta.desc;
+    document.title = `${initialMeta.title} | Spirit Tree Ceramics`;
 
     // Fetch dynamic banner and pots
     if (typeof db !== 'undefined') {
-      // 1. Fetch Banner Image
-      db.collection('faq').doc('about_john').onSnapshot(doc => {
+      // 1. Fetch Dynamic Banner, Title & Description from seo_heros
+      db.collection('faq').doc('seo_heros').onSnapshot(doc => {
         if (doc.exists) {
           const data = doc.data();
-          if (data.categoryBannerUrl) {
-            document.getElementById('cat-hero-bg').style.backgroundImage = `url('${data.categoryBannerUrl}')`;
+          const catData = data[categoryType];
+          if (catData) {
+            if (catData.title) {
+              document.getElementById('cat-title').textContent = catData.title;
+              document.title = `${catData.title} | Spirit Tree Ceramics`;
+            }
+            if (catData.desc) {
+              document.getElementById('cat-desc').textContent = catData.desc;
+            }
+            if (catData.bannerUrl) {
+              document.getElementById('cat-hero-bg').style.backgroundImage = `url('${catData.bannerUrl}')`;
+            }
           }
         }
       });
@@ -276,7 +281,7 @@
           : '<span style="position:absolute;top:12px;left:12px;background:rgba(74,122,74,0.9);color:var(--pearl);padding:4px 10px;font-size:0.7rem;font-weight:700;border-radius:4px;letter-spacing:0.08em;text-transform:uppercase;">Available</span>';
 
         card.innerHTML = `
-          <div class="shop-card__img-wrap" style="position:relative; aspect-ratio:1/1; overflow:hidden; background:rgba(0,0,0,0.2);">
+          <div class="shop-card__img-wrap" style="position:relative; aspect-ratio:1/1; overflow:hidden; background:rgba(0,0,0,0.25);">
             ${statusBadge}
             <img src="${mainImage}" alt="${escapeHtml(pot.title)}" style="width:100%; height:100%; object-fit:cover; transition:transform 0.3s ease;" class="grid-card-img" />
           </div>
