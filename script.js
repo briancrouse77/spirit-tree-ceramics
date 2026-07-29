@@ -872,7 +872,13 @@ function checkHashAndOpenModal() {
   if (hash && hash.indexOf('#inquire-') === 0) {
     var potId = hash.substring(9);
     if (_shopPotsMap && _shopPotsMap[potId]) {
-      openPurchaseModal(potId, true);
+      var shopSection = document.getElementById('shop');
+      if (shopSection) {
+        shopSection.scrollIntoView({ behavior: 'smooth' });
+      }
+      setTimeout(function() {
+        openPurchaseModal(potId, true);
+      }, 300);
     }
   } else {
     var overlay = document.getElementById('purchase-overlay');
