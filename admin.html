@@ -1147,8 +1147,15 @@
             </div>
 
             <div class="field-group" style="margin-bottom: 28px;">
-              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Profile Image URL</label>
-              <input type="text" id="about-form-img-url" class="field-input" placeholder="e.g. images/about.png" required style="width:100%; box-sizing:border-box;" />
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Profile Image</label>
+              <div style="display: flex; gap: 16px; align-items: center;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.25); border: 2px solid rgba(193,84,10,0.2); display: flex; align-items: center; justify-content: center;">
+                  <img id="about-form-img-preview" src="images/about.png" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <button type="button" class="btn-sm btn-ghost" onclick="document.getElementById('about-bio-image-input').click()" style="padding: 8px 16px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: none; color: var(--pearl);">Upload Photo</button>
+                <input type="file" id="about-bio-image-input" accept="image/*" style="display:none;" />
+                <input type="hidden" id="about-form-img-url" />
+              </div>
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 12px;">
@@ -2218,7 +2225,9 @@
       document.getElementById('about-form-title').value = _aboutBioData.title || '';
       document.getElementById('about-form-eyebrow').value = _aboutBioData.eyebrow || '';
       document.getElementById('about-form-years').value = _aboutBioData.years || '';
-      document.getElementById('about-form-img-url').value = _aboutBioData.imgUrl || '';
+      const imgUrl = _aboutBioData.imgUrl || 'images/about.png';
+      document.getElementById('about-form-img-url').value = imgUrl;
+      document.getElementById('about-form-img-preview').src = imgUrl;
 
       const editor = document.getElementById('about-paragraphs-editor');
       if (editor) {
@@ -2305,6 +2314,22 @@
         };
       }
       renderUploadSlots();
+
+      document.getElementById('about-bio-image-input').addEventListener('change', async e => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        try {
+          const base64 = await compressImage(file);
+          document.getElementById('about-form-img-url').value = base64;
+          document.getElementById('about-form-img-preview').src = base64;
+          toast('Photo loaded. Click "Save Biography" to apply changes.');
+        } catch(err) {
+          console.error('Image compression failed:', err);
+          toast('Failed to process image: ' + err);
+        }
+        e.target.value = '';
+      });
     }
   </script>
 </body>
