@@ -929,12 +929,11 @@
         <span class="sidebar__badge">Admin</span>
       </div>
       <nav class="sidebar__nav">
-        <div class="nav-item" data-panel="messages" id="nav-messages">
-          <span class="icon">💬</span>
-          <span>Messages</span>
-          <span class="badge" id="badge-messages" style="display:none;">0</span>
+        <div class="nav-item active" data-panel="about" id="nav-about">
+          <span class="icon">👤</span>
+          <span>About Bio</span>
         </div>
-        <div class="nav-item active" data-panel="shop" id="nav-shop">
+        <div class="nav-item" data-panel="shop" id="nav-shop">
           <span class="icon">🏺</span>
           <span>Shop</span>
           <span class="badge" id="badge-shop" style="display:none;">0</span>
@@ -949,9 +948,10 @@
           <span>Purchases</span>
           <span class="badge" id="badge-purchases" style="display:none;">0</span>
         </div>
-        <div class="nav-item" data-panel="about" id="nav-about">
-          <span class="icon">👤</span>
-          <span>About Bio</span>
+        <div class="nav-item" data-panel="messages" id="nav-messages">
+          <span class="icon">💬</span>
+          <span>Messages</span>
+          <span class="badge" id="badge-messages" style="display:none;">0</span>
         </div>
         <a href="index.html" class="nav-item" target="_blank">
           <span class="icon">🌐</span>
@@ -970,8 +970,8 @@
     <main class="main">
       <div class="topbar">
         <div>
-          <div class="topbar__title" id="page-title">Shop</div>
-          <div class="topbar__sub" id="page-sub">Manage pieces for sale</div>
+          <div class="topbar__title" id="page-title">Biography</div>
+          <div class="topbar__sub" id="page-sub">Manage homepage profile details</div>
         </div>
         <div class="topbar__actions">
           <button class="btn-sm btn-ghost" id="refresh-btn">↻ Refresh</button>
@@ -1010,7 +1010,7 @@
       </div>
 
       <!-- Shop Panel -->
-      <div class="panel active" id="panel-shop">
+      <div class="panel" id="panel-shop">
         <div class="shop-layout">
 
           <!-- Left: Add/Edit Form -->
@@ -1113,7 +1113,7 @@
       </div>
 
       <!-- About Bio Panel -->
-      <div class="panel" id="panel-about">
+      <div class="panel active" id="panel-about">
         <div class="section-hdr" style="margin-bottom: 24px;">
           <div>
             <h2>About Biography</h2>
@@ -1381,7 +1381,7 @@
     }
 
     // ── Navigation ──
-    let currentPanel = 'shop';
+    let currentPanel = 'about';
     let messageFilter = 'all';
 
     document.querySelectorAll('.nav-item[data-panel]').forEach(item => {
@@ -2314,6 +2314,7 @@
           years: "4+",
           imgUrl: "images/about.png"
         };
+        populateAboutForm();
       }
       renderUploadSlots();
 
