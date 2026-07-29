@@ -1178,6 +1178,18 @@
         </div>
         <div class="form-card" style="max-width: 800px; margin: 0 auto; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 28px;">
           <form id="about-bio-form" onsubmit="event.preventDefault(); saveAboutBio();">
+            <div class="field-group" style="margin-bottom: 28px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Profile Image</label>
+              <div style="display: flex; gap: 16px; align-items: center;">
+                <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.25); border: 2px solid rgba(193,84,10,0.2); display: flex; align-items: center; justify-content: center;">
+                  <img id="about-form-img-preview" src="images/about.png" style="width: 100%; height: 100%; object-fit: cover;" />
+                </div>
+                <button type="button" class="btn-sm btn-ghost" onclick="document.getElementById('about-bio-image-input').click()" style="padding: 8px 16px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: none; color: var(--pearl);">Upload Photo</button>
+                <input type="file" id="about-bio-image-input" accept="image/*" style="display:none;" />
+                <input type="hidden" id="about-form-img-url" />
+              </div>
+            </div>
+
             <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
               <div class="field-group" style="flex: 1; min-width: 250px;">
                 <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Heading Title</label>
@@ -1208,18 +1220,6 @@
                 <!-- Dynamically generated features go here -->
               </div>
               <button type="button" class="btn-sm btn-ghost" onclick="window.addAboutFeatureField('', '', '')" style="margin-top: 12px; padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; cursor: pointer; border: 1px dashed rgba(255,255,255,0.25); background: none; color: var(--pearl); display: block; width: fit-content;">➕ Add Bullet</button>
-            </div>
-
-            <div class="field-group" style="margin-bottom: 28px;">
-              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Profile Image</label>
-              <div style="display: flex; gap: 16px; align-items: center;">
-                <div style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; background: rgba(0,0,0,0.25); border: 2px solid rgba(193,84,10,0.2); display: flex; align-items: center; justify-content: center;">
-                  <img id="about-form-img-preview" src="images/about.png" style="width: 100%; height: 100%; object-fit: cover;" />
-                </div>
-                <button type="button" class="btn-sm btn-ghost" onclick="document.getElementById('about-bio-image-input').click()" style="padding: 8px 16px; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.15); background: none; color: var(--pearl);">Upload Photo</button>
-                <input type="file" id="about-bio-image-input" accept="image/*" style="display:none;" />
-                <input type="hidden" id="about-form-img-url" />
-              </div>
             </div>
 
 
