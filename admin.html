@@ -1825,7 +1825,7 @@
     }
 
     window.copyShareLink = function(potId) {
-      const link = 'https://www.spirittreeceramics.com/#inquire-' + potId;
+      const link = 'https://www.spirittreeceramics.com/pot/' + potId;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(link)
           .then(() => toast('Share link copied!'))

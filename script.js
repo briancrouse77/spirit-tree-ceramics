@@ -967,7 +967,7 @@ function copyModalLink() {
   var potId = window._activePotId;
   if (!potId) return;
   
-  var shareUrl = window.location.origin + window.location.pathname + '#inquire-' + potId;
+  var shareUrl = window.location.origin + '/pot/' + potId;
   navigator.clipboard.writeText(shareUrl).then(function() {
     var shareBtn = document.getElementById('modal-share-btn');
     if (shareBtn) {
