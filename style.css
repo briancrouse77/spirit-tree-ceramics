@@ -1244,6 +1244,22 @@ body.modal-open { overflow: hidden; }
   pointer-events: none;
   background: radial-gradient(circle, transparent 50%, rgba(15,10,7,0.5) 100%);
 }
+.shop-card__likes-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(15, 10, 7, 0.65);
+  backdrop-filter: blur(4px);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--pearl);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  z-index: 3;
+}
 .shop-card__img {
   width: 100%;
   height: 100%;

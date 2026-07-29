@@ -751,7 +751,9 @@ var _shopPotsMap = {};
         var key = p.id || p._docId;
         return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
           + (p.imageUrl
-              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
+              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + '" loading="lazy" /><div class="shop-card__img-vignette"></div>'
+                + (p.likes ? '<span class="shop-card__likes-badge">❤️ ' + p.likes + '</span>' : '')
+                + '</div>'
               : '<div class="shop-card__img-ph">🏺</div>')
           + '<div class="shop-card__body">'
           + '<div><div class="shop-card__title">' + p.title + '</div>'
@@ -781,15 +783,25 @@ function openPurchaseModal(potId, preventHashUpdate) {
   document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
   document.getElementById('purchase-pot-desc').textContent  = pot.description || '';
 
-  // Populate mock like count
-  var count = getMockLikeCount(potId);
+  // Populate actual like count and active liked state from LocalStorage
+  var likes = parseInt(pot.likes, 10) || 0;
   var likeCountEl = document.getElementById('modal-like-count');
   if (likeCountEl) {
-    likeCountEl.textContent = count;
+    likeCountEl.textContent = likes;
     var likeBtn = document.getElementById('modal-like-btn');
     if (likeBtn) {
-      likeBtn.classList.remove('liked');
-      likeBtn.style.background = '';
+      var likedListStr = localStorage.getItem('JQPOTS_LIKED_IDS');
+      var likedList = [];
+      try {
+        if (likedListStr) likedList = JSON.parse(likedListStr);
+      } catch (e) {}
+      if (likedList.includes(potId)) {
+        likeBtn.classList.add('liked');
+        likeBtn.style.background = 'rgba(193,84,10,0.35)';
+      } else {
+        likeBtn.classList.remove('liked');
+        likeBtn.style.background = '';
+      }
     }
   }
   window._activePotId = potId;
@@ -903,30 +915,54 @@ function checkHashAndOpenModal() {
 
 window.addEventListener('hashchange', checkHashAndOpenModal);
 
-function getMockLikeCount(potId) {
-  if (!potId) return 42;
-  var hash = 0;
-  for (var i = 0; i < potId.length; i++) {
-    hash = potId.charCodeAt(i) + ((hash << 5) - hash);
-  }
-  return 20 + Math.abs(hash % 131);
-}
+function toggleLike() {
+  var potId = window._activePotId;
+  if (!potId) return;
 
-function toggleMockLike() {
   var likeBtn = document.getElementById('modal-like-btn');
   var likeCountEl = document.getElementById('modal-like-count');
   if (!likeBtn || !likeCountEl) return;
-  
-  var count = parseInt(likeCountEl.textContent, 10) || 0;
-  if (likeBtn.classList.contains('liked')) {
-    likeBtn.classList.remove('liked');
-    likeBtn.style.background = '';
-    likeCountEl.textContent = count - 1;
-  } else {
-    likeBtn.classList.add('liked');
-    likeBtn.style.background = 'rgba(193,84,10,0.35)';
-    likeCountEl.textContent = count + 1;
-  }
+
+  var likedListStr = localStorage.getItem('JQPOTS_LIKED_IDS');
+  var likedList = [];
+  try {
+    if (likedListStr) likedList = JSON.parse(likedListStr);
+  } catch (e) {}
+
+  var isLiked = likedList.includes(potId);
+  var pot = _shopPotsMap[potId];
+  if (!pot) return;
+
+  var currentLikes = parseInt(pot.likes, 10) || 0;
+  var newLikes = isLiked ? currentLikes - 1 : currentLikes + 1;
+  if (newLikes < 0) newLikes = 0;
+
+  likeBtn.style.pointerEvents = 'none';
+
+  var docId = pot._docId || potId;
+
+  db.collection('pots').doc(docId).update({
+    likes: firebase.firestore.FieldValue.increment(isLiked ? -1 : 1)
+  }).then(function() {
+    likeBtn.style.pointerEvents = '';
+
+    if (isLiked) {
+      likedList = likedList.filter(id => id !== potId);
+      likeBtn.classList.remove('liked');
+      likeBtn.style.background = '';
+    } else {
+      likedList.push(potId);
+      likeBtn.classList.add('liked');
+      likeBtn.style.background = 'rgba(193,84,10,0.35)';
+    }
+    localStorage.setItem('JQPOTS_LIKED_IDS', JSON.stringify(likedList));
+
+    pot.likes = newLikes;
+    likeCountEl.textContent = newLikes;
+  }).catch(function(err) {
+    likeBtn.style.pointerEvents = '';
+    console.error('Error updating likes: ', err);
+  });
 }
 
 function copyModalLink() {
