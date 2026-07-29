@@ -1590,6 +1590,7 @@
 
     document.querySelectorAll('.nav-item[data-panel]').forEach(item => {
       item.addEventListener('click', () => {
+        window.scrollTo(0, 0);
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         item.classList.add('active');
         const panel = item.dataset.panel;
