@@ -90,7 +90,45 @@
         "@id": "https://www.spirittreeceramics.com/#website",
         "url": "https://www.spirittreeceramics.com/",
         "name": "Spirit Tree Ceramics",
-        "description": "Handmade pottery for sale and mobile pottery wheel experiences in Dallas–Fort Worth, TX"
+        "description": "Handmade fine art pottery for sale in Dallas–Fort Worth, TX by artist John Ruiz"
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://www.spirittreeceramics.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Who is the artist behind Spirit Tree Ceramics?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas. With over four years of experience at the pottery wheel, John crafts one-of-a-kind functional art and fine stoneware in his Dallas studio."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where can I buy John Ruiz pottery?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can browse and purchase John Ruiz's handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/. Each piece is unique and available for local DFW pickup, local delivery, or shipping nationwide."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are Spirit Tree Ceramics functional and food-safe?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, all Spirit Tree Ceramics functional ware—including mugs, bowls, and platters—are high-fired to stoneware durability, ensuring they are 100% food-safe, dishwasher-safe, and microwave-safe."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does John Ruiz offer custom pottery commissions in Dallas?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes, John Ruiz accepts custom pottery inquiries and fine art commissions. You can contact him directly through the inquiry form on his website to discuss custom stoneware collections or specific design needs."
+            }
+          }
+        ]
       }
     ]
   }
@@ -318,6 +356,59 @@
         <h3>Own a Piece of the Craft</h3>
         <p>Browse our current collection of handmade stoneware. Subscribe to get early access to future shop drops.</p>
         <a href="#shop" class="btn btn--primary btn--lg" style="text-decoration:none;display:inline-block;text-align:center;">Browse Gallery →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ── -->
+  <section class="faq section section--void" id="faq" style="border-top:1px solid rgba(193,84,10,0.06);padding-bottom:100px;">
+    <div class="container" style="max-width: 800px;">
+      <div class="section__header" style="margin-bottom: 48px; text-align: center;">
+        <p class="section__eyebrow">Common Inquiries</p>
+        <h2 class="section__title">Frequently Asked Questions</h2>
+        <p class="section__sub">Direct answers about the craft, orders, and custom stoneware commissions.</p>
+      </div>
+      
+      <div class="faq__list" style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="faq__item" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--radius); padding: 20px 24px; cursor: pointer; transition: border-color var(--transition);" onclick="toggleFaq(this)">
+          <div class="faq__question" style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-head); font-size: 1.25rem; color: var(--pearl); font-weight: 600;">
+            <span>Who is the artist behind Spirit Tree Ceramics?</span>
+            <span class="faq__icon" style="font-size: 1rem; color: var(--am-lt); transition: transform var(--transition);">▼</span>
+          </div>
+          <div class="faq__answer" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin-top 0.3s ease; color: var(--smoke); font-size: 0.95rem; line-height: 1.6;">
+            <p style="padding-top: 12px;">Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas. With over four years of experience at the pottery wheel, John crafts one-of-a-kind functional art and fine stoneware in his Dallas studio.</p>
+          </div>
+        </div>
+
+        <div class="faq__item" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--radius); padding: 20px 24px; cursor: pointer; transition: border-color var(--transition);" onclick="toggleFaq(this)">
+          <div class="faq__question" style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-head); font-size: 1.25rem; color: var(--pearl); font-weight: 600;">
+            <span>Where can I buy John Ruiz pottery?</span>
+            <span class="faq__icon" style="font-size: 1rem; color: var(--am-lt); transition: transform var(--transition);">▼</span>
+          </div>
+          <div class="faq__answer" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin-top 0.3s ease; color: var(--smoke); font-size: 0.95rem; line-height: 1.6;">
+            <p style="padding-top: 12px;">You can browse and purchase John Ruiz's handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/. Each piece is unique and available for local DFW pickup, local delivery, or shipping nationwide.</p>
+          </div>
+        </div>
+
+        <div class="faq__item" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--radius); padding: 20px 24px; cursor: pointer; transition: border-color var(--transition);" onclick="toggleFaq(this)">
+          <div class="faq__question" style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-head); font-size: 1.25rem; color: var(--pearl); font-weight: 600;">
+            <span>Are the ceramic pieces food and microwave safe?</span>
+            <span class="faq__icon" style="font-size: 1rem; color: var(--am-lt); transition: transform var(--transition);">▼</span>
+          </div>
+          <div class="faq__answer" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin-top 0.3s ease; color: var(--smoke); font-size: 0.95rem; line-height: 1.6;">
+            <p style="padding-top: 12px;">Yes, all functional pottery pieces—such as mugs, bowls, cups, and platters—are high-fired to stoneware durability. They are food-safe, microwave-safe, and dishwasher-safe.</p>
+          </div>
+        </div>
+
+        <div class="faq__item" style="background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--radius); padding: 20px 24px; cursor: pointer; transition: border-color var(--transition);" onclick="toggleFaq(this)">
+          <div class="faq__question" style="display: flex; justify-content: space-between; align-items: center; font-family: var(--font-head); font-size: 1.25rem; color: var(--pearl); font-weight: 600;">
+            <span>Does John Ruiz accept custom pottery commissions?</span>
+            <span class="faq__icon" style="font-size: 1rem; color: var(--am-lt); transition: transform var(--transition);">▼</span>
+          </div>
+          <div class="faq__answer" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin-top 0.3s ease; color: var(--smoke); font-size: 0.95rem; line-height: 1.6;">
+            <p style="padding-top: 12px;">Yes! John Ruiz collaborates with restaurants, interior designers, and individual collectors on custom stoneware orders, dinnerware collections, and fine art installations. Inquire directly via the contact form below with details of your vision.</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>

@@ -1352,3 +1352,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
+window.toggleFaq = function(el) {
+  var answer = el.querySelector('.faq__answer');
+  var icon = el.querySelector('.faq__icon');
+  var isOpen = el.classList.contains('open');
+  
+  // Close all other FAQs for clean accordion behavior
+  document.querySelectorAll('.faq__item').forEach(function(item) {
+    item.classList.remove('open');
+    item.style.borderColor = 'rgba(193,84,10,0.12)';
+    item.querySelector('.faq__answer').style.maxHeight = '0';
+    item.querySelector('.faq__icon').style.transform = '';
+  });
+  
+  if (!isOpen) {
+    el.classList.add('open');
+    el.style.borderColor = 'var(--am-lt)';
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+    icon.style.transform = 'rotate(180deg)';
+  }
+};
