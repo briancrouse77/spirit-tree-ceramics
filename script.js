@@ -1047,34 +1047,19 @@ function openPurchaseModal(potId, preventHashUpdate) {
       .slice(0, 3);
 
     if (related.length > 0) {
-      related.forEach(function(rp) {
+      relatedList.innerHTML = related.map(function(rp) {
         const rpId = rp.id || rp._docId;
         const rpImg = rp.imageUrl || 'images/hero.png';
-        const item = document.createElement('div');
-        item.style.display = 'flex';
-        item.style.alignItems = 'center';
-        item.style.gap = '10px';
-        item.style.background = 'rgba(255,255,255,0.03)';
-        item.style.padding = '8px 12px';
-        item.style.borderRadius = '6px';
-        item.style.border = '1px solid rgba(255,255,255,0.06)';
-        item.style.cursor = 'pointer';
-        item.style.transition = 'background 0.2s';
-        
-        item.innerHTML = `
-          <img src="${rpImg}" alt="${rp.title}" style="width:36px; height:36px; object-fit:cover; border-radius:4px;" />
-          <div>
-            <div style="font-size:0.8rem; font-weight:600; color:var(--pearl);">${rp.title}</div>
-            <div style="font-size:0.7rem; color:var(--smoke);">$${Number(rp.price || 0).toFixed(0)}</div>
+        return `
+          <div style="flex:1; min-width:80px; max-width:110px; cursor:pointer; transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1.0)'" onclick="openPurchaseModal('${rpId}')">
+            <div style="aspect-ratio:1/1; border-radius:8px; overflow:hidden; border:2px solid rgba(193,84,10,0.15); margin-bottom:8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);">
+              <img src="${rpImg}" style="width:100%; height:100%; object-fit:cover;" />
+            </div>
+            <div style="font-size:0.78rem; font-weight:600; color:var(--pearl); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(rp.title)}</div>
+            <div style="font-size:0.75rem; color:var(--gold); font-weight:600; margin-top:2px;">$${Number(rp.price || 0).toFixed(0)}</div>
           </div>
         `;
-        item.addEventListener('mouseenter', function() { item.style.background = 'rgba(255,255,255,0.08)'; });
-        item.addEventListener('mouseleave', function() { item.style.background = 'rgba(255,255,255,0.03)'; });
-        item.addEventListener('click', function() {
-          openPurchaseModal(rpId);
-        });
-        relatedList.appendChild(item);
-      });
+      }).join('');
       relatedSection.style.display = 'block';
     } else {
       relatedSection.style.display = 'none';
