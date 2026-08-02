@@ -1179,7 +1179,8 @@ function copyModalLink() {
   if (!potId) return;
   
   var shareUrl = window.location.origin + '/pot/' + potId;
-  navigator.clipboard.writeText(shareUrl).then(function() {
+  
+  function performCopy() {
     var shareBtn = document.getElementById('modal-share-btn');
     if (shareBtn) {
       var originalHtml = shareBtn.innerHTML;
@@ -1192,9 +1193,38 @@ function copyModalLink() {
         shareBtn.style.color = '';
       }, 1500);
     }
-  }).catch(function(err) {
-    console.error('Failed to copy share link: ', err);
-  });
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(shareUrl).then(performCopy).catch(function(err) {
+      fallbackCopy(shareUrl);
+    });
+  } else {
+    fallbackCopy(shareUrl);
+  }
+
+  function fallbackCopy(text) {
+    try {
+      var textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      var successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (successful) {
+        performCopy();
+      } else {
+        console.error('Fallback copy failed');
+      }
+    } catch (err) {
+      console.error('Fallback error: ', err);
+    }
+  }
 }
 
 function goPurchaseStep(n) {
