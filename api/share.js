@@ -85,7 +85,10 @@ module.exports = async (req, res) => {
   // Fallback defaults if pot not found or error
   const title = potData ? `Spirit Tree Ceramics - ${potData.title}` : 'Spirit Tree Ceramics';
   const desc = potData ? `${potData.description} - $${potData.price}` : 'Handmade functional art and stoneware fired in Dallas, TX.';
-  const image = potData && potData.imageUrl ? potData.imageUrl : 'https://www.spirittreeceramics.com/images/hero.png';
+  let image = potData && potData.imageUrl ? potData.imageUrl : 'https://www.spirittreeceramics.com/images/hero.png';
+  if (image && !image.startsWith('http')) {
+    image = 'https://www.spirittreeceramics.com/' + (image.startsWith('/') ? image.substring(1) : image);
+  }
 
   // Return HTML with Open Graph tags and JS redirect
   res.setHeader('Content-Type', 'text/html');
