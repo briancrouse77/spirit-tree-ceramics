@@ -86,8 +86,17 @@ module.exports = async (req, res) => {
   const title = potData ? `Spirit Tree Ceramics - ${potData.title}` : 'Spirit Tree Ceramics';
   const desc = potData ? `${potData.description} - $${potData.price}` : 'Handmade functional art and stoneware fired in Dallas, TX.';
   let image = potData && potData.imageUrl ? potData.imageUrl : 'https://www.spirittreeceramics.com/images/hero.png';
-  if (image && !image.startsWith('http')) {
-    image = 'https://www.spirittreeceramics.com/' + (image.startsWith('/') ? image.substring(1) : image);
+  if (image && (image.startsWith('data:') || !image.startsWith('http'))) {
+    const type = (potData && potData.type ? potData.type.toLowerCase().trim() : 'other');
+    const banners = {
+      mug: 'https://www.spirittreeceramics.com/images/shop_mugs_banner.jpg',
+      vase: 'https://www.spirittreeceramics.com/images/shop_vases_banner.jpg',
+      bowl: 'https://www.spirittreeceramics.com/images/shop_bowls_banner.jpg',
+      plate: 'https://www.spirittreeceramics.com/images/shop_plates_banner.jpg',
+      platter: 'https://www.spirittreeceramics.com/images/shop_platters_banner.jpg',
+      other: 'https://www.spirittreeceramics.com/images/hero.png'
+    };
+    image = banners[type] || banners['other'];
   }
 
   // Return HTML with Open Graph tags and JS redirect
