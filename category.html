@@ -719,7 +719,7 @@
     window.copyModalLink = function() {
       if (!_purchasePot) return;
       const potId = _purchasePot.id || _purchasePot._docId;
-      const shareUrl = window.location.origin + '/#inquire-' + potId;
+      const shareUrl = window.location.origin + '/pot/' + potId;
       
       navigator.clipboard.writeText(shareUrl).then(() => {
         const shareBtn = document.getElementById('modal-share-btn');
