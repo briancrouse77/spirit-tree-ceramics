@@ -755,10 +755,10 @@
       submitBtn.textContent = 'Sending...';
 
       const bookingData = {
-        potId: _purchasePot.id || _purchasePot._docId,
-        potTitle: _purchasePot.title || '',
-        price: _purchasePot.price || 0,
-        imageUrl: _purchasePot.imageUrl || '',
+        id:        'PUR-' + Math.random().toString(36).substr(2,6).toUpperCase(),
+        potId:     _purchasePot.id || _purchasePot._docId,
+        potTitle:  _purchasePot.title || '',
+        potPrice:  _purchasePot.price || 0,
         name,
         email,
         phone,
@@ -766,11 +766,11 @@
         delivery,
         address: delivery === 'ship' ? address : '',
         timestamp: new Date().toISOString(),
-        status: 'pending'
+        status:    'new'
       };
 
       try {
-        await db.collection('bookings').add(bookingData);
+        await db.collection('purchases').add(bookingData);
         try {
           await db.collection('pots').doc(bookingData.potId).update({
             status: 'sold'

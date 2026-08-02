@@ -1633,6 +1633,7 @@
         }
       });
 
+      runAutoMigration();
       startFaqListener();
     }
 
@@ -1732,6 +1733,42 @@
       if (msgBadge) {
         msgBadge.textContent = unread.length;
         msgBadge.style.display = unread.length ? '' : 'none';
+      }
+    }
+
+    async function runAutoMigration() {
+      if (typeof db === 'undefined') return;
+      try {
+        const snap = await db.collection('bookings').get();
+        let migratedCount = 0;
+        for (const doc of snap.docs) {
+          const data = doc.data();
+          if (data.potId || data.potTitle) {
+            const purchaseRecord = {
+              id:        data.id || 'PUR-' + Math.random().toString(36).substr(2,6).toUpperCase(),
+              potId:     data.potId || '',
+              potTitle:  data.potTitle || '',
+              potPrice:  data.potPrice || data.price || 0,
+              name:      data.name || '',
+              email:     data.email || '',
+              phone:     data.phone || '',
+              delivery:  data.delivery || 'pickup',
+              address:   data.address || '',
+              notes:     data.notes || '',
+              status:    data.status === 'pending' ? 'new' : (data.status || 'new'),
+              timestamp: data.timestamp || new Date().toISOString()
+            };
+            await db.collection('purchases').add(purchaseRecord);
+            await db.collection('bookings').doc(doc.id).delete();
+            migratedCount++;
+          }
+        }
+        if (migratedCount > 0) {
+          console.log(`Auto-migration complete: migrated ${migratedCount} inquiries.`);
+          toast(`Migrated ${migratedCount} misplaced inquiries.`);
+        }
+      } catch (err) {
+        console.error("Auto-migration error:", err);
       }
     }
 
