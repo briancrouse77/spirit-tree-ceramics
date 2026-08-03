@@ -1179,6 +1179,7 @@ function copyModalLink() {
   if (!potId) return;
   
   var shareUrl = window.location.origin + '/pot/' + potId;
+  var potTitle = (_shopPotsMap && _shopPotsMap[potId]) ? _shopPotsMap[potId].title : 'Spirit Tree Ceramics';
   
   function performCopy() {
     var shareBtn = document.getElementById('modal-share-btn');
@@ -1193,14 +1194,6 @@ function copyModalLink() {
         shareBtn.style.color = '';
       }, 1500);
     }
-  }
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(shareUrl).then(performCopy).catch(function(err) {
-      fallbackCopy(shareUrl);
-    });
-  } else {
-    fallbackCopy(shareUrl);
   }
 
   function fallbackCopy(text) {
@@ -1223,6 +1216,26 @@ function copyModalLink() {
       }
     } catch (err) {
       console.error('Fallback error: ', err);
+    }
+  }
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'Spirit Tree Ceramics - ' + potTitle,
+      text: 'Check out this handthrown piece: ' + potTitle,
+      url: shareUrl
+    }).catch(function(err) {
+      if (err.name !== 'AbortError') {
+        fallbackCopy(shareUrl);
+      }
+    });
+  } else {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(shareUrl).then(performCopy).catch(function(err) {
+        fallbackCopy(shareUrl);
+      });
+    } else {
+      fallbackCopy(shareUrl);
     }
   }
 }
