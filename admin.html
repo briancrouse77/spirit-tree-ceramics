@@ -1736,6 +1736,44 @@
       }
     }
 
+    async function logManualSale(p) {
+      if (typeof db === 'undefined') return;
+      const purchaseRecord = {
+        id:        'PUR-MAN-' + Math.random().toString(36).substr(2,6).toUpperCase(),
+        potId:     p.id || p._docId || '',
+        potTitle:  p.title || '',
+        potPrice:  p.price || 0,
+        name:      'Admin (Manual Sale)',
+        email:     'admin@spirittreeceramics.com',
+        phone:     '',
+        delivery:  'pickup',
+        address:   '',
+        notes:     'Marked as sold manually by admin in shop manager.',
+        status:    'completed',
+        timestamp: new Date().toISOString()
+      };
+      try {
+        await db.collection('purchases').add(purchaseRecord);
+      } catch (err) {
+        console.error('Failed to log manual sale:', err);
+      }
+    }
+
+    async function removeManualSale(p) {
+      if (typeof db === 'undefined') return;
+      try {
+        const snap = await db.collection('purchases')
+          .where('potId', '==', p.id || p._docId)
+          .where('name', '==', 'Admin (Manual Sale)')
+          .get();
+        for (const doc of snap.docs) {
+          await db.collection('purchases').doc(doc.id).delete();
+        }
+      } catch (err) {
+        console.error('Failed to remove manual sale log:', err);
+      }
+    }
+
     async function runAutoMigration() {
       if (typeof db === 'undefined') return;
       try {
@@ -1763,9 +1801,29 @@
             migratedCount++;
           }
         }
-        if (migratedCount > 0) {
-          console.log(`Auto-migration complete: migrated ${migratedCount} inquiries.`);
-          toast(`Migrated ${migratedCount} misplaced inquiries.`);
+
+        // Scan for sold pots that lack a purchase log and create one
+        const potsSnap = await db.collection('pots').where('status', '==', 'sold').get();
+        const purchasesSnap = await db.collection('purchases').get();
+        let manualSalesLogged = 0;
+
+        for (const potDoc of potsSnap.docs) {
+          const pot = potDoc.data();
+          pot._docId = potDoc.id;
+          const potId = pot.id || pot._docId;
+          const hasPurchase = purchasesSnap.docs.some(purDoc => {
+            const pur = purDoc.data();
+            return pur.potId === potId;
+          });
+          if (!hasPurchase) {
+            await logManualSale(pot);
+            manualSalesLogged++;
+          }
+        }
+
+        if (migratedCount > 0 || manualSalesLogged > 0) {
+          console.log(`Auto-migration complete: migrated ${migratedCount} inquiries, created ${manualSalesLogged} manual logs.`);
+          toast(`Updated dashboard with manual sale logs.`);
         }
       } catch (err) {
         console.error("Auto-migration error:", err);
@@ -2136,8 +2194,16 @@
 
       if (_editingPotId) {
         const pot = _pots.find(p => (p.id || p._docId) === _editingPotId);
-        if (pot) await db.collection('pots').doc(pot._docId).update(data);
-        toast('Piece updated.');
+        if (pot) {
+          const oldStatus = pot.status;
+          await db.collection('pots').doc(pot._docId).update(data);
+          toast('Piece updated.');
+          if (oldStatus !== 'sold' && status === 'sold') {
+            await logManualSale(pot);
+          } else if (oldStatus === 'sold' && status === 'available') {
+            await removeManualSale(pot);
+          }
+        }
       } else {
         data.id = 'POT-' + Math.random().toString(36).substr(2,6).toUpperCase();
         // Default new pots to the top of the sorted list
@@ -2148,6 +2214,9 @@
         data.sortOrder = minOrder - 1;
         await db.collection('pots').add(data);
         toast('Piece added!');
+        if (status === 'sold') {
+          await logManualSale({ id: data.id, title: data.title, price: data.price });
+        }
       }
       document.getElementById('pot-save-btn').disabled = false;
       resetPotForm();
@@ -2284,9 +2353,16 @@
 
     function setPotStatus(key, status) {
       const p = _pots.find(x => (x.id || x._docId) === key);
-      if (p) db.collection('pots').doc(p._docId).update({ status }).then(() =>
-        toast(status === 'sold' ? 'Marked as sold.' : 'Re-listed as available.')
-      );
+      if (p) {
+        db.collection('pots').doc(p._docId).update({ status }).then(() => {
+          toast(status === 'sold' ? 'Marked as sold.' : 'Re-listed as available.');
+          if (status === 'sold') {
+            logManualSale(p);
+          } else if (status === 'available') {
+            removeManualSale(p);
+          }
+        });
+      }
     }
 
     window.copyShareLink = function(potId) {
