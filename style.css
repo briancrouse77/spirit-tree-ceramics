@@ -1585,10 +1585,9 @@ body.modal-open { overflow: hidden; }
     font-size: 16px !important;
   }
 
-  /* Details Modal Mobile Above-the-Fold (Sizing max-height: 38vh) */
+  /* Details Modal Mobile Above-the-Fold (Sizing max-height: 48vh) */
   .showcase-media {
-    max-height: 38vh;
-    aspect-ratio: 4/3;
+    max-height: 48vh;
   }
 
   /* Sticky Action Buttons Footer inside Details Modal */
