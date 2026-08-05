@@ -1,0 +1,7 @@
+{
+  "name": "spirit-tree-ceramics",
+  "version": "1.0.0",
+  "dependencies": {
+    "jimp": "^0.16.13"
+  }
+}

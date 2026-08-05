@@ -1,4 +1,5 @@
 const https = require('https');
+const Jimp = require('jimp');
 
 // Helper to make https requests using Node built-in
 function fetchUrl(url, method = 'GET', body = null) {
@@ -103,14 +104,29 @@ module.exports = async (req, res) => {
     try {
       const match = potData.imageUrl.match(/^data:image\/(png|jpeg|jpg);base64,(.+)$/);
       if (match) {
-        const mimeType = `image/${match[1] === 'jpg' ? 'jpeg' : match[1]}`;
         const base64Data = match[2];
         const buffer = Buffer.from(base64Data, 'base64');
         
+        // Use Jimp to pad the image to 1200x630 (1.91:1 ratio) to prevent cropping on Facebook
+        const potImage = await Jimp.read(buffer);
+        
+        // 1200x630 card background (using dark slate brand color #111625)
+        const bg = new Jimp(1200, 630, 0x111625FF);
+        
+        // Scale pot image down to fit comfortably with a small border
+        potImage.scaleToFit(1140, 570);
+        
+        // Composite centered
+        const x = (1200 - potImage.bitmap.width) / 2;
+        const y = (630 - potImage.bitmap.height) / 2;
+        bg.composite(potImage, x, y);
+        
+        const outputBuffer = await bg.getBufferAsync(Jimp.MIME_JPEG);
+        
         // Cache the image on the CDN edge for 1 day
         res.setHeader('Cache-Control', 'public, max-age=86400, s-maxage=86400');
-        res.setHeader('Content-Type', mimeType);
-        return res.status(200).send(buffer);
+        res.setHeader('Content-Type', 'image/jpeg');
+        return res.status(200).send(outputBuffer);
       }
     } catch (e) {
       console.error('Error parsing base64 image:', e);
