@@ -1095,6 +1095,17 @@
                   <textarea id="pot-inspiration" class="field-textarea" style="height: 80px;" placeholder="Describe the creative inspiration behind this piece..."></textarea>
                 </div>
               </div>
+              <div style="margin: 10px 0; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;">
+                <p style="font-size: 0.72rem; color: var(--smoke); text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.04em;">Custom Share Copy (Social Media Previews)</p>
+                <div class="field-group" style="margin-bottom: 8px;">
+                  <label>Custom Share Title (Optional)</label>
+                  <input type="text" id="pot-share-title" class="field-input" placeholder="Catchy title for Facebook link previews" />
+                </div>
+                <div class="field-group" style="margin-bottom: 12px;">
+                  <label>Custom Share Description (Optional)</label>
+                  <textarea id="pot-share-desc" class="field-textarea" style="height: 60px;" placeholder="Catchy description for Facebook link previews..."></textarea>
+                </div>
+              </div>
               <div id="upload-progress" style="display:none">
                 <div class="upload-bar"><div class="upload-fill" id="upload-fill"></div></div>
                 <p class="upload-pct" id="upload-pct">Uploading…</p>
@@ -2165,6 +2176,9 @@
       const care        = document.getElementById('pot-care').value.trim();
       const inspiration = document.getElementById('pot-inspiration').value.trim();
       
+      const shareTitle  = document.getElementById('pot-share-title').value.trim();
+      const shareDesc   = document.getElementById('pot-share-desc').value.trim();
+      
       const imageUrl = _potGalleryImages[0] || '';
       
       // Collect alternative angles (slots 1 to 5)
@@ -2187,6 +2201,8 @@
         dimensions,
         care,
         inspiration,
+        shareTitle,
+        shareDesc,
         imageUrl, 
         galleryUrls,  
         timestamp: new Date().toISOString() 
@@ -2290,6 +2306,9 @@
       document.getElementById('pot-care').value = '';
       document.getElementById('pot-inspiration').value = '';
       
+      document.getElementById('pot-share-title').value = '';
+      document.getElementById('pot-share-desc').value = '';
+      
       // Reset upload slots
       _potGalleryImages = [null, null, null, null, null, null];
       renderUploadSlots();
@@ -2315,6 +2334,9 @@
       document.getElementById('pot-dimensions').value = p.dimensions || '';
       document.getElementById('pot-care').value = p.care || '';
       document.getElementById('pot-inspiration').value = p.inspiration || '';
+      
+      document.getElementById('pot-share-title').value = p.shareTitle || '';
+      document.getElementById('pot-share-desc').value = p.shareDesc || '';
       
       // Load gallery slots
       _potGalleryImages = [null, null, null, null, null, null];

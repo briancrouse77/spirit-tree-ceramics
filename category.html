@@ -814,6 +814,32 @@
 
       try {
         await db.collection('purchases').add(bookingData);
+        if (typeof window.triggerSmsNotification === 'function') {
+          window.triggerSmsNotification('inquiry', {
+            title: bookingData.potTitle,
+            price: bookingData.potPrice,
+            name: bookingData.name,
+            email: bookingData.email,
+            phone: bookingData.phone,
+            notes: bookingData.notes
+          });
+        } else {
+          fetch('/api/notify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'inquiry',
+              details: {
+                title: bookingData.potTitle,
+                price: bookingData.potPrice,
+                name: bookingData.name,
+                email: bookingData.email,
+                phone: bookingData.phone,
+                notes: bookingData.notes
+              }
+            })
+          }).catch(err => console.error('SMS fallback fail:', err));
+        }
         try {
           await db.collection('pots').doc(bookingData.potId).update({
             status: 'sold'

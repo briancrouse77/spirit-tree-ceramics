@@ -547,7 +547,20 @@
 
     // Save to Firestore (cross-device) with localStorage fallback
     if (typeof db !== 'undefined') {
-      db.collection('bookings').add(booking).catch(err => {
+      db.collection('bookings').add(booking).then(function() {
+        if (typeof window.triggerSmsNotification === 'function') {
+          window.triggerSmsNotification('booking', {
+            experience: booking.class,
+            name: booking.details.name,
+            email: booking.details.email,
+            phone: booking.details.phone,
+            date: new Date(booking.date).toLocaleDateString(),
+            time: booking.time,
+            guests: booking.details.guests,
+            notes: booking.details.notes
+          });
+        }
+      }).catch(err => {
         console.warn('Firestore write failed, using localStorage', err);
         const ex = JSON.parse(localStorage.getItem('stc_bookings') || '[]');
         ex.push(booking);
@@ -594,7 +607,15 @@
       };
 
       if (typeof db !== 'undefined') {
-        db.collection('messages').add(msgObj).catch(err => {
+        db.collection('messages').add(msgObj).then(function() {
+          if (typeof window.triggerSmsNotification === 'function') {
+            window.triggerSmsNotification('message', {
+              name: msgObj.name,
+              email: msgObj.email,
+              message: msgObj.message
+            });
+          }
+        }).catch(err => {
           console.warn('Firestore write failed, using localStorage', err);
           const msgs = JSON.parse(localStorage.getItem('stc_messages') || '[]');
           msgs.push(msgObj);
@@ -1305,6 +1326,16 @@ async function submitPurchase() {
     if (typeof db !== 'undefined') {
       await db.collection('purchases').add(record);
     }
+    if (typeof window.triggerSmsNotification === 'function') {
+      window.triggerSmsNotification('inquiry', {
+        title: record.potTitle,
+        price: record.potPrice,
+        name: record.name,
+        email: record.email,
+        phone: record.phone,
+        notes: record.notes
+      });
+    }
     if (typeof window.trackClick === 'function') window.trackClick('inquire_submit');
     goPurchaseStep(4);
   } catch(err) {
@@ -1839,4 +1870,14 @@ window.trackClick = function(clickKey) {
       window.trackClick('facebook');
     }
   });
+
+  window.triggerSmsNotification = function(type, details) {
+    fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: type, details: details })
+    }).catch(function(err) {
+      console.error('Failed to trigger SMS notification:', err);
+    });
+  };
 })();
