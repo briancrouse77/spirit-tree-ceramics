@@ -933,6 +933,10 @@
           <span class="icon">👤</span>
           <span>About Bio</span>
         </div>
+        <div class="nav-item" data-panel="contact" id="nav-contact">
+          <span class="icon">📞</span>
+          <span>Contact &amp; Gallery</span>
+        </div>
         <div class="nav-item" data-panel="shop" id="nav-shop">
           <span class="icon">🏺</span>
           <span>Shop</span>
@@ -1239,8 +1243,20 @@
           </form>
         </div>
 
-        <!-- Contact Settings Panel -->
-        <div class="form-card" style="max-width: 800px; margin: 32px auto 0 auto; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 28px;">
+        </div>
+      </div>
+
+      <!-- Contact & Gallery Panel -->
+      <div class="panel" id="panel-contact">
+        <div class="section-hdr" style="margin-bottom: 24px;">
+          <div>
+            <h2>Contact &amp; Gallery Info</h2>
+            <p style="font-size: 0.85rem; color: var(--smoke); margin-top: 4px;">Update Dallas contact information and customize the header copy shown above the main storefront gallery.</p>
+          </div>
+        </div>
+
+        <!-- Card 1: Contact Details -->
+        <div class="form-card" style="max-width: 800px; margin: 0 auto 32px auto; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 28px;">
           <h3 style="font-family: var(--font-head); font-size: 1.4rem; color: var(--pearl); margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">Contact Details</h3>
           <form id="about-contact-form" onsubmit="event.preventDefault(); saveContactInfo();">
             <div class="field-group" style="margin-bottom: 20px;">
@@ -1266,6 +1282,31 @@
 
             <div style="display: flex; justify-content: flex-end;">
               <button type="submit" class="btn-sm btn-primary" id="btn-save-contact" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">Save Contact Info →</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Card 2: Gallery Header Copy -->
+        <div class="form-card" style="max-width: 800px; margin: 0 auto; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 28px;">
+          <h3 style="font-family: var(--font-head); font-size: 1.4rem; color: var(--pearl); margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">Gallery Header Copy</h3>
+          <form id="gallery-header-form" onsubmit="event.preventDefault(); saveGalleryHeader();">
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Gallery Eyebrow</label>
+              <input type="text" id="gallery-form-eyebrow" class="field-input" placeholder="e.g. John Ruiz — Fine Art Stoneware &amp; Porcelain" required style="width:100%; box-sizing:border-box;" />
+            </div>
+
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Gallery Title</label>
+              <input type="text" id="gallery-form-title" class="field-input" placeholder="e.g. Dallas Handmade Ceramics Gallery" required style="width:100%; box-sizing:border-box;" />
+            </div>
+
+            <div class="field-group" style="margin-bottom: 24px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Gallery Description</label>
+              <textarea id="gallery-form-desc" class="field-textarea" placeholder="One-of-a-kind, handthrown stoneware and porcelain pottery..." required style="width:100%; box-sizing:border-box; min-height: 80px;"></textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn-sm btn-primary" id="btn-save-gallery-header" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">Save Gallery Header →</button>
             </div>
           </form>
         </div>
@@ -1451,6 +1492,7 @@
     let _aboutBioData = null;
     let _seoHerosData = null;
     let _contactInfoData = null;
+    let _galleryHeaderData = null;
     let _faqHeadersData = null;
     let _analyticsData = null;
 
@@ -1673,7 +1715,7 @@
       db.collection('faq').doc('contact_info').onSnapshot(doc => {
         if (doc.exists) {
           _contactInfoData = doc.data();
-          if (currentPanel === 'about') populateContactForm();
+          if (currentPanel === 'contact') populateContactForm();
         } else {
           const defaults = {
             title: "Contact Spirit Tree Ceramics",
@@ -1682,8 +1724,24 @@
             phone: "(214) 555-0100"
           };
           _contactInfoData = defaults;
-          if (currentPanel === 'about') populateContactForm();
+          if (currentPanel === 'contact') populateContactForm();
           db.collection('faq').doc('contact_info').set(defaults).catch(err => console.error("Contact info migration error:", err));
+        }
+      });
+
+      db.collection('faq').doc('gallery_header').onSnapshot(doc => {
+        if (doc.exists) {
+          _galleryHeaderData = doc.data();
+          if (currentPanel === 'contact') populateGalleryHeaderForm();
+        } else {
+          const defaults = {
+            eyebrow: "John Ruiz — Fine Art Stoneware & Porcelain",
+            title: "Dallas Handmade Ceramics Gallery",
+            desc: "One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries."
+          };
+          _galleryHeaderData = defaults;
+          if (currentPanel === 'contact') populateGalleryHeaderForm();
+          db.collection('faq').doc('gallery_header').set(defaults).catch(err => console.error("Gallery header migration error:", err));
         }
       });
 
@@ -1730,7 +1788,11 @@
           document.getElementById('page-title').textContent = 'Biography';
           document.getElementById('page-sub').textContent = 'Manage homepage profile details';
           populateAboutForm();
+        } else if (panel === 'contact') {
+          document.getElementById('page-title').textContent = 'Contact & Gallery';
+          document.getElementById('page-sub').textContent = 'Manage contact details and storefront gallery header copy';
           populateContactForm();
+          populateGalleryHeaderForm();
         } else if (panel === 'seo') {
           document.getElementById('page-title').textContent = 'SEO Hero';
           document.getElementById('page-sub').textContent = 'Manage category landing page titles and banner photos';
@@ -2671,7 +2733,7 @@
           }
 
           _faqs = snap.docs
-            .filter(doc => doc.id !== 'about_john' && doc.id !== 'seo_heros' && doc.id !== 'faq_headers' && doc.id !== 'contact_info')
+            .filter(doc => doc.id !== 'about_john' && doc.id !== 'seo_heros' && doc.id !== 'faq_headers' && doc.id !== 'contact_info' && doc.id !== 'gallery_header')
             .map(doc => {
               const data = doc.data();
               data.id = doc.id;
@@ -2994,6 +3056,45 @@
         if (btn) {
           btn.disabled = false;
           btn.textContent = 'Save Contact Info →';
+        }
+      }
+    };
+
+    function populateGalleryHeaderForm() {
+      if (!_galleryHeaderData) return;
+      document.getElementById('gallery-form-eyebrow').value = _galleryHeaderData.eyebrow || '';
+      document.getElementById('gallery-form-title').value = _galleryHeaderData.title || '';
+      document.getElementById('gallery-form-desc').value = _galleryHeaderData.desc || '';
+    }
+
+    window.saveGalleryHeader = async function() {
+      const eyebrow = document.getElementById('gallery-form-eyebrow').value.trim();
+      const title = document.getElementById('gallery-form-title').value.trim();
+      const desc = document.getElementById('gallery-form-desc').value.trim();
+
+      const btn = document.getElementById('btn-save-gallery-header');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+      }
+
+      const data = {
+        eyebrow: eyebrow,
+        title: title,
+        desc: desc,
+        lastUpdated: new Date().toISOString()
+      };
+
+      try {
+        await db.collection('faq').doc('gallery_header').set(data, { merge: true });
+        toast('Gallery header copy updated successfully!');
+      } catch(err) {
+        console.error('Error saving gallery header:', err);
+        toast('Error saving gallery header: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Save Gallery Header →';
         }
       }
     };

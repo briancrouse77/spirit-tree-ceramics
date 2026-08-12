@@ -1643,7 +1643,7 @@ function initFaqListener() {
       }
 
       var filteredDocs = snap.docs.filter(function(d) {
-        return d.id !== 'about_john' && d.id !== 'seo_heros' && d.id !== 'faq_headers' && d.id !== 'contact_info';
+        return d.id !== 'about_john' && d.id !== 'seo_heros' && d.id !== 'faq_headers' && d.id !== 'contact_info' && d.id !== 'gallery_header';
       });
       if (filteredDocs.length === 0) {
         faqList.innerHTML = '<p style="text-align:center;color:var(--smoke);padding:24px 0;">No FAQs found.</p>';
@@ -1800,6 +1800,29 @@ function initContactListener() {
     });
 }
 initContactListener();
+
+// Listen to the Gallery header copy doc in Firestore to update index.html dynamically
+function initGalleryHeaderListener() {
+  if (typeof db === 'undefined') return;
+
+  db.collection('faq')
+    .doc('gallery_header')
+    .onSnapshot(function(doc) {
+      if (!doc.exists) return;
+      var data = doc.data();
+
+      var eyebrowEl = document.getElementById('gallery-eyebrow');
+      var titleEl = document.getElementById('gallery-title');
+      var descEl = document.getElementById('gallery-desc');
+
+      if (eyebrowEl) eyebrowEl.textContent = data.eyebrow || '';
+      if (titleEl) titleEl.textContent = data.title || '';
+      if (descEl) descEl.textContent = data.desc || '';
+    }, function(err) {
+      console.error('Error fetching Gallery Header data:', err);
+    });
+}
+initGalleryHeaderListener();
 
 document.addEventListener('DOMContentLoaded', () => {
   
