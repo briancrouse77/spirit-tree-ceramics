@@ -860,9 +860,11 @@ var _shopPotsMap = {};
         }
       });
 
-      const typesOrder = ['mug', 'vase', 'bowl', 'plate', 'platter', 'other'];
+      const typesOrder = ['mug', 'tumbler', 'tea-pot', 'vase', 'bowl', 'plate', 'platter', 'other'];
       const displayNames = {
         'mug': 'Mugs',
+        'tumbler': 'Tumblers',
+        'tea-pot': 'Tea Pots',
         'vase': 'Vases',
         'bowl': 'Bowls',
         'plate': 'Plates',
