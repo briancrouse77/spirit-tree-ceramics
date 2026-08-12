@@ -1244,6 +1244,37 @@
             </div>
           </form>
         </div>
+
+        <!-- Contact Settings Panel -->
+        <div class="form-card" style="max-width: 800px; margin: 32px auto 0 auto; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 28px;">
+          <h3 style="font-family: var(--font-head); font-size: 1.4rem; color: var(--pearl); margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">Contact Details</h3>
+          <form id="about-contact-form" onsubmit="event.preventDefault(); saveContactInfo();">
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Contact Title</label>
+              <input type="text" id="contact-form-title" class="field-input" placeholder="e.g. Contact Spirit Tree Ceramics" required style="width:100%; box-sizing:border-box;" />
+            </div>
+            
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Location</label>
+              <input type="text" id="contact-form-loc" class="field-input" placeholder="e.g. Dallas–Fort Worth &amp; Surrounding Areas, TX" required style="width:100%; box-sizing:border-box;" />
+            </div>
+
+            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
+              <div class="field-group" style="flex: 1; min-width: 250px;">
+                <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Contact Email</label>
+                <input type="email" id="contact-form-email" class="field-input" placeholder="e.g. hello@spirittreeceramics.com" required style="width:100%; box-sizing:border-box;" />
+              </div>
+              <div class="field-group" style="flex: 1; min-width: 200px;">
+                <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Contact Phone</label>
+                <input type="text" id="contact-form-phone" class="field-input" placeholder="e.g. (214) 555-0100" required style="width:100%; box-sizing:border-box;" />
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" class="btn-sm btn-primary" id="btn-save-contact" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">Save Contact Info →</button>
+            </div>
+          </form>
+        </div>
       </div>
 
       <!-- SEO Hero Panel -->
@@ -1425,6 +1456,7 @@
     let _shopFilter = 'all';
     let _aboutBioData = null;
     let _seoHerosData = null;
+    let _contactInfoData = null;
     let _faqHeadersData = null;
     let _analyticsData = null;
 
@@ -1644,6 +1676,23 @@
         }
       });
 
+      db.collection('faq').doc('contact_info').onSnapshot(doc => {
+        if (doc.exists) {
+          _contactInfoData = doc.data();
+          if (currentPanel === 'about') populateContactForm();
+        } else {
+          const defaults = {
+            title: "Contact Spirit Tree Ceramics",
+            location: "Dallas–Fort Worth & Surrounding Areas, TX",
+            email: "hello@spirittreeceramics.com",
+            phone: "(214) 555-0100"
+          };
+          _contactInfoData = defaults;
+          if (currentPanel === 'about') populateContactForm();
+          db.collection('faq').doc('contact_info').set(defaults).catch(err => console.error("Contact info migration error:", err));
+        }
+      });
+
       runAutoMigration();
       startFaqListener();
     }
@@ -1687,6 +1736,7 @@
           document.getElementById('page-title').textContent = 'Biography';
           document.getElementById('page-sub').textContent = 'Manage homepage profile details';
           populateAboutForm();
+          populateContactForm();
         } else if (panel === 'seo') {
           document.getElementById('page-title').textContent = 'SEO Hero';
           document.getElementById('page-sub').textContent = 'Manage category landing page titles and banner photos';
@@ -2627,7 +2677,7 @@
           }
 
           _faqs = snap.docs
-            .filter(doc => doc.id !== 'about_john' && doc.id !== 'seo_heros' && doc.id !== 'faq_headers')
+            .filter(doc => doc.id !== 'about_john' && doc.id !== 'seo_heros' && doc.id !== 'faq_headers' && doc.id !== 'contact_info')
             .map(doc => {
               const data = doc.data();
               data.id = doc.id;
@@ -2907,6 +2957,48 @@
       } finally {
         btn.disabled = false;
         btn.textContent = 'Save Biography →';
+      }
+    };
+
+    function populateContactForm() {
+      if (!_contactInfoData) return;
+      document.getElementById('contact-form-title').value = _contactInfoData.title || '';
+      document.getElementById('contact-form-loc').value = _contactInfoData.location || '';
+      document.getElementById('contact-form-email').value = _contactInfoData.email || '';
+      document.getElementById('contact-form-phone').value = _contactInfoData.phone || '';
+    }
+
+    window.saveContactInfo = async function() {
+      const title = document.getElementById('contact-form-title').value.trim();
+      const location = document.getElementById('contact-form-loc').value.trim();
+      const email = document.getElementById('contact-form-email').value.trim();
+      const phone = document.getElementById('contact-form-phone').value.trim();
+
+      const btn = document.getElementById('btn-save-contact');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+      }
+
+      const data = {
+        title: title,
+        location: location,
+        email: email,
+        phone: phone,
+        lastUpdated: new Date().toISOString()
+      };
+
+      try {
+        await db.collection('faq').doc('contact_info').set(data, { merge: true });
+        toast('Contact information updated successfully!');
+      } catch(err) {
+        console.error('Error saving contact info:', err);
+        toast('Error saving contact info: ' + err.message);
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'Save Contact Info →';
+        }
       }
     };
 

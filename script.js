@@ -1643,7 +1643,7 @@ function initFaqListener() {
       }
 
       var filteredDocs = snap.docs.filter(function(d) {
-        return d.id !== 'about_john' && d.id !== 'seo_heros' && d.id !== 'faq_headers';
+        return d.id !== 'about_john' && d.id !== 'seo_heros' && d.id !== 'faq_headers' && d.id !== 'contact_info';
       });
       if (filteredDocs.length === 0) {
         faqList.innerHTML = '<p style="text-align:center;color:var(--smoke);padding:24px 0;">No FAQs found.</p>';
@@ -1767,6 +1767,39 @@ function initAboutListener() {
 renderVideos();
 initFaqListener();
 initAboutListener();
+
+// Listen to the Contact info doc in Firestore to update index.html dynamically
+function initContactListener() {
+  if (typeof db === 'undefined') return;
+
+  db.collection('faq')
+    .doc('contact_info')
+    .onSnapshot(function(doc) {
+      if (!doc.exists) return;
+      var data = doc.data();
+
+      var titleEl = document.getElementById('contact-title');
+      var locEl = document.getElementById('contact-loc');
+      var emailEl = document.getElementById('contact-email');
+      var phoneEl = document.getElementById('contact-phone');
+
+      if (titleEl) titleEl.textContent = data.title || '';
+      if (locEl) locEl.textContent = '📍 ' + (data.location || '');
+      if (emailEl) {
+        var cleanEmail = (data.email || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        emailEl.innerHTML = '📧 <a href="mailto:' + cleanEmail + '">' + cleanEmail + '</a>';
+      }
+      if (phoneEl) {
+        var cleanPhone = (data.phone || '').replace(/\D/g, '');
+        if (cleanPhone && cleanPhone.length === 10) cleanPhone = '+1' + cleanPhone;
+        var formattedPhone = (data.phone || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        phoneEl.innerHTML = '📱 <a href="tel:' + cleanPhone + '">' + formattedPhone + '</a>';
+      }
+    }, function(err) {
+      console.error('Error fetching Contact Info data:', err);
+    });
+}
+initContactListener();
 
 document.addEventListener('DOMContentLoaded', () => {
   
