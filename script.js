@@ -1865,9 +1865,17 @@ function initGalleryHeaderListener() {
       var titleEl = document.getElementById('gallery-title');
       var descEl = document.getElementById('gallery-desc');
 
+      var soldEyebrowEl = document.getElementById('sold-eyebrow');
+      var soldTitleEl = document.getElementById('sold-title');
+      var soldDescEl = document.getElementById('sold-desc');
+
       if (eyebrowEl) eyebrowEl.textContent = data.eyebrow || '';
       if (titleEl) titleEl.textContent = data.title || '';
       if (descEl) descEl.textContent = data.desc || '';
+
+      if (soldEyebrowEl) soldEyebrowEl.textContent = data.soldEyebrow || '';
+      if (soldTitleEl) soldTitleEl.textContent = data.soldTitle || '';
+      if (soldDescEl) soldDescEl.textContent = data.soldDesc || '';
     }, function(err) {
       console.error('Error fetching Gallery Header data:', err);
     });

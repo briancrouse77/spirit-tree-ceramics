@@ -1242,8 +1242,6 @@
             </div>
           </form>
         </div>
-
-        </div>
       </div>
 
       <!-- Contact & Gallery Panel -->
@@ -1288,25 +1286,45 @@
 
         <!-- Card 2: Gallery Header Copy -->
         <div class="form-card" style="max-width: 800px; margin: 0 auto; background: var(--deep); border: 1px solid rgba(193,84,10,0.12); border-radius: var(--r-lg); padding: 28px;">
-          <h3 style="font-family: var(--font-head); font-size: 1.4rem; color: var(--pearl); margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">Gallery Header Copy</h3>
+          <h3 style="font-family: var(--font-head); font-size: 1.4rem; color: var(--pearl); margin-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">Gallery Headers Copy</h3>
           <form id="gallery-header-form" onsubmit="event.preventDefault(); saveGalleryHeader();">
+            
+            <h4 style="font-family: var(--font-head); font-size: 1.1rem; color: var(--gold); margin-bottom: 14px;">Active Shop Gallery</h4>
+            
             <div class="field-group" style="margin-bottom: 20px;">
-              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Gallery Eyebrow</label>
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Shop Eyebrow</label>
               <input type="text" id="gallery-form-eyebrow" class="field-input" placeholder="e.g. John Ruiz — Fine Art Stoneware &amp; Porcelain" required style="width:100%; box-sizing:border-box;" />
             </div>
 
             <div class="field-group" style="margin-bottom: 20px;">
-              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Gallery Title</label>
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Shop Title</label>
               <input type="text" id="gallery-form-title" class="field-input" placeholder="e.g. Dallas Handmade Ceramics Gallery" required style="width:100%; box-sizing:border-box;" />
             </div>
 
+            <div class="field-group" style="margin-bottom: 28px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Shop Description</label>
+              <textarea id="gallery-form-desc" class="field-textarea" placeholder="One-of-a-kind, handthrown stoneware and porcelain pottery..." required style="width:100%; box-sizing:border-box; min-height: 70px;"></textarea>
+            </div>
+
+            <h4 style="font-family: var(--font-head); font-size: 1.1rem; color: var(--gold); margin-bottom: 14px; border-top: 1px dashed rgba(255,255,255,0.06); padding-top: 18px;">Previously Sold Gallery</h4>
+
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Sold Eyebrow</label>
+              <input type="text" id="gallery-form-sold-eyebrow" class="field-input" placeholder="e.g. Archived Works" required style="width:100%; box-sizing:border-box;" />
+            </div>
+
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Sold Title</label>
+              <input type="text" id="gallery-form-sold-title" class="field-input" placeholder="e.g. Previously Sold Pieces" required style="width:100%; box-sizing:border-box;" />
+            </div>
+
             <div class="field-group" style="margin-bottom: 24px;">
-              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Gallery Description</label>
-              <textarea id="gallery-form-desc" class="field-textarea" placeholder="One-of-a-kind, handthrown stoneware and porcelain pottery..." required style="width:100%; box-sizing:border-box; min-height: 80px;"></textarea>
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Sold Description</label>
+              <textarea id="gallery-form-sold-desc" class="field-textarea" placeholder="A visual archive of handthrown stoneware..." required style="width:100%; box-sizing:border-box; min-height: 70px;"></textarea>
             </div>
 
             <div style="display: flex; justify-content: flex-end;">
-              <button type="submit" class="btn-sm btn-primary" id="btn-save-gallery-header" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">Save Gallery Header →</button>
+              <button type="submit" class="btn-sm btn-primary" id="btn-save-gallery-header" style="padding: 10px 24px; font-size: 0.9rem; cursor: pointer;">Save Gallery Headers →</button>
             </div>
           </form>
         </div>
@@ -1737,7 +1755,10 @@
           const defaults = {
             eyebrow: "John Ruiz — Fine Art Stoneware & Porcelain",
             title: "Dallas Handmade Ceramics Gallery",
-            desc: "One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries."
+            desc: "One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries.",
+            soldEyebrow: "Archived Works",
+            soldTitle: "Previously Sold Pieces",
+            soldDesc: "A visual archive of handthrown stoneware and porcelain pieces that have found their homes. Click any piece for full specifications and high-resolution details."
           };
           _galleryHeaderData = defaults;
           if (currentPanel === 'contact') populateGalleryHeaderForm();
@@ -3065,12 +3086,18 @@
       document.getElementById('gallery-form-eyebrow').value = _galleryHeaderData.eyebrow || '';
       document.getElementById('gallery-form-title').value = _galleryHeaderData.title || '';
       document.getElementById('gallery-form-desc').value = _galleryHeaderData.desc || '';
+      document.getElementById('gallery-form-sold-eyebrow').value = _galleryHeaderData.soldEyebrow || '';
+      document.getElementById('gallery-form-sold-title').value = _galleryHeaderData.soldTitle || '';
+      document.getElementById('gallery-form-sold-desc').value = _galleryHeaderData.soldDesc || '';
     }
 
     window.saveGalleryHeader = async function() {
       const eyebrow = document.getElementById('gallery-form-eyebrow').value.trim();
       const title = document.getElementById('gallery-form-title').value.trim();
       const desc = document.getElementById('gallery-form-desc').value.trim();
+      const soldEyebrow = document.getElementById('gallery-form-sold-eyebrow').value.trim();
+      const soldTitle = document.getElementById('gallery-form-sold-title').value.trim();
+      const soldDesc = document.getElementById('gallery-form-sold-desc').value.trim();
 
       const btn = document.getElementById('btn-save-gallery-header');
       if (btn) {
@@ -3082,19 +3109,22 @@
         eyebrow: eyebrow,
         title: title,
         desc: desc,
+        soldEyebrow: soldEyebrow,
+        soldTitle: soldTitle,
+        soldDesc: soldDesc,
         lastUpdated: new Date().toISOString()
       };
 
       try {
         await db.collection('faq').doc('gallery_header').set(data, { merge: true });
-        toast('Gallery header copy updated successfully!');
+        toast('Gallery headers copy updated successfully!');
       } catch(err) {
-        console.error('Error saving gallery header:', err);
-        toast('Error saving gallery header: ' + err.message);
+        console.error('Error saving gallery headers:', err);
+        toast('Error saving gallery headers: ' + err.message);
       } finally {
         if (btn) {
           btn.disabled = false;
-          btn.textContent = 'Save Gallery Header →';
+          btn.textContent = 'Save Gallery Headers →';
         }
       }
     };
