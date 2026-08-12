@@ -102,7 +102,7 @@
             "name": "Who is the artist behind Spirit Tree Ceramics?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas. With over four years of experience at the pottery wheel, John crafts one-of-a-kind functional art and fine stoneware in his Dallas studio."
+              "text": "Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas. Since discovering clay in 2022, John crafts one-of-a-kind functional art and fine stoneware in his Dallas studio."
             }
           },
           {
@@ -144,13 +144,13 @@
 <body>
 
   <!-- ── NAV ── -->
-  <!-- ── NAV ── -->
   <nav class="nav" id="nav">
     <div class="nav__inner">
-      <a href="#about" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
+      <a href="#home" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
       <ul class="nav__links">
-        <li><a href="#about">About John</a></li>
+        <li><a href="#home">Home</a></li>
         <li><a href="#shop">Shop</a></li>
+        <li><a href="#about">About John</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
       <a href="#contact" class="btn btn--accent nav__cta" id="nav-book-btn">Get in Touch</a>
@@ -159,12 +159,72 @@
       </button>
     </div>
     <div class="nav__mobile" id="mobile-menu">
-      <a href="#about">About John</a>
+      <a href="#home">Home</a>
       <a href="#shop">Shop</a>
+      <a href="#about">About John</a>
       <a href="#contact">Contact</a>
       <a href="#contact" class="btn btn--accent" id="mobile-book-btn" style="text-align:center;">Get in Touch</a>
     </div>
   </nav>
+
+
+  <!-- ── HERO (LANDING SCREEN) ── -->
+  <header class="hero" id="home">
+    <div class="hero__bg">
+      <img src="images/hero.png" alt="Spirit Tree Ceramics Stoneware" class="hero__img" />
+      <div class="hero__overlay"></div>
+    </div>
+    
+    <!-- Sacred Geometry Rings -->
+    <div class="hero__geometry">
+      <svg class="geo-ring geo-ring--1" viewBox="0 0 100 100" fill="none" stroke="rgba(193, 84, 10, 0.08)" stroke-width="0.5">
+        <circle cx="50" cy="50" r="45" />
+        <circle cx="50" cy="50" r="30" />
+        <line x1="5" y1="50" x2="95" y2="50" />
+        <line x1="50" y1="5" x2="50" y2="95" />
+      </svg>
+      <svg class="geo-ring geo-ring--2" viewBox="0 0 100 100" fill="none" stroke="rgba(102, 187, 187, 0.06)" stroke-width="0.5">
+        <circle cx="50" cy="50" r="40" />
+        <circle cx="50" cy="50" r="25" />
+        <polygon points="50,15 80,70 20,70" />
+      </svg>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="hero__particles" id="particles"></div>
+
+    <div class="hero__content">
+      <p class="hero__eyebrow">Handthrown functional art</p>
+      <h1 class="hero__title">
+        Rooted in Earth.<br>
+        Fired for <em>Ritual</em>.
+      </h1>
+      <p class="hero__sub">
+        One-of-a-kind functional stoneware and fine ceramics individually thrown and glazed in Dallas, Texas. Designed for daily connection.
+      </p>
+      <div class="hero__actions">
+        <a href="#shop" class="btn btn--accent">Shop the Collection</a>
+        <a href="#contact" class="btn btn--secondary">Book a Session</a>
+      </div>
+    </div>
+
+    <div class="hero__scroll">
+      <div class="hero__scroll-line"></div>
+    </div>
+  </header>
+
+  <!-- ── SHOP ── -->
+  <section class="section section--void" id="shop">
+    <div class="container">
+      <div class="section__header" style="margin-bottom: 40px;">
+        <p class="section__eyebrow section__eyebrow--light">John Ruiz — Fine Art Stoneware &amp; Porcelain</p>
+        <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);">Dallas Handmade Ceramics Gallery</h2>
+        <p class="section__sub">One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries.</p>
+      </div>
+      <div class="shop-grid" id="shop-grid"></div>
+      <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0">Nothing listed right now — check back soon.</p>
+    </div>
+  </section>
 
   <!-- ── ABOUT (LANDING SCREEN) ── -->
   <section class="about section" id="about">
@@ -180,7 +240,7 @@
         <p id="about-eyebrow" class="section__eyebrow">The Maker Behind the Clay</p>
         <h1 id="about-title" class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);">Hi, I'm John Ruiz — Dallas Pottery Artist</h1>
         <div id="about-paragraphs-container">
-          <p class="about__body">Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.</p>
+          <p class="about__body">I discovered clay in 2022, and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.</p>
           <p class="about__body">Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life.</p>
         </div>
         <ul class="about__features" id="about-features-container">
@@ -207,19 +267,6 @@
           </li>
         </ul>
       </div>
-    </div>
-  </section>
-
-  <!-- ── SHOP ── -->
-  <section class="section section--void" id="shop">
-    <div class="container">
-      <div class="section__header" style="margin-bottom: 40px;">
-        <p class="section__eyebrow section__eyebrow--light">John Ruiz — Fine Art Stoneware &amp; Porcelain</p>
-        <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);">Dallas Handmade Ceramics Gallery</h2>
-        <p class="section__sub">One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries.</p>
-      </div>
-      <div class="shop-grid" id="shop-grid"></div>
-      <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0">Nothing listed right now — check back soon.</p>
     </div>
   </section>
 
@@ -337,6 +384,9 @@
           <button class="btn btn--ghost" style="flex:1" onclick="goPurchaseStep(2)">← Back</button>
           <button class="btn btn--primary" style="flex:2" id="pur-submit-btn" onclick="submitPurchase()">Send Inquiry →</button>
         </div>
+        <p style="font-size:0.75rem;color:var(--smoke);text-align:center;margin-top:12px;margin-bottom:0;line-height:1.4;">
+          By submitting, you agree to our <a href="#" onclick="openPoliciesModal(event)" style="color:var(--teal-lt);text-decoration:underline;">Shipping &amp; Returns Policy</a>.
+        </p>
       </div>
 
       <!-- Step 4: Success -->
@@ -431,8 +481,10 @@
         <!-- Categories links populated dynamically if products return for them -->
       </div>
 
-      <div style="display: flex; gap: 20px; align-items: center; margin-top: 4px;">
+      <div style="display: flex; gap: 20px; align-items: center; margin-top: 4px; flex-wrap: wrap; justify-content: center;">
         <a href="#faq" class="footer__admin-link">FAQs</a>
+        <span style="color:rgba(255,255,255,0.15)">•</span>
+        <a href="#" onclick="openPoliciesModal(event)" class="footer__admin-link">Shipping &amp; Returns Policy</a>
       </div>
     </div>
   </footer>
@@ -699,6 +751,33 @@
   <div id="lightbox-overlay" onclick="closeLightbox()">
     <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()">&times;</button>
     <img id="lightbox-img" src="" alt="Enlarged Ceramic View" class="lightbox-img" onclick="event.stopPropagation()" />
+  </div>
+
+  <!-- ── POLICIES MODAL ── -->
+  <div class="modal-overlay" id="policies-modal-overlay" style="display:none;z-index:2002;" onclick="closePoliciesModal()">
+    <div class="modal" style="max-width:560px;padding:32px;text-align:left;" onclick="event.stopPropagation()">
+      <button class="modal__close" onclick="closePoliciesModal()">×</button>
+      <h3 style="font-family:var(--font-head);font-size:2rem;color:var(--pearl);margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:12px;">Shipping &amp; Returns</h3>
+      
+      <div style="max-height:360px;overflow-y:auto;padding-right:8px;color:var(--smoke);font-size:0.92rem;line-height:1.6;">
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">📦 Domestic Shipping</h4>
+        <p style="margin-bottom:16px;">All pottery is carefully packed in eco-friendly, biodegradable materials to ensure safe arrival. Shipped via UPS Ground or USPS within 3–5 business days. You will receive a tracking number as soon as your order is dispatched.</p>
+        
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">📍 Local DFW Pickup</h4>
+        <p style="margin-bottom:16px;">We offer free local pickup at our Dallas studio. Choose the "Local Pickup" option during checkout, and we will contact you via email or text to arrange a pickup window.</p>
+        
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">🔄 Return Policy</h4>
+        <p style="margin-bottom:16px;">Because each ceramic piece is handmade and completely one-of-a-kind, all sales are final. We do not accept returns or exchanges for change of mind.</p>
+        
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">💔 Damaged Items</h4>
+        <p style="margin-bottom:16px;">In the rare event that a piece is broken during shipping, please contact us at <strong>spirit.tree.ceramics@gmail.com</strong> with photos of the damaged item and packaging within 48 hours of delivery. We will issue a full refund or arrange a replacement piece.</p>
+
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">🏺 Pottery Care &amp; Safety</h4>
+        <p style="margin-bottom:0;">All functional stoneware (mugs, bowls, platters) is food, microwave, and dishwasher safe. High-firing to stoneware temperatures ensures maximum durability. However, handwashing is always recommended to preserve the hand-applied glaze finish for years to come.</p>
+      </div>
+      
+      <button class="btn btn--primary" style="width:100%;margin-top:24px;" onclick="closePoliciesModal()">Close Policies</button>
+    </div>
   </div>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>

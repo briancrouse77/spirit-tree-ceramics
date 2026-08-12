@@ -131,8 +131,10 @@
         <!-- Categories links populated dynamically if products return for them -->
       </div>
 
-      <div style="display: flex; gap: 20px; align-items: center; margin-top: 4px;">
+      <div style="display: flex; gap: 20px; align-items: center; margin-top: 4px; flex-wrap: wrap; justify-content: center;">
         <a href="index.html#faq" class="footer__admin-link">FAQs</a>
+        <span style="color:rgba(255,255,255,0.15)">•</span>
+        <a href="#" onclick="openPoliciesModal(event)" class="footer__admin-link">Shipping &amp; Returns Policy</a>
       </div>
     </div>
   </footer>
@@ -249,6 +251,9 @@
           <button class="btn btn--ghost" style="flex:1" onclick="goPurchaseStep(2)">← Back</button>
           <button class="btn btn--primary" style="flex:2" id="pur-submit-btn" onclick="submitPurchase()">Send Inquiry →</button>
         </div>
+        <p style="font-size:0.75rem;color:var(--smoke);text-align:center;margin-top:12px;margin-bottom:0;line-height:1.4;">
+          By submitting, you agree to our <a href="#" onclick="openPoliciesModal(event)" style="color:var(--teal-lt);text-decoration:underline;">Shipping &amp; Returns Policy</a>.
+        </p>
       </div>
 
       <!-- Step 4: Success -->
@@ -265,6 +270,33 @@
   <div id="lightbox-overlay" onclick="closeLightbox()">
     <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()">&times;</button>
     <img id="lightbox-img" src="" alt="Enlarged Ceramic View" class="lightbox-img" onclick="event.stopPropagation()" />
+  </div>
+
+  <!-- ── POLICIES MODAL ── -->
+  <div class="modal-overlay" id="policies-modal-overlay" style="display:none;z-index:2002;" onclick="closePoliciesModal()">
+    <div class="modal" style="max-width:560px;padding:32px;text-align:left;" onclick="event.stopPropagation()">
+      <button class="modal__close" onclick="closePoliciesModal()">×</button>
+      <h3 style="font-family:var(--font-head);font-size:2rem;color:var(--pearl);margin-bottom:16px;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:12px;">Shipping &amp; Returns</h3>
+      
+      <div style="max-height:360px;overflow-y:auto;padding-right:8px;color:var(--smoke);font-size:0.92rem;line-height:1.6;">
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">📦 Domestic Shipping</h4>
+        <p style="margin-bottom:16px;">All pottery is carefully packed in eco-friendly, biodegradable materials to ensure safe arrival. Shipped via UPS Ground or USPS within 3–5 business days. You will receive a tracking number as soon as your order is dispatched.</p>
+        
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">📍 Local DFW Pickup</h4>
+        <p style="margin-bottom:16px;">We offer free local pickup at our Dallas studio. Choose the "Local Pickup" option during checkout, and we will contact you via email or text to arrange a pickup window.</p>
+        
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">🔄 Return Policy</h4>
+        <p style="margin-bottom:16px;">Because each ceramic piece is handmade and completely one-of-a-kind, all sales are final. We do not accept returns or exchanges for change of mind.</p>
+        
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">💔 Damaged Items</h4>
+        <p style="margin-bottom:16px;">In the rare event that a piece is broken during shipping, please contact us at <strong>spirit.tree.ceramics@gmail.com</strong> with photos of the damaged item and packaging within 48 hours of delivery. We will issue a full refund or arrange a replacement piece.</p>
+
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">🏺 Pottery Care &amp; Safety</h4>
+        <p style="margin-bottom:0;">All functional stoneware (mugs, bowls, platters) is food, microwave, and dishwasher safe. High-firing to stoneware temperatures ensures maximum durability. However, handwashing is always recommended to preserve the hand-applied glaze finish for years to come.</p>
+      </div>
+      
+      <button class="btn btn--primary" style="width:100%;margin-top:24px;" onclick="closePoliciesModal()">Close Policies</button>
+    </div>
   </div>
 
   <!-- Firebase SDKs -->
@@ -772,6 +804,16 @@
           fallbackCopy(shareUrl);
         }
       }
+    };
+
+    window.openPoliciesModal = function(e) {
+      if (e) e.preventDefault();
+      const el = document.getElementById('policies-modal-overlay');
+      if (el) el.style.display = 'flex';
+    };
+    window.closePoliciesModal = function() {
+      const el = document.getElementById('policies-modal-overlay');
+      if (el) el.style.display = 'none';
     };
 
     window.submitPurchase = async function() {

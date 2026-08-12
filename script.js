@@ -1871,6 +1871,16 @@ window.trackClick = function(clickKey) {
     }
   });
 
+  window.openPoliciesModal = function(e) {
+    if (e) e.preventDefault();
+    var el = document.getElementById('policies-modal-overlay');
+    if (el) el.style.display = 'flex';
+  };
+  window.closePoliciesModal = function() {
+    var el = document.getElementById('policies-modal-overlay');
+    if (el) el.style.display = 'none';
+  };
+
   window.triggerSmsNotification = function(type, details) {
     fetch('/api/notify', {
       method: 'POST',
