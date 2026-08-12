@@ -1205,15 +1205,9 @@
               </div>
             </div>
 
-            <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
-              <div class="field-group" style="flex: 1; min-width: 250px;">
-                <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Heading Title</label>
-                <input type="text" id="about-form-title" class="field-input" placeholder="e.g. Hi, I'm John Ruiz — Dallas Pottery Artist" required style="width:100%; box-sizing:border-box;" />
-              </div>
-              <div class="field-group" style="width: 140px;">
-                <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Experience Badge</label>
-                <input type="text" id="about-form-years" class="field-input" placeholder="e.g. 4+" required style="width:100%; box-sizing:border-box;" />
-              </div>
+            <div class="field-group" style="margin-bottom: 20px;">
+              <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Heading Title</label>
+              <input type="text" id="about-form-title" class="field-input" placeholder="e.g. Hi, I'm John Ruiz — Dallas Pottery Artist" required style="width:100%; box-sizing:border-box;" />
             </div>
             
             <div class="field-group" style="margin-bottom: 20px;">
@@ -2862,7 +2856,8 @@
       if (!_aboutBioData) return;
       document.getElementById('about-form-title').value = _aboutBioData.title || '';
       document.getElementById('about-form-eyebrow').value = _aboutBioData.eyebrow || '';
-      document.getElementById('about-form-years').value = _aboutBioData.years || '';
+      const yearsEl = document.getElementById('about-form-years');
+      if (yearsEl) yearsEl.value = _aboutBioData.years || '';
       const imgUrl = _aboutBioData.imgUrl || 'images/about.png';
       document.getElementById('about-form-img-url').value = imgUrl;
       document.getElementById('about-form-img-preview').src = imgUrl;
@@ -2908,7 +2903,8 @@
     window.saveAboutBio = async function() {
       const title = document.getElementById('about-form-title').value.trim();
       const eyebrow = document.getElementById('about-form-eyebrow').value.trim();
-      const years = document.getElementById('about-form-years').value.trim();
+      const yearsEl = document.getElementById('about-form-years');
+      const years = yearsEl ? yearsEl.value.trim() : '';
       const imgUrl = document.getElementById('about-form-img-url').value.trim();
 
       const textareas = document.querySelectorAll('#about-paragraphs-editor .about-para-input');
