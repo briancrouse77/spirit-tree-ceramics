@@ -69,11 +69,11 @@
   <!-- ── NAV ── -->
   <nav class="nav" id="nav">
     <div class="nav__inner">
-      <a href="index.html#about" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
+      <a href="index.html#shop" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
       <ul class="nav__links">
-        <li><a href="index.html#about">About John</a></li>
         <li><a href="index.html#shop">Shop</a></li>
-        <li><a href="index.html#contact">Contact</a></li>
+        <li><a href="index.html#sold">Previously Sold</a></li>
+        <li><a href="index.html#about">About John</a></li>
       </ul>
       <a href="index.html#contact" class="btn btn--accent nav__cta">Get in Touch</a>
       <button class="nav__hamburger" id="hamburger" aria-label="Open menu">
@@ -81,9 +81,9 @@
       </button>
     </div>
     <div class="nav__mobile" id="mobile-menu">
-      <a href="index.html#about">About John</a>
       <a href="index.html#shop">Shop</a>
-      <a href="index.html#contact">Contact</a>
+      <a href="index.html#sold">Previously Sold</a>
+      <a href="index.html#about">About John</a>
       <a href="index.html#contact" class="btn btn--accent" style="text-align:center;">Get in Touch</a>
     </div>
   </nav>
@@ -196,7 +196,7 @@
                   <span>🔗</span> Share
                 </button>
               </div>
-              <button class="btn btn--primary" style="width:100%" onclick="goPurchaseStep(2)">Inquire About This Piece →</button>
+              <button class="btn btn--primary" style="width:100%" id="modal-inquire-btn" onclick="goPurchaseStep(2)">Inquire About This Piece →</button>
               <p style="font-size:0.75rem;color:var(--smoke);text-align:center;margin-top:12px">No payment is processed now. John will email you to arrange pickup or shipping.</p>
               
               <!-- Related Pieces Section -->
@@ -548,8 +548,28 @@
       const mainImage = (pot.images && pot.images[0]) || pot.imageUrl || 'images/hero.png';
       img.src = mainImage;
       document.getElementById('purchase-pot-title').textContent = pot.title || '';
-      document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
       document.getElementById('purchase-pot-desc').textContent = pot.description || '';
+
+      const priceEl = document.getElementById('purchase-pot-price');
+      const inquireBtn = document.getElementById('modal-inquire-btn');
+
+      if (pot.status === 'sold') {
+        if (priceEl) priceEl.textContent = 'Sold';
+        if (inquireBtn) {
+          inquireBtn.textContent = 'Piece Already Sold';
+          inquireBtn.disabled = true;
+          inquireBtn.style.opacity = '0.5';
+          inquireBtn.style.pointerEvents = 'none';
+        }
+      } else {
+        if (priceEl) priceEl.textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
+        if (inquireBtn) {
+          inquireBtn.textContent = 'Inquire About This Piece →';
+          inquireBtn.disabled = false;
+          inquireBtn.style.opacity = '1';
+          inquireBtn.style.pointerEvents = 'auto';
+        }
+      }
 
       // Likes state
       const likes = parseInt(pot.likes, 10) || 0;

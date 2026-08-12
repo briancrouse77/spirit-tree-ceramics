@@ -734,9 +734,10 @@ var _shopPotsMap = {};
     .onSnapshot(function(snap) {
       var allPots = snap.docs.map(function(d) { return Object.assign({}, d.data(), { _docId: d.id }); });
       var pots = allPots.filter(function(p) { return p.status === 'available'; });
+      var soldPots = allPots.filter(function(p) { return p.status === 'sold'; });
 
-      // Sort pots by sortOrder ascending, falling back to timestamp desc
-      pots.sort(function(a, b) {
+      // Sort helper
+      var sortFunc = function(a, b) {
         var orderA = a.sortOrder !== undefined ? a.sortOrder : Number.MAX_SAFE_INTEGER;
         var orderB = b.sortOrder !== undefined ? b.sortOrder : Number.MAX_SAFE_INTEGER;
         if (orderA !== orderB) {
@@ -745,41 +746,70 @@ var _shopPotsMap = {};
         var timeA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
         var timeB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
         return timeB - timeA;
-      });
+      };
+
+      pots.sort(sortFunc);
+      soldPots.sort(sortFunc);
 
       // Update the global registry
       _shopPotsMap = {};
       pots.forEach(function(p) { _shopPotsMap[p.id || p._docId] = p; });
+      soldPots.forEach(function(p) { _shopPotsMap[p.id || p._docId] = p; });
 
       // Check deep link on load once registry is populated
       if (typeof checkHashAndOpenModal === 'function') {
         checkHashAndOpenModal();
       }
 
+      // Render available pots
       if (pots.length === 0) {
         shopGrid.innerHTML = '';
         shopEmpty.style.display = '';
-        updateProductSchema([]);
-        updateFooterCategories(allPots);
-        return;
+      } else {
+        shopEmpty.style.display = 'none';
+        shopGrid.innerHTML = pots.map(function(p) {
+          var key = p.id || p._docId;
+          return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
+            + (p.imageUrl
+                ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + ' - Handcrafted Pottery" width="400" height="400" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
+                : '<div class="shop-card__img-ph">🏺</div>')
+            + '<div class="shop-card__body">'
+            + '<div><div class="shop-card__title">' + p.title + '</div>'
+            + (p.description ? '<div class="shop-card__desc">' + p.description + '</div>' : '')
+            + '</div>'
+            + '<div class="shop-card__footer">'
+            + '<div class="shop-card__price">$' + Number(p.price).toFixed(0) + '</div>'
+            + '<button class="shop-card__cta" onclick="event.stopPropagation();openPurchaseModal(\'' + key + '\')">Inquire \u2192</button>'
+            + '</div></div></div>';
+        }).join('');
       }
 
-      shopEmpty.style.display = 'none';
-      shopGrid.innerHTML = pots.map(function(p) {
-        var key = p.id || p._docId;
-        return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
-          + (p.imageUrl
-              ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + ' - Handcrafted Pottery" width="400" height="400" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
-              : '<div class="shop-card__img-ph">🏺</div>')
-          + '<div class="shop-card__body">'
-          + '<div><div class="shop-card__title">' + p.title + '</div>'
-          + (p.description ? '<div class="shop-card__desc">' + p.description + '</div>' : '')
-          + '</div>'
-          + '<div class="shop-card__footer">'
-          + '<div class="shop-card__price">$' + Number(p.price).toFixed(0) + '</div>'
-          + '<button class="shop-card__cta" onclick="event.stopPropagation();openPurchaseModal(\'' + key + '\')">Inquire \u2192</button>'
-          + '</div></div></div>';
-      }).join('');
+      // Render sold pots
+      var soldGrid = document.getElementById('sold-grid');
+      var soldEmpty = document.getElementById('sold-empty');
+      if (soldGrid && soldEmpty) {
+        if (soldPots.length === 0) {
+          soldGrid.innerHTML = '';
+          soldEmpty.style.display = '';
+        } else {
+          soldEmpty.style.display = 'none';
+          soldGrid.innerHTML = soldPots.map(function(p) {
+            var key = p.id || p._docId;
+            return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
+              + (p.imageUrl
+                  ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + ' - Handcrafted Pottery" width="400" height="400" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
+                  : '<div class="shop-card__img-ph">🏺</div>')
+              + '<div class="shop-card__body">'
+              + '<div><div class="shop-card__title">' + p.title + '</div>'
+              + (p.description ? '<div class="shop-card__desc">' + p.description + '</div>' : '')
+              + '</div>'
+              + '<div class="shop-card__footer">'
+              + '<div class="shop-card__price" style="color:var(--smoke);text-decoration:none;">Sold</div>'
+              + '<button class="shop-card__cta" style="background:rgba(255,255,255,0.05);color:var(--smoke);border-color:transparent;cursor:pointer;" onclick="event.stopPropagation();openPurchaseModal(\'' + key + '\')">Details</button>'
+              + '</div></div></div>';
+          }).join('');
+        }
+      }
 
       updateProductSchema(pots);
       updateFooterCategories(allPots);
@@ -895,8 +925,28 @@ function openPurchaseModal(potId, preventHashUpdate) {
   if (pot.imageUrl) { img.src = pot.imageUrl; img.style.display = 'block'; }
   else              { img.style.display = 'none'; }
   document.getElementById('purchase-pot-title').textContent = pot.title || '';
-  document.getElementById('purchase-pot-price').textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
   document.getElementById('purchase-pot-desc').textContent  = pot.description || '';
+
+  const priceEl = document.getElementById('purchase-pot-price');
+  const inquireBtn = document.getElementById('modal-inquire-btn');
+
+  if (pot.status === 'sold') {
+    if (priceEl) priceEl.textContent = 'Sold';
+    if (inquireBtn) {
+      inquireBtn.textContent = 'Piece Already Sold';
+      inquireBtn.disabled = true;
+      inquireBtn.style.opacity = '0.5';
+      inquireBtn.style.pointerEvents = 'none';
+    }
+  } else {
+    if (priceEl) priceEl.textContent = pot.price ? `$${Number(pot.price).toFixed(0)}` : '';
+    if (inquireBtn) {
+      inquireBtn.textContent = 'Inquire About This Piece →';
+      inquireBtn.disabled = false;
+      inquireBtn.style.opacity = '1';
+      inquireBtn.style.pointerEvents = 'auto';
+    }
+  }
 
   // Populate actual like count and active liked state from LocalStorage
   var likes = parseInt(pot.likes, 10) || 0;

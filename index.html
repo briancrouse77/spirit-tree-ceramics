@@ -149,8 +149,8 @@
       <a href="#shop" class="nav__logo">Spirit Tree <span>Ceramics</span></a>
       <ul class="nav__links">
         <li><a href="#shop">Shop</a></li>
+        <li><a href="#sold">Previously Sold</a></li>
         <li><a href="#about">About John</a></li>
-        <li><a href="#contact">Contact</a></li>
       </ul>
       <a href="#contact" class="btn btn--accent nav__cta" id="nav-book-btn">Get in Touch</a>
       <button class="nav__hamburger" id="hamburger" aria-label="Open menu">
@@ -159,8 +159,8 @@
     </div>
     <div class="nav__mobile" id="mobile-menu">
       <a href="#shop">Shop</a>
+      <a href="#sold">Previously Sold</a>
       <a href="#about">About John</a>
-      <a href="#contact">Contact</a>
       <a href="#contact" class="btn btn--accent" id="mobile-book-btn" style="text-align:center;">Get in Touch</a>
     </div>
   </nav>
@@ -175,6 +175,19 @@
       </div>
       <div class="shop-grid" id="shop-grid"></div>
       <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0">Nothing listed right now — check back soon.</p>
+    </div>
+  </section>
+
+  <!-- ── PREVIOUSLY SOLD ── -->
+  <section class="section section--void" id="sold" style="border-top: 1px solid rgba(193,84,10,0.06);">
+    <div class="container">
+      <div class="section__header" style="margin-bottom: 40px;">
+        <p class="section__eyebrow section__eyebrow--light">Archived Works</p>
+        <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);">Previously Sold Pieces</h2>
+        <p class="section__sub">A visual archive of handthrown stoneware and porcelain pieces that have found their homes. Click any piece for full specifications and high-resolution details.</p>
+      </div>
+      <div class="shop-grid" id="sold-grid"></div>
+      <p id="sold-empty" style="text-align:center;color:var(--smoke);padding:48px 0;display:none;">No sold pieces archived yet.</p>
     </div>
   </section>
 
@@ -277,7 +290,7 @@
                   <span>🔗</span> Share
                 </button>
               </div>
-              <button class="btn btn--primary" style="width:100%" onclick="goPurchaseStep(2)">Inquire About This Piece →</button>
+              <button class="btn btn--primary" style="width:100%" id="modal-inquire-btn" onclick="goPurchaseStep(2)">Inquire About This Piece →</button>
               <p style="font-size:0.75rem;color:var(--smoke);text-align:center;margin-top:12px">No payment is processed now. John will email you to arrange pickup or shipping.</p>
               
               <!-- Related Pieces Section -->
