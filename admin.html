@@ -1213,7 +1213,7 @@
 
             <div class="field-group" style="margin-bottom: 20px;">
               <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Heading Title</label>
-              <input type="text" id="about-form-title" class="field-input" placeholder="e.g. Hi, I'm John Ruiz — Dallas Pottery Artist" required style="width:100%; box-sizing:border-box;" />
+              <input type="text" id="about-form-title" class="field-input" placeholder="e.g. Hi, I'm John Ruiz — Emory Pottery Artist" required style="width:100%; box-sizing:border-box;" />
             </div>
             
             <div class="field-group" style="margin-bottom: 20px;">
@@ -1251,7 +1251,7 @@
         <div class="section-hdr" style="margin-bottom: 24px;">
           <div>
             <h2>Contact &amp; Gallery Info</h2>
-            <p style="font-size: 0.85rem; color: var(--smoke); margin-top: 4px;">Update Dallas contact information and customize the header copy shown above the main storefront gallery.</p>
+            <p style="font-size: 0.85rem; color: var(--smoke); margin-top: 4px;">Update Emory contact information and customize the header copy shown above the main storefront gallery.</p>
           </div>
         </div>
 
@@ -1266,7 +1266,7 @@
             
             <div class="field-group" style="margin-bottom: 20px;">
               <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Location</label>
-              <input type="text" id="contact-form-loc" class="field-input" placeholder="e.g. Dallas–Fort Worth &amp; Surrounding Areas, TX" required style="width:100%; box-sizing:border-box;" />
+              <input type="text" id="contact-form-loc" class="field-input" placeholder="e.g. Emory &amp; Surrounding Areas, TX" required style="width:100%; box-sizing:border-box;" />
             </div>
 
             <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 24px;">
@@ -1300,7 +1300,7 @@
 
             <div class="field-group" style="margin-bottom: 20px;">
               <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Shop Title</label>
-              <input type="text" id="gallery-form-title" class="field-input" placeholder="e.g. Dallas Handmade Ceramics Gallery" required style="width:100%; box-sizing:border-box;" />
+              <input type="text" id="gallery-form-title" class="field-input" placeholder="e.g. Emory Handmade Ceramics Gallery" required style="width:100%; box-sizing:border-box;" />
             </div>
 
             <div class="field-group" style="margin-bottom: 28px;">
@@ -1360,7 +1360,7 @@
 
             <div class="field-group" style="margin-bottom: 20px;">
               <label style="font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); margin-bottom: 8px; display: block;">Hero Title / Heading</label>
-              <input type="text" id="seo-form-title" class="field-input" placeholder="e.g. Dallas Handthrown Ceramic Mugs by John Ruiz" required style="width:100%; box-sizing:border-box;" />
+              <input type="text" id="seo-form-title" class="field-input" placeholder="e.g. Emory Handthrown Ceramic Mugs by John Ruiz" required style="width:100%; box-sizing:border-box;" />
             </div>
 
             <div class="field-group" style="margin-bottom: 24px;">
@@ -1645,16 +1645,16 @@
           if (currentPanel === 'about') populateAboutForm();
         } else {
           const defaults = {
-            title: "Hi, I'm John Ruiz — Dallas Pottery Artist",
+            title: "Hi, I'm John Ruiz — Emory Pottery Artist",
             eyebrow: "The Maker Behind the Clay",
             paragraphs: [
               "I discovered clay in 2022, and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
-              "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life."
+              "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Emory studio, designed to bring the grounding essence of raw clay into your everyday life."
             ],
             features: [
               { icon: "🏺", title: "One-of-a-Kind Pieces", text: "Every pot in the shop is handthrown and glazed individually in my studio. Own a piece of the slow craft." },
               { icon: "🔥", title: "Stoneware & Porcelain", text: "Clays are formulated for high-fire durability, ensuring each vase, bowl, and mug is fully functional." },
-              { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Dallas, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
+              { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Emory, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
             ],
             years: (new Date().getFullYear() - 2022) + "+",
             imgUrl: "images/about.png",
@@ -1674,18 +1674,18 @@
         } else {
           const defaults = {
             mug: {
-              title: "Dallas Handthrown Ceramic Mugs",
-              desc: "Each stoneware mug is handthrown on the wheel by John Ruiz in Dallas, TX. Built for tactile warmth, comforting weight, and everyday durability.",
+              title: "Emory Handthrown Ceramic Mugs",
+              desc: "Each stoneware mug is handthrown on the wheel by John Ruiz in Emory, TX. Built for tactile warmth, comforting weight, and everyday durability.",
               bannerUrl: "images/shop_mugs_banner.jpg"
             },
             tumbler: {
-              title: "Dallas Handthrown Ceramic Tumblers",
-              desc: "Beautifully textured stoneware and porcelain tumblers. Handmade in Dallas, TX, and built for comfortable grip and excellent temperature retention.",
+              title: "Emory Handthrown Ceramic Tumblers",
+              desc: "Beautifully textured stoneware and porcelain tumblers. Handmade in Emory, TX, and built for comfortable grip and excellent temperature retention.",
               bannerUrl: "images/hero.png"
             },
             "tea-pot": {
               title: "Handcrafted Stoneware Tea Pots",
-              desc: "Elegant wheel-thrown clay tea pots. Crafted for smooth pouring, comfortable balance, and slow, peaceful tea sessions.",
+              desc: "Elegant wheel-thrown clay tea pots. Crafted in Emory, TX for smooth pouring, comfortable balance, and slow, peaceful tea sessions.",
               bannerUrl: "images/hero.png"
             },
             vase: {
@@ -1699,7 +1699,7 @@
               bannerUrl: "images/shop_bowls_banner.jpg"
             },
             plate: {
-              title: "Dallas Artisanal Ceramic Plates",
+              title: "Emory Handcrafted Ceramic Plates",
               desc: "Handcrafted clay plates designed for daily service and rustic table presentation. Glazed with high-fire food-safe finishes.",
               bannerUrl: "images/shop_plates_banner.jpg"
             },
@@ -1710,7 +1710,7 @@
             },
             other: {
               title: "Spirit Tree Ceramics Studio Pieces",
-              desc: "Explore unique, experimental, and one-of-a-kind art pieces created at the wheel by Dallas artist John Ruiz.",
+              desc: "Explore unique, experimental, and one-of-a-kind art pieces created at the wheel by Emory artist John Ruiz.",
               bannerUrl: "images/shop_studio_banner.jpg"
             }
           };
@@ -1751,7 +1751,7 @@
         } else {
           const defaults = {
             title: "Contact Spirit Tree Ceramics",
-            location: "Dallas–Fort Worth & Surrounding Areas, TX",
+            location: "Emory & Surrounding Areas, TX",
             email: "hello@spirittreeceramics.com",
             phone: "(214) 555-0100"
           };
@@ -1768,7 +1768,7 @@
         } else {
           const defaults = {
             eyebrow: "John Ruiz — Fine Art Stoneware & Porcelain",
-            title: "Dallas Handmade Ceramics Gallery",
+            title: "Emory Handmade Ceramics Gallery",
             desc: "One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries.",
             soldEyebrow: "Archived Works",
             soldTitle: "Previously Sold Pieces",
@@ -2739,12 +2739,12 @@
             const defaults = [
               {
                 question: "Who is the artist behind Spirit Tree Ceramics?",
-                answer: "Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas. Since discovering clay in 2022, John crafts one-of-a-kind functional art and fine stoneware in his Dallas studio.",
+                answer: "Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Emory, Texas. Since discovering clay in 2022, John crafts one-of-a-kind functional art and fine stoneware in his Emory studio.",
                 sortOrder: 10
               },
               {
                 question: "Where can I buy John Ruiz pottery?",
-                answer: "You can browse and purchase John Ruiz's handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/. Each piece is unique and available for local DFW pickup, local delivery, or shipping nationwide.",
+                answer: "You can browse and purchase John Ruiz's handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/. Each piece is unique and available for local Emory pickup, local delivery, or shipping nationwide.",
                 sortOrder: 20
               },
               {
@@ -2990,7 +2990,7 @@
           features = [
             { icon: "🏺", title: "One-of-a-Kind Pieces", text: "Every pot in the shop is handthrown and glazed individually in my studio. Own a piece of the slow craft." },
             { icon: "🔥", title: "Stoneware & Porcelain", text: "Clays are formulated for high-fire durability, ensuring each vase, bowl, and mug is fully functional." },
-            { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Dallas, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
+            { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Emory, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
           ];
         }
         features.forEach(f => window.addAboutFeatureField(f.icon, f.title, f.text));
@@ -3224,21 +3224,21 @@
       } else {
         updateStats();
         _faqs = [
-          { id: 'faq-1', question: 'Who is the artist behind Spirit Tree Ceramics?', answer: 'Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Dallas, Texas.', sortOrder: 10 },
+          { id: 'faq-1', question: 'Who is the artist behind Spirit Tree Ceramics?', answer: 'Spirit Tree Ceramics is created by John Ruiz, a handmade pottery artist based in Emory, Texas.', sortOrder: 10 },
           { id: 'faq-2', question: 'Where can I buy John Ruiz pottery?', answer: 'You can browse and purchase John Ruiz\'s handthrown ceramics directly from the online gallery at https://www.spirittreeceramics.com/.', sortOrder: 20 }
         ];
         renderFaqs();
         _aboutBioData = {
-          title: "Hi, I'm John Ruiz — Dallas Pottery Artist",
+          title: "Hi, I'm John Ruiz — Emory Pottery Artist",
           eyebrow: "The Maker Behind the Clay",
           paragraphs: [
-            "Four years ago I put my hands on a wheel and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
-            "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Dallas studio, designed to bring the grounding essence of raw clay into your everyday life."
+            "I discovered clay in 2022, and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.",
+            "Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Emory studio, designed to bring the grounding essence of raw clay into your everyday life."
           ],
           features: [
             { icon: "🏺", title: "One-of-a-Kind Pieces", text: "Every pot in the shop is handthrown and glazed individually in my studio. Own a piece of the slow craft." },
             { icon: "🔥", title: "Stoneware & Porcelain", text: "Clays are formulated for high-fire durability, ensuring each vase, bowl, and mug is fully functional." },
-            { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Dallas, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
+            { icon: "🌵", title: "Rooted in Texas", text: "Crafted locally in Emory, TX. Each piece carries the distinct grounding energy of raw clay into your everyday life." }
           ],
           years: "4+",
           imgUrl: "images/about.png"

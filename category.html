@@ -93,7 +93,7 @@
     <div class="cat-hero__bg" id="cat-hero-bg"></div>
     <div class="cat-hero__content">
       <p class="section__eyebrow" id="cat-eyebrow">Handmade Functional Art</p>
-      <h1 class="cat-hero__title" id="cat-title">Dallas Handthrown Stoneware</h1>
+      <h1 class="cat-hero__title" id="cat-title">Emory Handthrown Stoneware</h1>
       <p class="cat-hero__sub" id="cat-desc">Artisanal high-fire ceramics designed to bring functional beauty and grounded energy into your home.</p>
     </div>
   </header>
@@ -112,7 +112,7 @@
   <footer class="footer">
     <div class="container footer__inner">
       <div class="footer__logo">Spirit Tree <span>Ceramics</span></div>
-      <p class="footer__tagline">Rooted in earth. Open to the infinite. Dallas, TX.</p>
+      <p class="footer__tagline">Rooted in earth. Open to the infinite. Emory, TX.</p>
       <div class="footer__socials">
         <a href="https://www.instagram.com/spirit_tree_ceramics/" target="_blank" rel="noopener" aria-label="Instagram">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
@@ -154,7 +154,7 @@
           </div>
           <!-- Right Column: Details -->
           <div class="showcase-details">
-            <span class="showcase-badge">Dallas Studio Collection</span>
+            <span class="showcase-badge">Emory Studio Collection</span>
             <h2 id="purchase-pot-title" class="showcase-title"></h2>
             <div id="purchase-pot-price" class="showcase-price"></div>
             
@@ -282,8 +282,8 @@
         <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">📦 Domestic Shipping</h4>
         <p style="margin-bottom:16px;">All pottery is carefully packed in eco-friendly, biodegradable materials to ensure safe arrival. Shipped via UPS Ground or USPS within 3–5 business days. You will receive a tracking number as soon as your order is dispatched.</p>
         
-        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">📍 Local DFW Pickup</h4>
-        <p style="margin-bottom:16px;">We offer free local pickup at our Dallas studio. Choose the "Local Pickup" option during checkout, and we will contact you via email or text to arrange a pickup window.</p>
+        <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">📍 Local Emory Pickup</h4>
+        <p style="margin-bottom:16px;">We offer free local pickup at our Emory studio. Choose the "Local Pickup" option during checkout, and we will contact you via email or text to arrange a pickup window.</p>
         
         <h4 style="color:var(--pearl);margin-bottom:6px;font-size:1.05rem;">🔄 Return Policy</h4>
         <p style="margin-bottom:16px;">Because each ceramic piece is handmade and completely one-of-a-kind, all sales are final. We do not accept returns or exchanges for change of mind.</p>
@@ -324,7 +324,7 @@
     if (!categoryType) {
       // Check window.location.pathname (e.g. /mug or /bowl)
       const path = window.location.pathname.replace(/^\/|\/$/g, '').toLowerCase();
-      if (['mug', 'vase', 'bowl', 'plate', 'platter', 'other'].includes(path)) {
+      if (['mug', 'tumbler', 'tea-pot', 'vase', 'bowl', 'plate', 'platter', 'other'].includes(path)) {
         categoryType = path;
       }
     }
@@ -333,10 +333,22 @@
     // Static fallback defaults
     const typeMetaDefaults = {
       mug: {
-        title: "Dallas Handthrown Ceramic Mugs",
-        eyebrow: "Artisanal Coffee Mugs & Tumblers",
-        desc: "Each stoneware mug is handthrown on the wheel by John Ruiz in Dallas, TX. Built for tactile warmth, comforting weight, and everyday durability.",
+        title: "Emory Handthrown Ceramic Mugs",
+        eyebrow: "Artisanal Coffee Mugs",
+        desc: "Each stoneware mug is handthrown on the wheel by John Ruiz in Emory, TX. Built for tactile warmth, comforting weight, and everyday durability.",
         bannerUrl: "images/shop_mugs_banner.jpg"
+      },
+      tumbler: {
+        title: "Emory Handthrown Ceramic Tumblers",
+        eyebrow: "Artisanal Tumblers & Cups",
+        desc: "Beautifully textured stoneware and porcelain tumblers. Handmade in Emory, TX, and built for comfortable grip and excellent temperature retention.",
+        bannerUrl: "images/hero.png"
+      },
+      "tea-pot": {
+        title: "Handcrafted Stoneware Tea Pots",
+        eyebrow: "Artisanal Clay Tea Pots",
+        desc: "Elegant wheel-thrown clay tea pots. Crafted in Emory, TX for smooth pouring, comfortable balance, and slow, peaceful tea sessions.",
+        bannerUrl: "images/hero.png"
       },
       vase: {
         title: "Fine Art Stoneware & Porcelain Vases",
@@ -351,7 +363,7 @@
         bannerUrl: "images/shop_bowls_banner.jpg"
       },
       plate: {
-        title: "Dallas Handcrafted Ceramic Plates",
+        title: "Emory Handcrafted Ceramic Plates",
         eyebrow: "Handthrown Stoneware Plates",
         desc: "Handcrafted clay plates designed for daily service and rustic table presentation. Glazed with high-fire food-safe finishes.",
         bannerUrl: "images/shop_plates_banner.jpg"
@@ -365,7 +377,7 @@
       other: {
         title: "Spirit Tree Ceramics Studio Pieces",
         eyebrow: "Artisanal Clay Work",
-        desc: "Explore unique, experimental, and one-of-a-kind art pieces created at the wheel by Dallas artist John Ruiz.",
+        desc: "Explore unique, experimental, and one-of-a-kind art pieces created at the wheel by Emory artist John Ruiz.",
         bannerUrl: "images/shop_studio_banner.jpg"
       }
     };
