@@ -813,6 +813,22 @@ var _shopPotsMap = {};
 
       updateProductSchema(pots);
       updateFooterCategories(allPots);
+    }, function(err) {
+      console.error('Firestore load error:', err);
+      if (shopGrid) {
+        shopGrid.innerHTML = '';
+      }
+      if (shopEmpty) {
+        shopEmpty.textContent = 'Connection error. Please check your network and refresh the page.';
+        shopEmpty.style.display = '';
+      }
+      var soldGrid = document.getElementById('sold-grid');
+      var soldEmpty = document.getElementById('sold-empty');
+      if (soldGrid) soldGrid.innerHTML = '';
+      if (soldEmpty) {
+        soldEmpty.textContent = 'Connection error. Please check your network and refresh the page.';
+        soldEmpty.style.display = '';
+      }
     });
 
     function updateProductSchema(potsList) {
