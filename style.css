@@ -455,6 +455,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ══════════════════════════════════════════ */
 .about.section { background: var(--deep); }
 
+#shop, #sold, #about, #contact {
+  scroll-margin-top: 70px;
+}
+
 #shop {
   padding-top: 140px;
 }

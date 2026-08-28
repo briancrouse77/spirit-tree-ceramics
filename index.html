@@ -173,8 +173,49 @@
         <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);" id="gallery-title">Emory Handmade Ceramics Gallery</h2>
         <p class="section__sub" id="gallery-desc">One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries.</p>
       </div>
-      <div class="shop-grid" id="shop-grid"></div>
-      <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0">Nothing listed right now — check back soon.</p>
+      <div class="shop-grid" id="shop-grid">
+        <!-- Static placeholders for SEO & Answer Engine Optimization (AEO) crawlers. Overwritten dynamically by Firestore on load. -->
+        <div class="shop-card">
+          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+          <div class="shop-card__body">
+            <div>
+              <div class="shop-card__title">Handthrown Ceramic Mug</div>
+              <div class="shop-card__desc">Earthy wheel-thrown stoneware mug featuring unique glaze runs, comfortable thumb-rest, and high-fire durability. Thrown locally in Emory, TX.</div>
+            </div>
+            <div class="shop-card__footer">
+              <div class="shop-card__price">$45</div>
+              <button class="shop-card__cta">Inquire →</button>
+            </div>
+          </div>
+        </div>
+        <div class="shop-card">
+          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+          <div class="shop-card__body">
+            <div>
+              <div class="shop-card__title">Fine Art Stoneware Vase</div>
+              <div class="shop-card__desc">Elegant wheel-thrown decorative clay vase with raw textured surface highlights and soft ash glaze runs. Thrown locally in Emory, TX.</div>
+            </div>
+            <div class="shop-card__footer">
+              <div class="shop-card__price">$120</div>
+              <button class="shop-card__cta">Inquire →</button>
+            </div>
+          </div>
+        </div>
+        <div class="shop-card">
+          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+          <div class="shop-card__body">
+            <div>
+              <div class="shop-card__title">Functional Clay Bowl</div>
+              <div class="shop-card__desc">Individually glazed wheel-thrown stoneware bowl. Crafted for serving or display, high-fired, and food, microwave, and dishwasher safe.</div>
+            </div>
+            <div class="shop-card__footer">
+              <div class="shop-card__price">$65</div>
+              <button class="shop-card__cta">Inquire →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0;display:none;">Nothing listed right now — check back soon.</p>
     </div>
   </section>
 
@@ -186,7 +227,35 @@
         <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);" id="sold-title">Previously Sold Pieces</h2>
         <p class="section__sub" id="sold-desc">A visual archive of handthrown stoneware and porcelain pieces that have found their homes. Click any piece for full specifications and high-resolution details.</p>
       </div>
-      <div class="shop-grid" id="sold-grid"></div>
+      <div class="shop-grid" id="sold-grid">
+        <!-- Static placeholders for SEO & Answer Engine Optimization (AEO) crawlers. Overwritten dynamically by Firestore on load. -->
+        <div class="shop-card">
+          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+          <div class="shop-card__body">
+            <div>
+              <div class="shop-card__title">Textured Stoneware Mug</div>
+              <div class="shop-card__desc">Handthrown clay mug with custom crawl glaze and dark iron reduction textures. Archived piece.</div>
+            </div>
+            <div class="shop-card__footer">
+              <div class="shop-card__price" style="color:var(--smoke);text-decoration:none;">Sold</div>
+              <button class="shop-card__cta" style="background:rgba(255,255,255,0.05);color:var(--smoke);border-color:transparent;cursor:pointer;">Details</button>
+            </div>
+          </div>
+        </div>
+        <div class="shop-card">
+          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+          <div class="shop-card__body">
+            <div>
+              <div class="shop-card__title">Organic Bottle Vase</div>
+              <div class="shop-card__desc">Tall wheel-thrown bottle vase in volcanic ash crawl glaze. Archived piece.</div>
+            </div>
+            <div class="shop-card__footer">
+              <div class="shop-card__price" style="color:var(--smoke);text-decoration:none;">Sold</div>
+              <button class="shop-card__cta" style="background:rgba(255,255,255,0.05);color:var(--smoke);border-color:transparent;cursor:pointer;">Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
       <p id="sold-empty" style="text-align:center;color:var(--smoke);padding:48px 0;display:none;">No sold pieces archived yet.</p>
     </div>
   </section>
