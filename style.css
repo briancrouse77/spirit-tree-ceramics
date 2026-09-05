@@ -1325,6 +1325,89 @@ body.modal-open { overflow: hidden; }
 }
 .shop-card__cta:hover { filter: brightness(1.15); }
 
+/* ── Skeleton Loading Animation ── */
+@keyframes skeleton-shimmer {
+  0% {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 0.07);
+  }
+  100% {
+    background-color: rgba(255, 255, 255, 0.03);
+  }
+}
+
+.shop-card--skeleton {
+  pointer-events: none;
+  cursor: default;
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.shop-card--skeleton:hover {
+  transform: none;
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: none;
+}
+
+.skeleton-pulse {
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
+.shop-card--skeleton .shop-card__img-wrap {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-bottom-color: rgba(255, 255, 255, 0.04);
+}
+
+.skeleton-line {
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.04);
+  margin-bottom: 8px;
+}
+
+.skeleton-line--title {
+  width: 65%;
+  height: 18px;
+  margin-bottom: 12px;
+}
+
+.skeleton-line--text {
+  width: 100%;
+  height: 12px;
+}
+
+.skeleton-line--short {
+  width: 75%;
+}
+
+.skeleton-line--price {
+  width: 45px;
+  height: 24px;
+  margin-bottom: 0;
+}
+
+.skeleton-line--btn {
+  width: 80px;
+  height: 28px;
+  border-radius: 50px;
+  margin-bottom: 0;
+}
+
+.shop-card--fade-in {
+  animation: cardFadeIn 0.35s ease-out forwards;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 
 /* Purchase delivery options */
 .purchase-delivery-opt {

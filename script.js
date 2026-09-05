@@ -769,7 +769,7 @@ var _shopPotsMap = {};
         shopEmpty.style.display = 'none';
         shopGrid.innerHTML = pots.map(function(p) {
           var key = p.id || p._docId;
-          return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
+          return '<div class="shop-card shop-card--fade-in" onclick="openPurchaseModal(\'' + key + '\')">'
             + (p.imageUrl
                 ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + ' - Handcrafted Pottery" width="400" height="400" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
                 : '<div class="shop-card__img-ph">🏺</div>')
@@ -795,7 +795,7 @@ var _shopPotsMap = {};
           soldEmpty.style.display = 'none';
           soldGrid.innerHTML = soldPots.map(function(p) {
             var key = p.id || p._docId;
-            return '<div class="shop-card" onclick="openPurchaseModal(\'' + key + '\')">'
+            return '<div class="shop-card shop-card--fade-in" onclick="openPurchaseModal(\'' + key + '\')">'
               + (p.imageUrl
                   ? '<div class="shop-card__img-wrap"><img src="' + p.imageUrl + '" class="shop-card__img" alt="' + p.title + ' - Handcrafted Pottery" width="400" height="400" loading="lazy" /><div class="shop-card__img-vignette"></div></div>'
                   : '<div class="shop-card__img-ph">🏺</div>')
@@ -1852,7 +1852,10 @@ function initContactListener() {
       var phoneEl = document.getElementById('contact-phone');
 
       if (titleEl) titleEl.textContent = data.title || '';
-      if (locEl) locEl.textContent = '📍 ' + (data.location || '');
+      if (locEl) {
+        var loc = (data.location || '').replace(/Dallas[–—\s]*Fort\s*Worth/gi, 'Emory').replace(/Dallas/gi, 'Emory');
+        locEl.textContent = '📍 ' + loc;
+      }
       if (emailEl) {
         var cleanEmail = (data.email || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
         emailEl.innerHTML = '📧 <a href="mailto:' + cleanEmail + '">' + cleanEmail + '</a>';

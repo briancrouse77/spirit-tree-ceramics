@@ -169,52 +169,60 @@
   <section class="section section--void" id="shop">
     <div class="container">
       <div class="section__header" style="margin-bottom: 40px;">
-        <p class="section__eyebrow section__eyebrow--light" id="gallery-eyebrow">John Ruiz — Fine Art Stoneware &amp; Porcelain</p>
-        <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);" id="gallery-title">Emory Handmade Ceramics Gallery</h2>
+        <p class="section__eyebrow section__eyebrow--light" id="gallery-eyebrow">John Ruiz — Functional and Fine Art Ceramics</p>
+        <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);" id="gallery-title">Handmade Ceramics Gallery</h2>
         <p class="section__sub" id="gallery-desc">One-of-a-kind, handthrown stoneware and porcelain pottery by artist John Ruiz. Click any piece for detailed views, magnifying hover-zoom, and purchase inquiries.</p>
       </div>
       <div class="shop-grid" id="shop-grid">
-        <!-- Static placeholders for SEO & Answer Engine Optimization (AEO) crawlers. Overwritten dynamically by Firestore on load. -->
-        <div class="shop-card">
-          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+        <!-- Skeleton loading placeholders while live pieces fetch from Firestore -->
+        <div class="shop-card shop-card--skeleton">
+          <div class="shop-card__img-wrap skeleton-pulse"></div>
           <div class="shop-card__body">
             <div>
-              <div class="shop-card__title">Handthrown Ceramic Mug</div>
-              <div class="shop-card__desc">Earthy wheel-thrown stoneware mug featuring unique glaze runs, comfortable thumb-rest, and high-fire durability. Thrown locally in Emory, TX.</div>
+              <div class="skeleton-line skeleton-line--title skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-line--short skeleton-pulse"></div>
             </div>
-            <div class="shop-card__footer">
-              <div class="shop-card__price">$45</div>
-              <button class="shop-card__cta">Inquire →</button>
+            <div class="shop-card__footer" style="margin-top: 20px;">
+              <div class="skeleton-line skeleton-line--price skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--btn skeleton-pulse"></div>
             </div>
           </div>
         </div>
-        <div class="shop-card">
-          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+        <div class="shop-card shop-card--skeleton">
+          <div class="shop-card__img-wrap skeleton-pulse"></div>
           <div class="shop-card__body">
             <div>
-              <div class="shop-card__title">Fine Art Stoneware Vase</div>
-              <div class="shop-card__desc">Elegant wheel-thrown decorative clay vase with raw textured surface highlights and soft ash glaze runs. Thrown locally in Emory, TX.</div>
+              <div class="skeleton-line skeleton-line--title skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-line--short skeleton-pulse"></div>
             </div>
-            <div class="shop-card__footer">
-              <div class="shop-card__price">$120</div>
-              <button class="shop-card__cta">Inquire →</button>
+            <div class="shop-card__footer" style="margin-top: 20px;">
+              <div class="skeleton-line skeleton-line--price skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--btn skeleton-pulse"></div>
             </div>
           </div>
         </div>
-        <div class="shop-card">
-          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+        <div class="shop-card shop-card--skeleton">
+          <div class="shop-card__img-wrap skeleton-pulse"></div>
           <div class="shop-card__body">
             <div>
-              <div class="shop-card__title">Functional Clay Bowl</div>
-              <div class="shop-card__desc">Individually glazed wheel-thrown stoneware bowl. Crafted for serving or display, high-fired, and food, microwave, and dishwasher safe.</div>
+              <div class="skeleton-line skeleton-line--title skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-line--short skeleton-pulse"></div>
             </div>
-            <div class="shop-card__footer">
-              <div class="shop-card__price">$65</div>
-              <button class="shop-card__cta">Inquire →</button>
+            <div class="shop-card__footer" style="margin-top: 20px;">
+              <div class="skeleton-line skeleton-line--price skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--btn skeleton-pulse"></div>
             </div>
           </div>
         </div>
       </div>
+      <noscript>
+        <div style="padding: 24px 0; color: var(--smoke); font-size: 0.95rem; line-height: 1.6;">
+          <p>Handmade functional and fine art pottery by artist John Ruiz — wheel-thrown stoneware and porcelain mugs, decorative vases, bowls, and serving platters. Thrown locally in Emory, TX. Please enable JavaScript to browse available pieces and submit purchase inquiries.</p>
+        </div>
+      </noscript>
       <p id="shop-empty" style="text-align:center;color:var(--smoke);padding:48px 0;display:none;">Nothing listed right now — check back soon.</p>
     </div>
   </section>
@@ -223,39 +231,46 @@
   <section class="section section--void" id="sold" style="border-top: 1px solid rgba(193,84,10,0.06);">
     <div class="container">
       <div class="section__header" style="margin-bottom: 40px;">
-        <p class="section__eyebrow section__eyebrow--light" id="sold-eyebrow">Archived Works</p>
-        <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);" id="sold-title">Previously Sold Pieces</h2>
-        <p class="section__sub" id="sold-desc">A visual archive of handthrown stoneware and porcelain pieces that have found their homes. Click any piece for full specifications and high-resolution details.</p>
+        <p class="section__eyebrow section__eyebrow--light" id="sold-eyebrow">Personal and Previously Sold Works</p>
+        <h2 class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);" id="sold-title">Gallery</h2>
+        <p class="section__sub" id="sold-desc">This pieces are no longer available. Inquire for similar work.</p>
       </div>
       <div class="shop-grid" id="sold-grid">
-        <!-- Static placeholders for SEO & Answer Engine Optimization (AEO) crawlers. Overwritten dynamically by Firestore on load. -->
-        <div class="shop-card">
-          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+        <!-- Skeleton loading placeholders while archive fetches from Firestore -->
+        <div class="shop-card shop-card--skeleton">
+          <div class="shop-card__img-wrap skeleton-pulse"></div>
           <div class="shop-card__body">
             <div>
-              <div class="shop-card__title">Textured Stoneware Mug</div>
-              <div class="shop-card__desc">Handthrown clay mug with custom crawl glaze and dark iron reduction textures. Archived piece.</div>
+              <div class="skeleton-line skeleton-line--title skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-line--short skeleton-pulse"></div>
             </div>
-            <div class="shop-card__footer">
-              <div class="shop-card__price" style="color:var(--smoke);text-decoration:none;">Sold</div>
-              <button class="shop-card__cta" style="background:rgba(255,255,255,0.05);color:var(--smoke);border-color:transparent;cursor:pointer;">Details</button>
+            <div class="shop-card__footer" style="margin-top: 20px;">
+              <div class="skeleton-line skeleton-line--price skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--btn skeleton-pulse"></div>
             </div>
           </div>
         </div>
-        <div class="shop-card">
-          <div class="shop-card__img-wrap"><div class="shop-card__img-ph">🏺</div></div>
+        <div class="shop-card shop-card--skeleton">
+          <div class="shop-card__img-wrap skeleton-pulse"></div>
           <div class="shop-card__body">
             <div>
-              <div class="shop-card__title">Organic Bottle Vase</div>
-              <div class="shop-card__desc">Tall wheel-thrown bottle vase in volcanic ash crawl glaze. Archived piece.</div>
+              <div class="skeleton-line skeleton-line--title skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--text skeleton-line--short skeleton-pulse"></div>
             </div>
-            <div class="shop-card__footer">
-              <div class="shop-card__price" style="color:var(--smoke);text-decoration:none;">Sold</div>
-              <button class="shop-card__cta" style="background:rgba(255,255,255,0.05);color:var(--smoke);border-color:transparent;cursor:pointer;">Details</button>
+            <div class="shop-card__footer" style="margin-top: 20px;">
+              <div class="skeleton-line skeleton-line--price skeleton-pulse"></div>
+              <div class="skeleton-line skeleton-line--btn skeleton-pulse"></div>
             </div>
           </div>
         </div>
       </div>
+      <noscript>
+        <div style="padding: 24px 0; color: var(--smoke); font-size: 0.95rem; line-height: 1.6;">
+          <p>Archived collection of previously sold handthrown stoneware and porcelain pieces by artist John Ruiz.</p>
+        </div>
+      </noscript>
       <p id="sold-empty" style="text-align:center;color:var(--smoke);padding:48px 0;display:none;">No sold pieces archived yet.</p>
     </div>
   </section>
@@ -267,8 +282,8 @@
         <img id="about-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="John Ruiz — founder of Spirit Tree Ceramics" class="about__img" />
       </div>
       <div class="about__text">
-        <p id="about-eyebrow" class="section__eyebrow">The Maker Behind the Clay</p>
-        <h1 id="about-title" class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);">Hi, I'm John Ruiz — Emory Pottery Artist</h1>
+        <p id="about-eyebrow" class="section__eyebrow">The Maker</p>
+        <h1 id="about-title" class="section__title" style="font-size: 3rem; margin-bottom: 12px; font-family: var(--font-head);">Hi, I'm John Ruiz — Texas Based Ceramic Artist</h1>
         <div id="about-paragraphs-container">
           <p class="about__body">I discovered clay in 2022, and everything changed. Clay is an ancient teacher — it slows you down, pulls you into the present, and gives something back every time you show up for it.</p>
           <p class="about__body">Spirit Tree Ceramics is a collection of <strong>handmade functional art and fine stoneware</strong> fired with intention in my Emory studio, designed to bring the grounding essence of raw clay into your everyday life.</p>
